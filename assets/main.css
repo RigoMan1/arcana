@@ -1,8 +1,14 @@
 html {
-	color-scheme: dark;
+  color-scheme: dark;
 }
 
 .bd,
 [bd] {
-	border: 1px solid magenta;
+  border: 1px solid magenta;
+}
+
+:root {
+  --v-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --v-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --v-ease-in: cubic-bezier(0.4, 0, 1, 1);
 }
