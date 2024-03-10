@@ -1,0 +1,8 @@
+html {
+	color-scheme: dark;
+}
+
+.bd,
+[bd] {
+	border: 1px solid magenta;
+}
