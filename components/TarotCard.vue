@@ -1,16 +1,4 @@
 <script setup lang="ts">
-type Arcana = 'major' | 'minor';
-type Suit = 'cup' | 'pentacle' | 'sword' | 'wand';
-type Court = 'knight' | 'page' | 'queen' | 'king';
-
-interface TarotCard {
-  name: string;
-  arcana: Arcana;
-  number: number | null;
-  suit: Suit | null;
-  court: Court | null;
-}
-
 const elementMap: Record<string, string> = {
   cups: 'water',
   pentacles: 'earth',
@@ -74,6 +62,10 @@ const toggleFlip = () => (isFlipped.value = !isFlipped.value);
   perspective: 1000px;
   width: 200px;
   height: 300px;
+  user-select: none;
+  /* --- */
+  pointer-events: none;
+  user-drag: none;
   user-select: none;
 }
 

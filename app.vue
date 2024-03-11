@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import TarotCards from '~/constants/tarot-card-data';
 
-type Spreads =
-  | 'three-card-cluster'
-  | 'pentagram-tarot'
-  | 'celtic-cross'
-  | 'seven-card-horseshoe';
-
-const randomCards = ref(TarotCards);
+const randomCards = ref(TarotCards) as Ref<TarotCard[]>;
 
 const shuffleCards = () => {
   let shuffled = [...TarotCards]; // Create a shallow copy to avoid modifying the original array
@@ -15,16 +9,18 @@ const shuffleCards = () => {
     const j = Math.floor(Math.random() * (i + 1)); // Random index from 0 to i
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // Swap elements
   }
-  randomCards.value = shuffled;
+  randomCards.value = shuffled as TarotCard[];
 };
 </script>
 
 <template>
   <div class="container mt-20 arcana-scrollbar">
-    <div class="flex mt-8 overflow-auto p-4 max-w-7xl mx-auto">
+    <div
+      class="flex mt-8 overflow-auto p-4 max-w-7xl mx-auto select-none h-[400px]"
+    >
       <div
         v-for="(card, cardIndex) in randomCards"
-        class="border border-zinc-500 relative p-4 first:rounded-l-lg last:rounded-r-lg"
+        class="border border-zinc-500 relative p-4 px-24 first:rounded-l-lg last:rounded-r-lg"
       >
         <!-- counter badge on center top of card -->
         <span
@@ -34,7 +30,7 @@ const shuffleCards = () => {
         >
           {{ cardIndex + 1 }}
         </span>
-        <tarot-card
+        <draggable-tarot-card
           :key="`${card.name}-${card.arcana}`"
           :card="card"
         />
