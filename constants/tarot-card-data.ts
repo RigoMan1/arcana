@@ -5,6 +5,7 @@ export default [
     number: 0,
     suit: null,
     court: null,
+    image: 'major-00-the-fool.jpg',
   },
   {
     name: 'The Magician',
@@ -12,6 +13,7 @@ export default [
     number: 1,
     suit: null,
     court: null,
+    image: 'major-01-the-magician.jpg',
   },
   {
     name: 'The High Priestess',
@@ -19,6 +21,7 @@ export default [
     number: 2,
     suit: null,
     court: null,
+    image: 'major-02-the-high-priestess.jpg',
   },
   {
     name: 'The Empress',
@@ -26,6 +29,7 @@ export default [
     number: 3,
     suit: null,
     court: null,
+    image: 'major-03-the-empress.jpg',
   },
   {
     name: 'The Emperor',
@@ -33,6 +37,7 @@ export default [
     number: 4,
     suit: null,
     court: null,
+    image: 'major-04-the-emperor.jpg',
   },
   {
     name: 'The Hierophant',
@@ -40,6 +45,7 @@ export default [
     number: 5,
     suit: null,
     court: null,
+    image: 'major-05-the-hierophant.jpg',
   },
   {
     name: 'The Lovers',
@@ -47,6 +53,7 @@ export default [
     number: 6,
     suit: null,
     court: null,
+    image: 'major-06-the-lovers.jpg',
   },
   {
     name: 'The Chariot',
@@ -54,6 +61,7 @@ export default [
     number: 7,
     suit: null,
     court: null,
+    image: 'major-07-the-chariot.jpg',
   },
   {
     name: 'Strength',
@@ -61,6 +69,7 @@ export default [
     number: 8,
     suit: null,
     court: null,
+    image: 'major-08-strength.jpg',
   },
   {
     name: 'The Hermit',
@@ -68,6 +77,7 @@ export default [
     number: 9,
     suit: null,
     court: null,
+    image: 'major-09-the-hermit.jpg',
   },
   {
     name: 'Wheel of Fortune',
@@ -75,6 +85,7 @@ export default [
     number: 10,
     suit: null,
     court: null,
+    image: 'major-10-the-wheel-of-fortune.jpg',
   },
   {
     name: 'Justice',
@@ -82,6 +93,7 @@ export default [
     number: 11,
     suit: null,
     court: null,
+    image: 'major-11-justice.jpg',
   },
   {
     name: 'The Hanged Man',
@@ -89,6 +101,7 @@ export default [
     number: 12,
     suit: null,
     court: null,
+    image: 'major-12-the-hanged-man.jpg',
   },
   {
     name: 'Death',
@@ -96,6 +109,7 @@ export default [
     number: 13,
     suit: null,
     court: null,
+    image: 'major-13-death.jpg',
   },
   {
     name: 'Temperance',
@@ -103,6 +117,7 @@ export default [
     number: 14,
     suit: null,
     court: null,
+    image: 'major-14-temperance.jpg',
   },
   {
     name: 'The Devil',
@@ -110,6 +125,7 @@ export default [
     number: 15,
     suit: null,
     court: null,
+    image: 'major-15-the-devil.jpg',
   },
   {
     name: 'The Tower',
@@ -117,6 +133,7 @@ export default [
     number: 16,
     suit: null,
     court: null,
+    image: 'major-16-the-tower.jpg',
   },
   {
     name: 'The Star',
@@ -124,6 +141,7 @@ export default [
     number: 17,
     suit: null,
     court: null,
+    image: 'major-17-the-star.jpg',
   },
   {
     name: 'The Moon',
@@ -131,6 +149,7 @@ export default [
     number: 18,
     suit: null,
     court: null,
+    image: 'major-18-the-moon.jpg',
   },
   {
     name: 'The Sun',
@@ -138,6 +157,7 @@ export default [
     number: 19,
     suit: null,
     court: null,
+    image: 'major-19-the-sun.jpg',
   },
   {
     name: 'Judgement',
@@ -145,6 +165,7 @@ export default [
     number: 20,
     suit: null,
     court: null,
+    image: 'major-20-judgement.jpg',
   },
   {
     name: 'The World',
@@ -152,18 +173,31 @@ export default [
     number: 21,
     suit: null,
     court: null,
+    image: 'major-21-the-world.jpg',
   },
-
-  // Minor Arcana =================================
-
-  { name: 'Ace of Cups', arcana: 'minor', number: 1, suit: 'cup', court: null },
-  { name: 'Two of Cups', arcana: 'minor', number: 2, suit: 'cup', court: null },
+  {
+    name: 'Ace of Cups',
+    arcana: 'minor',
+    number: 1,
+    suit: 'cup',
+    court: null,
+    image: 'cups-01.jpg',
+  },
+  {
+    name: 'Two of Cups',
+    arcana: 'minor',
+    number: 2,
+    suit: 'cup',
+    court: null,
+    image: 'cups-02.jpg',
+  },
   {
     name: 'Three of Cups',
     arcana: 'minor',
     number: 3,
     suit: 'cup',
     court: null,
+    image: 'cups-03.jpg',
   },
   {
     name: 'Four of Cups',
@@ -171,6 +205,7 @@ export default [
     number: 4,
     suit: 'cup',
     court: null,
+    image: 'cups-04.jpg',
   },
   {
     name: 'Five of Cups',
@@ -178,14 +213,23 @@ export default [
     number: 5,
     suit: 'cup',
     court: null,
+    image: 'cups-05.jpg',
   },
-  { name: 'Six of Cups', arcana: 'minor', number: 6, suit: 'cup', court: null },
+  {
+    name: 'Six of Cups',
+    arcana: 'minor',
+    number: 6,
+    suit: 'cup',
+    court: null,
+    image: 'cups-06.jpg',
+  },
   {
     name: 'Seven of Cups',
     arcana: 'minor',
     number: 7,
     suit: 'cup',
     court: null,
+    image: 'cups-07.jpg',
   },
   {
     name: 'Eight of Cups',
@@ -193,6 +237,7 @@ export default [
     number: 8,
     suit: 'cup',
     court: null,
+    image: 'cups-08.jpg',
   },
   {
     name: 'Nine of Cups',
@@ -200,6 +245,7 @@ export default [
     number: 9,
     suit: 'cup',
     court: null,
+    image: 'cups-09.jpg',
   },
   {
     name: 'Ten of Cups',
@@ -207,6 +253,7 @@ export default [
     number: 10,
     suit: 'cup',
     court: null,
+    image: 'cups-10.jpg',
   },
   {
     name: 'Page of Cups',
@@ -214,6 +261,7 @@ export default [
     number: null,
     suit: 'cup',
     court: 'page',
+    image: 'cups-11.jpg',
   },
   {
     name: 'Knight of Cups',
@@ -221,6 +269,7 @@ export default [
     number: null,
     suit: 'cup',
     court: 'knight',
+    image: 'cups-12.jpg',
   },
   {
     name: 'Queen of Cups',
@@ -228,6 +277,7 @@ export default [
     number: null,
     suit: 'cup',
     court: 'queen',
+    image: 'cups-13.jpg',
   },
   {
     name: 'King of Cups',
@@ -235,14 +285,15 @@ export default [
     number: null,
     suit: 'cup',
     court: 'king',
+    image: 'cups-14.jpg',
   },
-
   {
     name: 'Ace of Pentacles',
     arcana: 'minor',
     number: 1,
     suit: 'pentacle',
     court: null,
+    image: 'pents-01.jpg',
   },
   {
     name: 'Two of Pentacles',
@@ -250,6 +301,7 @@ export default [
     number: 2,
     suit: 'pentacle',
     court: null,
+    image: 'pents-02.jpg',
   },
   {
     name: 'Three of Pentacles',
@@ -257,6 +309,7 @@ export default [
     number: 3,
     suit: 'pentacle',
     court: null,
+    image: 'pents-03.jpg',
   },
   {
     name: 'Four of Pentacles',
@@ -264,6 +317,7 @@ export default [
     number: 4,
     suit: 'pentacle',
     court: null,
+    image: 'pents-04.jpg',
   },
   {
     name: 'Five of Pentacles',
@@ -271,6 +325,7 @@ export default [
     number: 5,
     suit: 'pentacle',
     court: null,
+    image: 'pents-05.jpg',
   },
   {
     name: 'Six of Pentacles',
@@ -278,6 +333,7 @@ export default [
     number: 6,
     suit: 'pentacle',
     court: null,
+    image: 'pents-06.jpg',
   },
   {
     name: 'Seven of Pentacles',
@@ -285,6 +341,7 @@ export default [
     number: 7,
     suit: 'pentacle',
     court: null,
+    image: 'pents-07.jpg',
   },
   {
     name: 'Eight of Pentacles',
@@ -292,6 +349,7 @@ export default [
     number: 8,
     suit: 'pentacle',
     court: null,
+    image: 'pents-08.jpg',
   },
   {
     name: 'Nine of Pentacles',
@@ -299,6 +357,7 @@ export default [
     number: 9,
     suit: 'pentacle',
     court: null,
+    image: 'pents-09.jpg',
   },
   {
     name: 'Ten of Pentacles',
@@ -306,6 +365,7 @@ export default [
     number: 10,
     suit: 'pentacle',
     court: null,
+    image: 'pents-10.jpg',
   },
   {
     name: 'Page of Pentacles',
@@ -313,6 +373,7 @@ export default [
     number: null,
     suit: 'pentacle',
     court: 'page',
+    image: 'pents-11.jpg',
   },
   {
     name: 'Knight of Pentacles',
@@ -320,6 +381,7 @@ export default [
     number: null,
     suit: 'pentacle',
     court: 'knight',
+    image: 'pents-12.jpg',
   },
   {
     name: 'Queen of Pentacles',
@@ -327,6 +389,7 @@ export default [
     number: null,
     suit: 'pentacle',
     court: 'queen',
+    image: 'pents-13.jpg',
   },
   {
     name: 'King of Pentacles',
@@ -334,14 +397,15 @@ export default [
     number: null,
     suit: 'pentacle',
     court: 'king',
+    image: 'pents-14.jpg',
   },
-
   {
     name: 'Ace of Swords',
     arcana: 'minor',
     number: 1,
     suit: 'sword',
     court: null,
+    image: 'swords-01.jpg',
   },
   {
     name: 'Two of Swords',
@@ -349,6 +413,7 @@ export default [
     number: 2,
     suit: 'sword',
     court: null,
+    image: 'swords-02.jpg',
   },
   {
     name: 'Three of Swords',
@@ -356,6 +421,7 @@ export default [
     number: 3,
     suit: 'sword',
     court: null,
+    image: 'swords-03.jpg',
   },
   {
     name: 'Four of Swords',
@@ -363,6 +429,7 @@ export default [
     number: 4,
     suit: 'sword',
     court: null,
+    image: 'swords-04.jpg',
   },
   {
     name: 'Five of Swords',
@@ -370,6 +437,7 @@ export default [
     number: 5,
     suit: 'sword',
     court: null,
+    image: 'swords-05.jpg',
   },
   {
     name: 'Six of Swords',
@@ -377,6 +445,7 @@ export default [
     number: 6,
     suit: 'sword',
     court: null,
+    image: 'swords-06.jpg',
   },
   {
     name: 'Seven of Swords',
@@ -384,6 +453,7 @@ export default [
     number: 7,
     suit: 'sword',
     court: null,
+    image: 'swords-07.jpg',
   },
   {
     name: 'Eight of Swords',
@@ -391,6 +461,7 @@ export default [
     number: 8,
     suit: 'sword',
     court: null,
+    image: 'swords-08.jpg',
   },
   {
     name: 'Nine of Swords',
@@ -398,6 +469,7 @@ export default [
     number: 9,
     suit: 'sword',
     court: null,
+    image: 'swords-09.jpg',
   },
   {
     name: 'Ten of Swords',
@@ -405,6 +477,7 @@ export default [
     number: 10,
     suit: 'sword',
     court: null,
+    image: 'swords-10.jpg',
   },
   {
     name: 'Page of Swords',
@@ -412,6 +485,7 @@ export default [
     number: null,
     suit: 'sword',
     court: 'page',
+    image: 'swords-11.jpg',
   },
   {
     name: 'Knight of Swords',
@@ -419,6 +493,7 @@ export default [
     number: null,
     suit: 'sword',
     court: 'knight',
+    image: 'swords-12.jpg',
   },
   {
     name: 'Queen of Swords',
@@ -426,6 +501,7 @@ export default [
     number: null,
     suit: 'sword',
     court: 'queen',
+    image: 'swords-13.jpg',
   },
   {
     name: 'King of Swords',
@@ -433,14 +509,15 @@ export default [
     number: null,
     suit: 'sword',
     court: 'king',
+    image: 'swords-14.jpg',
   },
-
   {
     name: 'Ace of Wands',
     arcana: 'minor',
     number: 1,
     suit: 'wand',
     court: null,
+    image: 'wands-01.jpg',
   },
   {
     name: 'Two of Wands',
@@ -448,6 +525,7 @@ export default [
     number: 2,
     suit: 'wand',
     court: null,
+    image: 'wands-02.jpg',
   },
   {
     name: 'Three of Wands',
@@ -455,6 +533,7 @@ export default [
     number: 3,
     suit: 'wand',
     court: null,
+    image: 'wands-03.jpg',
   },
   {
     name: 'Four of Wands',
@@ -462,6 +541,7 @@ export default [
     number: 4,
     suit: 'wand',
     court: null,
+    image: 'wands-04.jpg',
   },
   {
     name: 'Five of Wands',
@@ -469,6 +549,7 @@ export default [
     number: 5,
     suit: 'wand',
     court: null,
+    image: 'wands-05.jpg',
   },
   {
     name: 'Six of Wands',
@@ -476,6 +557,7 @@ export default [
     number: 6,
     suit: 'wand',
     court: null,
+    image: 'wands-06.jpg',
   },
   {
     name: 'Seven of Wands',
@@ -483,6 +565,7 @@ export default [
     number: 7,
     suit: 'wand',
     court: null,
+    image: 'wands-07.jpg',
   },
   {
     name: 'Eight of Wands',
@@ -490,6 +573,7 @@ export default [
     number: 8,
     suit: 'wand',
     court: null,
+    image: 'wands-08.jpg',
   },
   {
     name: 'Nine of Wands',
@@ -497,6 +581,7 @@ export default [
     number: 9,
     suit: 'wand',
     court: null,
+    image: 'wands-09.jpg',
   },
   {
     name: 'Ten of Wands',
@@ -504,6 +589,7 @@ export default [
     number: 10,
     suit: 'wand',
     court: null,
+    image: 'wands-10.jpg',
   },
   {
     name: 'Page of Wands',
@@ -511,6 +597,7 @@ export default [
     number: null,
     suit: 'wand',
     court: 'page',
+    image: 'wands-11.jpg',
   },
   {
     name: 'Knight of Wands',
@@ -518,6 +605,7 @@ export default [
     number: null,
     suit: 'wand',
     court: 'knight',
+    image: 'wands-12.jpg',
   },
   {
     name: 'Queen of Wands',
@@ -525,6 +613,7 @@ export default [
     number: null,
     suit: 'wand',
     court: 'queen',
+    image: 'wands-13.jpg',
   },
   {
     name: 'King of Wands',
@@ -532,5 +621,6 @@ export default [
     number: null,
     suit: 'wand',
     court: 'king',
+    image: 'wands-14.jpg',
   },
 ];

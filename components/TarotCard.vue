@@ -31,7 +31,13 @@ const toggleFlip = () => (isFlipped.value = !isFlipped.value);
           'card--major': card.arcana === 'major',
         }"
       >
-        <div>
+        <img
+          v-if="card.image"
+          :src="`images/tarot-deck-classic/${card.image}`"
+          :alt="`${card.name} - ${card.arcana}`"
+          class="h-full w-full object-cover"
+        />
+        <div v-else>
           <h1 class="text-3xl font-bold">{{ card.name }}</h1>
 
           <hr class="my-2 mx-4 opacity-10 border-white" />
@@ -40,11 +46,6 @@ const toggleFlip = () => (isFlipped.value = !isFlipped.value);
             {{ card.number || card.court }}
           </p>
         </div>
-        <!-- <img
-            :src="card.image"
-            alt="The Fool Tarot Card"
-            class="h-full w-full object-cover"
-          /> -->
       </div>
       <div class="card__back">
         <img

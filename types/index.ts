@@ -8,6 +8,7 @@ interface TarotCard {
   number: number | null;
   suit: Suit | null;
   court: Court | null;
+  image: string;
 }
 
 type Spreads =
