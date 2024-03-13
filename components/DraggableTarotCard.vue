@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useDraggableCard } from '@/composables/useDraggableCard';
+import { useDrag } from '@/composables/useDragAndDrop/useDrag';
 
-defineProps<{
+const props = defineProps<{
   card: TarotCard;
 }>();
 
@@ -12,17 +13,20 @@ const { style, isDragging, resetCard } = useDraggableCard(cardRef, {});
 watch(isDragging, (newVal) => {
   if (!newVal) resetCard();
 });
+
+const { dndState } = useDrag(cardRef, props.card.name);
 </script>
 
 <template>
   <Teleport
-    v-if="isDragging"
+    :disabled="!isDragging"
     to="body"
   >
     <div
       ref="cardRef"
-      class="draggable-container"
+      :class="{ 'absolute bd top-0 left-0': isDragging }"
       :style="style"
+      class="z-20"
     >
       <tarot-card
         class="card"
@@ -30,17 +34,6 @@ watch(isDragging, (newVal) => {
       />
     </div>
   </Teleport>
-  <div
-    v-else
-    ref="cardRef"
-    class="draggable-container"
-    :style="style"
-  >
-    <tarot-card
-      class="card"
-      :card="card"
-    />
-  </div>
 </template>
 
 <style scoped>

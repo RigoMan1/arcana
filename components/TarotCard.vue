@@ -67,7 +67,6 @@ const toggleFlip = () => (isFlipped.value = !isFlipped.value);
   /* --- */
   pointer-events: none;
   user-drag: none;
-  user-select: none;
 }
 
 .card__inner {
