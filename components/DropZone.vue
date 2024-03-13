@@ -6,17 +6,18 @@ const props = defineProps<{
   label?: string;
 }>();
 
-// function handleDrop(event: any) {
-//   if (props.card) return;
-
-//   emit('card-select', {
-//     cardName: droppedCardName,
-//     spreadLabel: props.label,
-//   });
-// }
-
 const dropTarget = ref() as Ref<HTMLElement>;
 const { isOver, dndState } = useDrop(dropTarget, props.zoneId);
+
+const selectedCard = computed(() => {
+  const card = dndState.dropContainers[props.zoneId] || [];
+  return card.length ? card[0] : [];
+});
+
+const emit = defineEmits(['drop']);
+watch(selectedCard, (newVal) => {
+  emit('drop', newVal, props.label);
+});
 </script>
 
 <template>
@@ -41,7 +42,7 @@ const { isOver, dndState } = useDrop(dropTarget, props.zoneId);
       container-data:{{ dndState.dropContainers }}  
     </pre> -->
 
-    <slot :dropZoneData="dndState.dropContainers[props.zoneId] || []" />
+    <slot :drop-zone-data="selectedCard" />
   </div>
 </template>
 

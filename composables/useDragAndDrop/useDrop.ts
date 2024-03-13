@@ -40,18 +40,18 @@ export function useDrop(
       // If the item comes from another container, transfer it
       if (sourceContainerId && sourceContainerId !== containerId) {
         transferItem(sourceContainerId, containerId, $state.dragData);
-        console.log(
-          `Item ${$state.dragData} transferred from ${sourceContainerId} to ${containerId}`
-        );
+        // console.log(
+        //   `Item ${$state.dragData} transferred from ${sourceContainerId} to ${containerId}`
+        // );
       } else if (!sourceContainerId) {
         // Handle the case where the item is not yet assigned to any container
         if ($state.dropContainers[containerId].length === 0) {
-          console.log(
-            'dropped',
-            $state.dragData,
-            'into container',
-            containerId
-          );
+          // console.log(
+          //   'dropped',
+          //   $state.dragData,
+          //   'into container',
+          //   containerId
+          // );
           $state.dropContainers[containerId].push($state.dragData);
         }
       }

@@ -38,17 +38,23 @@ export function useDrag(target: Ref<HTMLElement | null>, data: any) {
   }
 
   function startDrag(event: MouseEvent | TouchEvent) {
+    console.log('startDrag');
     event.preventDefault();
 
     setDragging(true);
     setDragData(data);
 
+    // document.addEventListener('mousemove', checkOverlap);
+
     document.addEventListener('mousemove', checkOverlap);
+    document.addEventListener('mouseup', endDrag, { once: true });
   }
 
   // ! this won't get called unless mouse pointer is over a draggable element
   function endDrag(event: MouseEvent | TouchEvent) {
+    console.log('endDrag');
     event.preventDefault();
+
     setDragging(false); // this will trigger onDrop
 
     document.removeEventListener('mousemove', checkOverlap);
@@ -57,14 +63,13 @@ export function useDrag(target: Ref<HTMLElement | null>, data: any) {
   onMounted(() => {
     if (target.value) {
       target.value.addEventListener('mousedown', startDrag);
-      target.value.addEventListener('mouseup', endDrag);
     }
   });
 
   onUnmounted(() => {
     if (target.value) {
       target.value.removeEventListener('mousedown', startDrag);
-      target.value.removeEventListener('mouseup', endDrag);
+      // target.value.removeEventListener('mouseup', endDrag); // handled by once
     }
   });
 

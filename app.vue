@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TarotCards from '~/constants/tarot-card-data';
 
-const randomCards = ref(TarotCards) as Ref<TarotCard[]>;
+const randomCards = ref(TarotCards) as Ref<TarotCard[] | null[]>;
 
 const shuffleCards = () => {
   let shuffled = [...TarotCards]; // Create a shallow copy to avoid modifying the original array
@@ -11,6 +11,44 @@ const shuffleCards = () => {
   }
   randomCards.value = shuffled as TarotCard[];
 };
+
+// selected cards: past, present, future
+
+const selectedCards = ref({
+  past: null,
+  present: null,
+  future: null,
+}) as Ref<Record<string, TarotCard | null>>;
+
+// when the user selects a card, remove it from the deck
+const handleCardSelect = (
+  cardName: string,
+  spreadLabel: 'past' | 'present' | 'future'
+) => {
+  // 1. find card in deck
+  const cardIndex = randomCards.value.findIndex(
+    (card) => card?.name === cardName
+  );
+
+  if (cardIndex === -1) return; // Card not found, exit early
+
+  const foundCard = randomCards.value[cardIndex];
+
+  // 2. update selected cards
+  // selectedCards.value[spreadLabel] = foundCard; // Update selected card
+  selectedCards.value = {
+    ...selectedCards.value,
+    [spreadLabel]: foundCard,
+  };
+  // 3. remove card from deck
+  randomCards.value.splice(cardIndex, 1, null);
+};
+
+onMounted(() => {
+  shuffleCards();
+});
+
+const flipCards = ref(false);
 </script>
 
 <template>
@@ -20,7 +58,9 @@ const shuffleCards = () => {
     >
       <div
         v-for="(card, cardIndex) in randomCards"
-        class="border border-zinc-500 relative p-4 px-24 first:rounded-l-lg last:rounded-r-lg"
+        :key="card ? `${card.name}-${card.arcana}` : cardIndex"
+        class="min-w-[233px] border border-zinc-500 relative p-4 first:rounded-l-lg
+          last:rounded-r-lg"
       >
         <!-- counter badge on center top of card -->
         <span
@@ -31,27 +71,35 @@ const shuffleCards = () => {
           {{ cardIndex + 1 }}
         </span>
         <draggable-tarot-card
-          :key="`${card.name}-${card.arcana}`"
+          v-if="card"
           :card="card"
         />
+        <div
+          v-else
+          class="w-[200px] h-full flex items-center justify-center"
+        >
+          <p class="text-center text-zinc-400">Card removed</p>
+        </div>
       </div>
     </div>
 
     <!-- Spreads Section -->
     <div class="flex space-x-8 mt-8 max-w-[940px] mx-auto">
-      <div
+      <!-- @card-select="handleCardSelect" -->
+      <drop-zone
         v-for="card in ['past', 'present', 'future']"
-        class="border border-zinc-500 relative p-4 flex-1 h-[400px] rounded-lg"
+        :key="card"
+        :label="card"
+        :zone-id="`zone-${card}`"
+        class="border border-zinc-500 relative p-4 flex-1 h-[400px] w-[300px] rounded-lg"
+        @drop="handleCardSelect"
       >
-        <!-- counter badge on center top of card -->
-        <span
-          class="flex items-center justify-center absolute px-2 h-6 text-center -top-3 left-1/2
-            transform -translate-x-1/2 capitalize bg-zinc-900 border border-zinc-600
-            text-zinc-400 font-medium rounded-lg"
-        >
-          {{ card }}
-        </span>
-      </div>
+        <draggable-tarot-card
+          v-if="selectedCards[card]"
+          :card="selectedCards[card]!"
+          :flip="flipCards"
+        />
+      </drop-zone>
     </div>
   </div>
 </template>

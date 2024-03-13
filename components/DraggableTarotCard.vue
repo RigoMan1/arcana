@@ -4,45 +4,57 @@ import { useDrag } from '@/composables/useDragAndDrop/useDrag';
 
 const props = defineProps<{
   card: TarotCard;
+  flip?: boolean;
 }>();
 
 const cardRef = ref();
+useDrag(cardRef, props.card.name);
 
 const { style, isDragging, resetCard } = useDraggableCard(cardRef, {});
 
 watch(isDragging, (newVal) => {
   if (!newVal) resetCard();
 });
-
-const { dndState } = useDrag(cardRef, props.card.name);
 </script>
 
 <template>
-  <Teleport
-    :disabled="!isDragging"
-    to="body"
-  >
+  <div ref="cardRef">
+    <Teleport
+      v-if="isDragging"
+      to="body"
+    >
+      <div
+        :class="{ 'absolute top-0 left-0': isDragging }"
+        :style="style"
+        class="z-20"
+      >
+        <tarot-card
+          :card="card"
+          :flip="flip"
+        />
+      </div>
+    </Teleport>
     <div
-      ref="cardRef"
-      :class="{ 'absolute bd top-0 left-0': isDragging }"
+      v-else
+      :class="{ 'absolute top-0 left-0': isDragging }"
       :style="style"
       class="z-20"
     >
       <tarot-card
-        class="card"
         :card="card"
+        :flip="flip"
       />
     </div>
-  </Teleport>
+  </div>
 </template>
 
 <style scoped>
 .draggable-container {
   position: absolute;
-  left: 0;
-  top: 0;
+  /* left: 0;
+  top: 0; */
   display: inline-block;
-  z-index: 10;
+  z-index: 20;
   will-change: transform;
 
   &:active {

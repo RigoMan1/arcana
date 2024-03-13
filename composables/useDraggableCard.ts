@@ -200,6 +200,7 @@ export function useDraggableCard(
     const rect = targetEl.getBoundingClientRect(); // Get bounding rectangle of target.
 
     // Set the pressedDelta to where the click occurred within the element
+
     const offsetX = e.clientX - rect.left;
     const offsetY = e.clientY - rect.top;
     pressedDelta.value = { x: offsetX, y: offsetY };

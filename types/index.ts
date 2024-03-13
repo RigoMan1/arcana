@@ -16,3 +16,23 @@ type Spreads =
   | 'pentagram-tarot'
   | 'celtic-cross'
   | 'seven-card-horseshoe';
+
+type ThreeCardCluster = 'past' | 'present' | 'future';
+type PentagramTarot = 'earth' | 'air' | 'fire' | 'water' | 'spirit';
+type CelticCross =
+  | 'present'
+  | 'challenge'
+  | 'past'
+  | 'future'
+  | 'above'
+  | 'below'
+  | 'advice'
+  | 'outcome';
+type SevenCardHorseshoe =
+  | 'past'
+  | 'present'
+  | 'challenge'
+  | 'near-future'
+  | 'advice'
+  | 'outcome'
+  | 'future';
