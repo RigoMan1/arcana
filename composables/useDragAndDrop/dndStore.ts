@@ -47,5 +47,25 @@ export const useDndStore = defineStore('dnd', {
     unregisterDropContainer(id: string) {
       delete this.dropContainers[id];
     },
+
+    transferItem(fromContainerId: string, toContainerId: string, item: string) {
+      const fromItems = this.dropContainers[fromContainerId];
+      const toItems = this.dropContainers[toContainerId];
+
+      if (fromItems && toItems && fromItems.includes(item)) {
+        // Remove item from the source container
+        const itemIndex = fromItems.indexOf(item);
+        if (itemIndex > -1) {
+          fromItems.splice(itemIndex, 1);
+        }
+
+        // Add item to the destination container
+        toItems.push(item);
+
+        // Update state to reflect changes
+        this.dropContainers[fromContainerId] = fromItems;
+        this.dropContainers[toContainerId] = toItems;
+      }
+    },
   },
 });
