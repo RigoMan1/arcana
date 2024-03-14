@@ -50,48 +50,13 @@ onMounted(() => {
 
 const flipCards = ref(false);
 
-const deckContaienr = ref<HTMLElement>();
-onMounted(() => {
-  // center horizontal scroll container
-  if (deckContaienr.value) {
-    deckContaienr.value.scrollLeft = deckContaienr.value.scrollWidth / 2;
-  }
+const allCardsSelected = computed(() => {
+  return Object.values(selectedCards.value).every((card) => card !== null);
 });
 </script>
 
 <template>
-  <div class="container mt-20 arcana-scrollbar">
-    <div
-      ref="deckContaienr"
-      class="flex mt-8 overflow-auto p-4 max-w-7xl mx-auto select-none h-[400px]"
-    >
-      <div
-        v-for="(card, cardIndex) in randomCards"
-        :key="card ? `${card.name}-${card.arcana}` : cardIndex"
-        class="min-w-[233px] border border-zinc-500 relative p-4 first:rounded-l-lg
-          last:rounded-r-lg"
-      >
-        <!-- counter badge on center top of card -->
-        <span
-          class="flex items-center justify-center absolute w-6 h-6 text-center -top-3 left-1/2
-            transform -translate-x-1/2 text-xs bg-zinc-900 border border-zinc-600
-            text-zinc-400 font-bold rounded-full"
-        >
-          {{ cardIndex + 1 }}
-        </span>
-        <draggable-tarot-card
-          v-if="card"
-          :card="card"
-        />
-        <div
-          v-else
-          class="w-[200px] h-full flex items-center justify-center"
-        >
-          <p class="text-center text-zinc-400">Card removed</p>
-        </div>
-      </div>
-    </div>
-
+  <div class="container mt-20">
     <!-- Spreads Section -->
     <div class="flex space-x-8 mt-8 max-w-[940px] mx-auto">
       <!-- @card-select="handleCardSelect" -->
@@ -112,11 +77,17 @@ onMounted(() => {
     </div>
 
     <fortune-reader
-      class="my-20"
+      class="mt-12"
       :cards="selectedCards"
+      :all-cards-selected="allCardsSelected"
       @reveal-fortune="flipCards = true"
     />
   </div>
+
+  <card-selection
+    v-show="!allCardsSelected"
+    :random-cards="randomCards"
+  />
 </template>
 
 <style>

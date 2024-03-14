@@ -12,3 +12,8 @@ html {
   --v-ease-out: cubic-bezier(0, 0, 0.2, 1);
   --v-ease-in: cubic-bezier(0.4, 0, 1, 1);
 }
+
+.bg-parchment-dark {
+  background-color: rgb(26, 17, 13);
+  background-image: url('../public/images/textures/parchment-dark.jpg');
+}
