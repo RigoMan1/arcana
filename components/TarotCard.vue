@@ -6,59 +6,88 @@ const elementMap: Record<string, string> = {
   wands: 'fire',
 };
 
-defineProps<{
+const props = defineProps<{
   card: TarotCard;
+  flip?: boolean;
 }>();
 
-const isFlipped = ref(true);
+const showOverlay = ref(false);
+// watch flip and show overlay for 1 second
 
-const toggleFlip = () => (isFlipped.value = !isFlipped.value);
+watch(
+  () => props.flip,
+  (newVal) => {
+    if (newVal) {
+      setTimeout(() => {
+        showOverlay.value = true;
+      }, 200);
+    }
+  }
+);
 </script>
 
 <template>
-  <div
-    class="card overflow-hidden p-2"
-    @click="toggleFlip"
-  >
+  <div class="relative">
     <div
-      class="card__inner rounded-lg border-4 border-zinc-200"
-      :class="{ 'is-flipped': isFlipped }"
-    >
+      class="card__overlay card__inner glow--inactive"
+      :class="{
+        'is-flipped': !flip,
+        'glow--active': showOverlay,
+        'card--major': card.arcana === 'major',
+        [`card--${card.suit}`]: card.suit,
+      }"
+    />
+    <div class="card overflow-hidden">
       <div
-        class="card__front flex items-center text-center justify-center"
-        :class="{
-          [`card--${card.suit}`]: card.suit,
-          'card--major': card.arcana === 'major',
-        }"
+        class="card__inner rounded-lg border-4 border-zinc-200"
+        :class="{ 'is-flipped': !flip }"
       >
-        <img
-          v-if="card.image"
-          :src="`images/tarot-deck-classic/${card.image}`"
-          :alt="`${card.name} - ${card.arcana}`"
-          class="h-full w-full object-cover"
-        />
-        <div v-else>
-          <h1 class="text-3xl font-bold">{{ card.name }}</h1>
+        <div
+          class="card__front flex items-center text-center justify-center"
+          :class="{
+            [`card--${card.suit}`]: card.suit,
+            'card--major': card.arcana === 'major',
+          }"
+        >
+          <img
+            v-if="card.image"
+            :src="`images/tarot-deck-classic/${card.image}`"
+            :alt="`${card.name} - ${card.arcana}`"
+            class="h-full w-full object-cover"
+          />
+          <div v-else>
+            <h1 class="text-3xl font-bold">{{ card.name }}</h1>
 
-          <hr class="my-2 mx-4 opacity-10 border-white" />
+            <hr class="my-2 mx-4 opacity-10 border-white" />
 
-          <p class="text-xl font-medium capitalize">
-            {{ card.number || card.court }}
-          </p>
+            <p class="text-xl font-medium capitalize">
+              {{ card.number || card.court }}
+            </p>
+          </div>
         </div>
-      </div>
-      <div class="card__back">
-        <img
-          src="/images/tarot-back.png"
-          alt="Tarot Card Back Design"
-          class="h-full w-full object-cover"
-        />
+        <div class="card__back">
+          <img
+            src="/images/tarot-back.png"
+            alt="Tarot Card Back Design"
+            class="h-full w-full object-cover"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style>
+:root {
+  /*  neon-glow parameters */
+  --neon-primary-color: #ff1177;
+  --neon-secondary-color: #fff;
+
+  --neon-spread-start: 6px;
+  --neon-spread-end: 4px;
+  --neon-glow-opacity: 0.5;
+}
+
 .card {
   perspective: 1000px;
   width: 200px;
@@ -118,20 +147,80 @@ const toggleFlip = () => (isFlipped.value = !isFlipped.value);
 .card--cup {
   background-color: theme('colors.blue.300');
   color: theme('colors.blue.900');
+  --neon-primary-color: theme('colors.blue.500');
+  --neon-secondary-color: theme('colors.blue.300');
 }
 
 .card--pentacle {
   background-color: theme('colors.green.300');
   color: theme('colors.green.900');
+  --neon-primary-color: theme('colors.green.500');
+  --neon-secondary-color: theme('colors.green.300');
 }
 
 .card--sword {
-  background-color: theme('colors.yellow.300');
-  color: theme('colors.yellow.900');
+  background-color: theme('colors.amber.300');
+  color: theme('colors.amber.900');
+  --neon-primary-color: theme('colors.amber.500');
+  --neon-secondary-color: theme('colors.amber.300');
 }
 
 .card--wand {
   background-color: theme('colors.rose.300');
   color: theme('colors.rose.900');
+  --neon-primary-color: theme('colors.rose.500');
+  --neon-secondary-color: theme('colors.rose.300');
+}
+
+.card--major {
+  /* gold */
+  background-color: #fedb37;
+  color: #5d4a1f;
+  --neon-primary-color: #fedb37;
+  --neon-secondary-color: #5d4a1f;
+  --neon-glow-opacity: 1;
+}
+
+/* todo: play with opacity and fill mode to replicate a glowing effect  */
+
+@keyframes neon-glow {
+  0% {
+    box-shadow:
+      0 0 calc(var(--neon-spread-start) * 1) var(--neon-secondary-color),
+      0 0 calc(var(--neon-spread-start) * 2) var(--neon-secondary-color),
+      0 0 calc(var(--neon-spread-start) * 3) var(--neon-secondary-color),
+      0 0 calc(var(--neon-spread-start) * 4) var(--neon-primary-color),
+      0 0 calc(var(--neon-spread-start) * 7) var(--neon-primary-color),
+      0 0 calc(var(--neon-spread-start) * 8) var(--neon-primary-color),
+      0 0 calc(var(--neon-spread-start) * 10) var(--neon-primary-color),
+      0 0 calc(var(--neon-spread-start) * 15) var(--neon-primary-color);
+  }
+  100% {
+    box-shadow:
+      0 0 calc(var(--neon-spread-end) * 1) var(--neon-secondary-color),
+      0 0 calc(var(--neon-spread-end) * 2) var(--neon-secondary-color),
+      0 0 calc(var(--neon-spread-end) * 3) var(--neon-secondary-color),
+      0 0 calc(var(--neon-spread-end) * 4) var(--neon-primary-color),
+      0 0 calc(var(--neon-spread-end) * 7) var(--neon-primary-color),
+      0 0 calc(var(--neon-spread-end) * 8) var(--neon-primary-color),
+      0 0 calc(var(--neon-spread-end) * 10) var(--neon-primary-color),
+      0 0 calc(var(--neon-spread-end) * 15) var(--neon-primary-color);
+  }
+}
+
+.card__overlay {
+  @apply absolute top-0 left-0 w-full h-full rounded-lg;
+  animation: neon-glow 1s ease-in-out infinite alternate;
+}
+
+.glow--inactive {
+  --neon-spread-start: 0;
+  --neon-spread-end: 0;
+}
+
+.glow--active {
+  --neon-spread-start: 4px;
+  --neon-spread-end: 6px;
+  opacity: var(--neon-glow-opacity);
 }
 </style>
