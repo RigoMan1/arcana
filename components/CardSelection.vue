@@ -1,9 +1,10 @@
 <script setup lang="ts">
 defineProps<{
-  randomCards: TarotCard[] | null[];
+  tarotDeck: TarotCard[] | null[];
 }>();
 
 const deckContainer = ref<HTMLElement>();
+
 onMounted(() => {
   if (deckContainer.value) {
     deckContainer.value.scrollLeft = deckContainer.value.scrollWidth / 2;
@@ -18,7 +19,7 @@ onMounted(() => {
       h-[420px]"
   >
     <div
-      v-for="(card, cardIndex) in randomCards"
+      v-for="(card, cardIndex) in tarotDeck"
       :key="card ? `${card.name}-${card.arcana}` : cardIndex"
       class="min-w-[233px] border border-zinc-500 relative p-4 first:rounded-l-lg
         last:rounded-r-lg"

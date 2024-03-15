@@ -11,15 +11,37 @@ interface TarotCard {
   image: string;
 }
 
-type Spreads =
+// Spre3ad Types
+type SpreadsTypes =
   | 'three-card-cluster'
   | 'pentagram-tarot'
   | 'celtic-cross'
   | 'seven-card-horseshoe';
 
-type ThreeCardCluster = 'past' | 'present' | 'future';
-type PentagramTarot = 'earth' | 'air' | 'fire' | 'water' | 'spirit';
-type CelticCross =
+// Three Card Cluster
+type ThreeCardClusterSlots = 'past' | 'present' | 'future';
+interface IThreeCardClusterSpread {
+  options: ThreeCardClusterSlots[];
+  name: string;
+  past: TarotCard | null;
+  present: TarotCard | null;
+  future: TarotCard | null;
+}
+
+// Pentagram Tarot
+type PentagramTarotSlots = 'earth' | 'air' | 'fire' | 'water' | 'spirit';
+interface IPentagramTarotSpread {
+  options: PentagramTarotSlots[];
+  name: string;
+  earth: TarotCard | null;
+  air: TarotCard | null;
+  fire: TarotCard | null;
+  water: TarotCard | null;
+  spirit: TarotCard | null;
+}
+
+// Celtic Cross
+type CelticCrossSlots =
   | 'present'
   | 'challenge'
   | 'past'
@@ -28,7 +50,21 @@ type CelticCross =
   | 'below'
   | 'advice'
   | 'outcome';
-type SevenCardHorseshoe =
+interface ICelticCrossSpread {
+  options: CelticCrossSlots[];
+  name: string;
+  present: TarotCard | null;
+  challenge: TarotCard | null;
+  past: TarotCard | null;
+  future: TarotCard | null;
+  above: TarotCard | null;
+  below: TarotCard | null;
+  advice: TarotCard | null;
+  outcome: TarotCard | null;
+}
+
+// Seven Card Horseshoe
+type SevenCardHorseshoeSlots =
   | 'past'
   | 'present'
   | 'challenge'
@@ -36,3 +72,15 @@ type SevenCardHorseshoe =
   | 'advice'
   | 'outcome'
   | 'future';
+
+interface ISevenCardHorseshoeSpread {
+  options: SevenCardHorseshoeSlots[];
+  name: string;
+  past: TarotCard | null;
+  present: TarotCard | null;
+  challenge: TarotCard | null;
+  nearFuture: TarotCard | null;
+  advice: TarotCard | null;
+  outcome: TarotCard | null;
+  future: TarotCard | null;
+}

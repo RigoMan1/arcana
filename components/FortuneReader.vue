@@ -3,46 +3,46 @@ import { testPrompt } from '@/constants/systemPrompts';
 const { chatCompletion } = useChatgpt();
 
 const props = defineProps<{
-  cards: any;
+  cards: IThreeCardClusterSpread;
   allCardsSelected: boolean;
 }>();
 
-const maxChatHistoryLength = 5;
-const chatHistory = computed(() => chatTree.value.slice(-maxChatHistoryLength));
+const formattedSpread = computed(() => {
+  if (!props.allCardsSelected) return;
 
-const chatTree = ref([]) as Ref<IMessage[]>;
-const fortuneTellerMessages = ref([]) as Ref<IMessage[]>;
-const isTyping = ref(false);
-
-function formatSpread(spread: any) {
   const formatCard = (position: string, card: TarotCard) =>
-    // `${position}: ${card.name}, ${card.arcana.charAt(0).toUpperCase() + card.arcana.slice(1)} Arcana, ${card.suit.charAt(0).toUpperCase() + card.suit.slice(1)} Suit`;
     `${position}: ${card.name}`;
 
+  const { past, future, present } = props.cards;
+  if (!past || !future || !present) return;
   return [
-    'test',
-    formatCard('Past', spread.past),
-    formatCard('Present', spread.present),
-    formatCard('Future', spread.future),
+    formatCard('Past', past),
+    formatCard('Present', present),
+    formatCard('Future', future),
   ].join('\n');
-}
+});
+
+const chatTree = ref([]) as Ref<IMessage[]>;
+const fortuneTellerMessages = computed(() =>
+  chatTree.value.filter((m) => m.role === 'assistant')
+);
+
+const isTyping = ref(false);
 const systemPrompt = ref(testPrompt);
 const userInputText = ref(`I would like to know my fortune, please.`);
 
 async function sendMessage() {
   if (!props.cards) return;
   try {
-    if (userInputText.value.trim() === '') {
-      return; // Avoid sending empty messages
-    }
+    if (userInputText.value.trim() === '') return; // Avoid sending empty messages
 
     const userMessage: IMessage = {
       role: 'user',
       content: `
       ${userInputText.value}
-      <taror-spread-three-card-cluster>
-        ${formatSpread(props.cards)}
-      </taror-spread-three-card-cluster>
+      <tarot-spread-${props.cards.name}>
+        ${formattedSpread.value}
+      </tarot-spread-${props.cards.name}>
       `,
     };
 
@@ -52,20 +52,17 @@ async function sendMessage() {
     };
 
     chatTree.value.push(userMessage);
-
     userInputText.value = '';
-
     isTyping.value = true;
 
     const responseMessage = (await chatCompletion([
       systemMessage,
-      ...chatHistory.value,
+      ...chatTree.value,
     ])) as IMessage;
 
     isTyping.value = false;
 
     chatTree.value.push(responseMessage);
-    fortuneTellerMessages.value.push(responseMessage);
   } catch (error) {
     alert(error);
   }
@@ -119,11 +116,3 @@ function handleClick() {
     </div>
   </div>
 </template>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap');
-
-html {
-  font-family: 'Cinzel', serif;
-}
-</style>

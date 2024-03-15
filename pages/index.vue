@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TarotCards from '~/constants/tarot-card-data';
 
-const randomCards = ref(TarotCards) as Ref<TarotCard[] | null[]>;
+const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
 
 const shuffleCards = () => {
   let shuffled = [...TarotCards]; // Create a shallow copy to avoid modifying the original array
@@ -9,39 +9,33 @@ const shuffleCards = () => {
     const j = Math.floor(Math.random() * (i + 1)); // Random index from 0 to i
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // Swap elements
   }
-  randomCards.value = shuffled as TarotCard[];
+  tarotDeck.value = shuffled as TarotCard[];
 };
 
-// selected cards: past, present, future
-
 const selectedCards = ref({
+  name: 'Three Card Cluster',
   past: null,
   present: null,
   future: null,
-}) as Ref<Record<string, TarotCard | null>>;
+  options: ['past', 'present', 'future'],
+} as IThreeCardClusterSpread);
 
-// when the user selects a card, remove it from the deck
 const handleCardSelect = (
   cardName: string,
-  spreadLabel: 'past' | 'present' | 'future'
+  spreadLabel: ThreeCardClusterSlots
 ) => {
   // 1. find card in deck
-  const cardIndex = randomCards.value.findIndex(
+  const cardIndex = tarotDeck.value.findIndex(
     (card) => card?.name === cardName
   );
-
-  if (cardIndex === -1) return; // Card not found, exit early
-
-  const foundCard = randomCards.value[cardIndex];
+  if (cardIndex === -1) return;
 
   // 2. update selected cards
-  // selectedCards.value[spreadLabel] = foundCard; // Update selected card
-  selectedCards.value = {
-    ...selectedCards.value,
-    [spreadLabel]: foundCard,
-  };
+  const foundCard = tarotDeck.value[cardIndex];
+  selectedCards.value[spreadLabel] = foundCard;
+
   // 3. remove card from deck
-  randomCards.value.splice(cardIndex, 1, null);
+  tarotDeck.value.splice(cardIndex, 1, null);
 };
 
 onMounted(() => {
@@ -57,11 +51,9 @@ const allCardsSelected = computed(() => {
 
 <template>
   <div class="container mt-20">
-    <!-- Spreads Section -->
     <div class="flex space-x-8 mt-8 max-w-[940px] mx-auto">
-      <!-- @card-select="handleCardSelect" -->
       <drop-zone
-        v-for="card in ['past', 'present', 'future']"
+        v-for="card in selectedCards.options"
         :key="card"
         :label="card"
         :zone-id="`zone-${card}`"
@@ -86,7 +78,7 @@ const allCardsSelected = computed(() => {
 
   <card-selection
     v-show="!allCardsSelected"
-    :random-cards="randomCards"
+    :tarot-deck="tarotDeck"
   />
 </template>
 

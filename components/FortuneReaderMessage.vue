@@ -31,5 +31,15 @@ const parsedContent =
 
 .markdown.prose a {
   text-decoration: none;
+  @apply text-amber-200;
+}
+
+.markdown.prose h2,
+.markdown.prose h3 {
+  @apply text-amber-200;
+}
+
+.markdown.prose {
+  @apply text-amber-100/85;
 }
 </style>
