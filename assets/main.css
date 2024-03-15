@@ -13,9 +13,37 @@ html {
   --v-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --v-ease-out: cubic-bezier(0, 0, 0.2, 1);
   --v-ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+  --color-primary: theme('colors.violet.500');
+  --color-primary-dark: #1e1e24;
+  --color-secondary: #cba135;
 }
 
 .bg-parchment-dark {
   background-color: rgb(26, 17, 13);
   background-image: url('../public/images/textures/parchment-dark.jpg');
+}
+
+/* Custom Scrollbar Styles for the Tarot Reading App */
+.arcana-scrollbar ::-webkit-scrollbar {
+  width: 12px; /* Adjust width of scrollbar */
+}
+
+.arcana-scrollbar ::-webkit-scrollbar-track {
+  background: #1e1e24;
+  border-left: 2px solid var(--color-primary-dark); /* Darken the track to match the thumb */
+}
+
+.arcana-scrollbar ::-webkit-scrollbar-thumb {
+  background: var(--color-primary); /* Gold thumb */
+  border-radius: 6px; /* Rounded corners for the thumb */
+  border: 2px solid var(--color-primary-dark); /* Dark border to match the track */
+}
+
+.arcana-scrollbar ::-webkit-scrollbar-thumb:hover {
+  background: #ffd700; /* Lighter gold when hovered for an interactive feel */
+}
+
+.arcana-scrollbar ::-webkit-scrollbar-thumb:active {
+  background: #cba135; /* Return to original gold to signify active scrolling */
 }

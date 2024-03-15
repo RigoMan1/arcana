@@ -51,22 +51,11 @@ const allCardsSelected = computed(() => {
 
 <template>
   <div class="container mt-20">
-    <div class="flex space-x-8 mt-8 max-w-[940px] mx-auto">
-      <drop-zone
-        v-for="card in selectedCards.options"
-        :key="card"
-        :label="card"
-        :zone-id="`zone-${card}`"
-        class="border border-zinc-500 relative p-4 flex-1 h-[400px] w-[300px] rounded-lg"
-        @drop="handleCardSelect"
-      >
-        <draggable-tarot-card
-          v-if="selectedCards[card]"
-          :card="selectedCards[card]!"
-          :flip="flipCards"
-        />
-      </drop-zone>
-    </div>
+    <tarot-spread
+      :cards="selectedCards"
+      :flip-cards="flipCards"
+      @select-card="handleCardSelect"
+    />
 
     <fortune-reader
       class="mt-12"
@@ -81,35 +70,3 @@ const allCardsSelected = computed(() => {
     :tarot-deck="tarotDeck"
   />
 </template>
-
-<style>
-:root {
-  --color-primary: theme('colors.violet.500');
-  --color-primary-dark: #1e1e24;
-  --color-secondary: #cba135;
-}
-
-/* Custom Scrollbar Styles for the Tarot Reading App */
-.arcana-scrollbar ::-webkit-scrollbar {
-  width: 12px; /* Adjust width of scrollbar */
-}
-
-.arcana-scrollbar ::-webkit-scrollbar-track {
-  background: #1e1e24;
-  border-left: 2px solid var(--color-primary-dark); /* Darken the track to match the thumb */
-}
-
-.arcana-scrollbar ::-webkit-scrollbar-thumb {
-  background: var(--color-primary); /* Gold thumb */
-  border-radius: 6px; /* Rounded corners for the thumb */
-  border: 2px solid var(--color-primary-dark); /* Dark border to match the track */
-}
-
-.arcana-scrollbar ::-webkit-scrollbar-thumb:hover {
-  background: #ffd700; /* Lighter gold when hovered for an interactive feel */
-}
-
-.arcana-scrollbar ::-webkit-scrollbar-thumb:active {
-  background: #cba135; /* Return to original gold to signify active scrolling */
-}
-</style>
