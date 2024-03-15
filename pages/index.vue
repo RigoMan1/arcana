@@ -47,9 +47,47 @@ const flipCards = ref(false);
 const allCardsSelected = computed(() => {
   return Object.values(selectedCards.value).every((card) => card !== null);
 });
+
+// --- Chained Reading Test ---
+import { chainedReadingSample } from '@/constants/tarot-options-selection';
+console.log(chainedReadingSample);
+
+const step = ref(0);
+const currentStep = computed(() => chainedReadingSample.steps[step.value]);
+const nextStep = () => {
+  if (step.value < chainedReadingSample.steps.length - 1) {
+    step.value += 1;
+  }
+};
+
+// watch all cards selected
+watch(allCardsSelected, (newVal) => {
+  if (newVal) nextStep();
+});
+
+const currentPrompt = computed(() => {
+  return chainedReadingSample.steps[step.value].prompt;
+});
+
+// todo: combine tarot spread & reading into 1 component
+// - selected cards should be scoped to the spread
+// - however the deck should be shared
 </script>
 
 <template>
+  <div class="mt-8 flex justify-center items-center space-x-4">
+    <arcana-button
+      text="prev"
+      :disabled="step === 0"
+      @click="step -= 1"
+    />
+    <arcana-button
+      text="next"
+      :disabled="step === chainedReadingSample.steps.length - 1"
+      @click="step += 1"
+    />
+  </div>
+
   <div class="container mt-20">
     <tarot-spread
       :cards="selectedCards"
@@ -57,7 +95,7 @@ const allCardsSelected = computed(() => {
       @select-card="handleCardSelect"
     />
 
-    <fortune-reader
+    <fortune-reading
       class="mt-12"
       :cards="selectedCards"
       :all-cards-selected="allCardsSelected"
@@ -65,8 +103,9 @@ const allCardsSelected = computed(() => {
     />
   </div>
 
+  <!-- v-show="!allCardsSelected" -->
   <card-selection
-    v-show="!allCardsSelected"
+    v-if="currentStep.type === 'card-select'"
     :tarot-deck="tarotDeck"
   />
 </template>
