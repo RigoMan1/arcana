@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { testPrompt } from '@/constants/systemPrompts';
 const { chatCompletion } = useChatgpt();
 
 const props = defineProps<{
   cards: IThreeCardClusterSpread;
   allCardsSelected: boolean;
+  prompt: {
+    user: string;
+    system: string;
+  };
 }>();
 
 const formattedSpread = computed(() => {
@@ -28,18 +31,16 @@ const fortuneTellerMessages = computed(() =>
 );
 
 const isTyping = ref(false);
-const systemPrompt = ref(testPrompt);
-const userInputText = ref(`I would like to know my fortune, please.`);
 
 async function sendMessage() {
   if (!props.cards) return;
   try {
-    if (userInputText.value.trim() === '') return; // Avoid sending empty messages
+    if (props.prompt.user.trim() === '') return; // Avoid sending empty messages
 
     const userMessage: IMessage = {
       role: 'user',
       content: `
-      ${userInputText.value}
+      ${props.prompt.user}
       <tarot-spread-${props.cards.name}>
         ${formattedSpread.value}
       </tarot-spread-${props.cards.name}>
@@ -48,11 +49,11 @@ async function sendMessage() {
 
     const systemMessage: IMessage = {
       role: 'system',
-      content: systemPrompt.value,
+      content: props.prompt.system,
     };
 
     chatTree.value.push(userMessage);
-    userInputText.value = '';
+    // props.prompt.user = ''; // clear input
     isTyping.value = true;
 
     const responseMessage = (await chatCompletion([
@@ -68,33 +69,38 @@ async function sendMessage() {
   }
 }
 
-const emit = defineEmits(['reveal-fortune']);
+const emit = defineEmits(['reveal-fortune', 'next-step']);
 function handleClick() {
   sendMessage();
   emit('reveal-fortune');
+}
+
+const showContinueButton = ref(true);
+// go to next step and hide the continue button
+function handleNextStep() {
+  emit('next-step');
+  showContinueButton.value = false;
 }
 </script>
 
 <template>
   <div>
-    <div class="flex justify-center mb-8">
-      <arcana-button
-        v-show="!fortuneTellerMessages.length"
-        :disabled="!allCardsSelected || isTyping"
-        @click="handleClick"
-      >
-        <template v-if="!allCardsSelected"> Pick 3 Cards </template>
-        <template v-if="isTyping"> Awaiting Fortune </template>
-        <template v-if="allCardsSelected && !isTyping">
-          Reveal Fortune
-        </template>
-      </arcana-button>
-    </div>
+    <arcana-button
+      v-show="!fortuneTellerMessages.length"
+      :disabled="!allCardsSelected || isTyping"
+      class="mb-8 block mx-auto"
+      @click="handleClick"
+    >
+      <template v-if="!allCardsSelected"> Pick 3 Cards </template>
+      <template v-if="isTyping"> Awaiting Fortune </template>
+      <template v-if="allCardsSelected && !isTyping"> Reveal Fortune </template>
+    </arcana-button>
 
     <!-- is typing effect -->
     <div
       v-if="fortuneTellerMessages.length > 0 || isTyping"
-      class="bg-parchment-dark p-12 border-8 border-amber-950/25 rounded-2xl"
+      class="bg-parchment-dark p-12 border-8 border-amber-950/25 rounded-2xl max-h-[800px]
+        overflow-y-auto"
     >
       <fortune-reader-message
         v-for="message in fortuneTellerMessages"
@@ -114,5 +120,13 @@ function handleClick() {
         </span>
       </p>
     </div>
+
+    <arcana-button
+      v-if="fortuneTellerMessages.length > 0 && showContinueButton"
+      class="mt-8 block mx-auto"
+      @click="handleNextStep"
+    >
+      Continue
+    </arcana-button>
   </div>
 </template>
