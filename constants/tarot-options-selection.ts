@@ -18,6 +18,13 @@ export const chainedReadingSample = {
       isTypingMessage:
         'Take a few deep breaths to clear your mind of any specific questions or preconceived ideas. Allow your thoughts to settle, creating a space of openness and receptivity.',
     },
+    // {
+    //   type: 'pick-3',
+    //   prompt: {
+    //     system: 'generate pick-3 questions based on the theme',
+    //     user: '',
+    //   },
+    // },
     {
       type: 'card-select',
       spread: 'three-card-cluster',
@@ -29,19 +36,7 @@ export const chainedReadingSample = {
         user: 'What is my past, present, and future reading',
       },
     },
-    // {
-    //   type: 'pick-3',
-    //   prompt: {
-    //     system: 'generate pick-3 questions based on the theme',
-    //     user: '',
-    //   },
-    //   content: [
-    //     // example: 3 questions relevant to the theme
-    //     'What insights does the past card offer?',
-    //     'How does the present card influence the theme?',
-    //     'What potential does the future card hold in relation to the theme?',
-    //   ],
-    // },
+
     {
       type: 'farewell',
       prompt: {

@@ -35,35 +35,55 @@ const currentPrompt = computed(() => {
   return chainedReadingSample.steps[step.value].prompt;
 });
 
-const spreads = ref([] as string[]);
-const addSpread = (spread: string) => spreads.value.push(spread);
+const steps = ref(
+  [] as {
+    type: string;
+    [key: string]: any;
+  }[]
+);
 
 watch(
   currentStep,
   (newVal) => {
-    if (newVal.type === 'card-select') addSpread(newVal.spread as string);
+    if (newVal.type !== 'tarot-reading') steps.value.push(newVal as any);
   },
   { immediate: true }
 );
 </script>
 
 <template>
-  <div class="container mt-20">
-    <tarot-spread
-      v-for="(spread, spreadIndex) in spreads"
-      :key="`spread-${spreadIndex}`"
-      :tarot-deck="tarotDeck"
-      :spread="spread"
-      :prompt="
-        currentPrompt || {
-          user: '',
-          system: '',
-        }
-      "
-      @remove-card="removeCard"
-      @all-cards-selected="nextStep"
-      @next-step="nextStep"
-    />
+  <div class="container mt-20 flex flex-col space-y-20">
+    <div
+      v-for="($step, stepIndex) in steps"
+      :key="`spread-${stepIndex}`"
+    >
+      <template v-if="$step.type === 'card-select'">
+        <tarot-spread
+          :tarot-deck="tarotDeck"
+          :spread="$step.spread"
+          :prompt="
+            currentPrompt || {
+              user: '',
+              system: '',
+            }
+          "
+          @remove-card="removeCard"
+          @all-cards-selected="nextStep"
+          @next-step="nextStep"
+        />
+      </template>
+      <template v-if="$step.type === 'pick-3'">
+        <pick-three-reading />
+      </template>
+      <template v-if="$step.type === 'farewell'">
+        <div class="text-center">
+          <h3 class="text-2xl font-bold">Farewell</h3>
+          <p class="mt-3">
+            May the guidance you seek lead you to the answers you desire
+          </p>
+        </div>
+      </template>
+    </div>
   </div>
 
   <card-selection

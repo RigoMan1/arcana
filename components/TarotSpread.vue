@@ -36,6 +36,7 @@ const labels = {
 const currentLabels = computed(() => labels[props.spread]);
 
 const createSpread = (spreadLabels: string[]) => {
+  console.log('spreadLabels', spreadLabels);
   const spread: Record<string, any | null> = {
     name: props.spread,
     options: spreadLabels,
@@ -61,7 +62,7 @@ const flipCards = ref(false);
 
 <template>
   <div>
-    <div class="flex space-x-8 mt-8 max-w-[940px] mx-auto">
+    <div class="flex space-x-8  max-w-[940px] mx-auto">
       <drop-zone
         v-for="label in currentLabels"
         :key="label"
@@ -78,7 +79,7 @@ const flipCards = ref(false);
       </drop-zone>
     </div>
     <fortune-reading
-      class="mt-12"
+      
       :cards="selectedCards"
       :prompt="prompt"
       :all-cards-selected="allCardsSelected"

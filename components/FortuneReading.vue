@@ -88,7 +88,7 @@ function handleNextStep() {
     <arcana-button
       v-show="!fortuneTellerMessages.length"
       :disabled="!allCardsSelected || isTyping"
-      class="mb-8 block mx-auto"
+      class="block mx-auto mt-12"
       @click="handleClick"
     >
       <template v-if="!allCardsSelected"> Pick 3 Cards </template>
@@ -100,7 +100,7 @@ function handleNextStep() {
     <div
       v-if="fortuneTellerMessages.length > 0 || isTyping"
       class="bg-parchment-dark p-12 border-8 border-amber-950/25 rounded-2xl max-h-[800px]
-        overflow-y-auto"
+        overflow-y-auto mt-12"
     >
       <fortune-reader-message
         v-for="message in fortuneTellerMessages"
@@ -123,7 +123,7 @@ function handleNextStep() {
 
     <arcana-button
       v-if="fortuneTellerMessages.length > 0 && showContinueButton"
-      class="mt-8 block mx-auto"
+      class="mt-12 block mx-auto"
       @click="handleNextStep"
     >
       Continue
