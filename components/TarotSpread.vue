@@ -2,8 +2,8 @@
 import { generateId } from '~/utils/helpers';
 const props = defineProps<{
   tarotDeck: TarotCard[] | null[];
-  spread: string; // todo: make this a type
-  prompt: Object;
+  spread: string;
+  prompt: ITarotPrompt;
 }>();
 
 const uniqueZoneId = generateId();
@@ -36,7 +36,6 @@ const labels = {
 const currentLabels = computed(() => labels[props.spread]);
 
 const createSpread = (spreadLabels: string[]) => {
-  console.log('spreadLabels', spreadLabels);
   const spread: Record<string, any | null> = {
     name: props.spread,
     options: spreadLabels,
@@ -58,11 +57,35 @@ watch(allCardsSelected, (newVal) => {
 });
 
 const flipCards = ref(false);
+const revealCards = () => (flipCards.value = true);
+
+// --- fortune reading logic ---
+
+import { useChatgptStore } from '~/stores/useChatgptStore';
+const { sendMessage } = useChatgptStore();
+
+const fortuneMessage = ref([]) as Ref<IMessage[]>;
+const isTyping = ref(false);
+async function handleClick() {
+  isTyping.value = true;
+
+  const res = await sendMessage(props.prompt, selectedCards.value);
+  if (res) fortuneMessage.value.push(res);
+
+  isTyping.value = false;
+  revealCards();
+}
+
+const showContinueButton = ref(true);
+function handleNextStep() {
+  emit('next-step');
+  showContinueButton.value = false;
+}
 </script>
 
 <template>
   <div>
-    <div class="flex space-x-8  max-w-[940px] mx-auto">
+    <div class="flex space-x-8 max-w-[940px] mx-auto">
       <drop-zone
         v-for="label in currentLabels"
         :key="label"
@@ -78,13 +101,53 @@ const flipCards = ref(false);
         />
       </drop-zone>
     </div>
-    <fortune-reading
-      
-      :cards="selectedCards"
-      :prompt="prompt"
-      :all-cards-selected="allCardsSelected"
-      @reveal-fortune="flipCards = true"
-      @next-step="emit('next-step')"
-    />
+
+    <div>
+      <arcana-button
+        v-show="!fortuneMessage.length"
+        :disabled="!allCardsSelected || isTyping"
+        class="block mx-auto mt-12"
+        @click="handleClick"
+      >
+        <template v-if="!allCardsSelected"> Pick 3 Cards </template>
+        <template v-if="isTyping"> Awaiting Fortune </template>
+        <template v-if="allCardsSelected && !isTyping">
+          Reveal Fortune
+        </template>
+      </arcana-button>
+
+      <!-- is typing effect -->
+      <div
+        v-if="fortuneMessage.length || isTyping"
+        class="bg-parchment-dark p-12 border-8 border-amber-950/25 rounded-2xl max-h-[800px]
+          overflow-y-auto mt-12"
+      >
+        <fortune-reader-message
+          v-for="message in fortuneMessage"
+          :key="message.content.slice(0, 10)"
+          :content="message.content"
+          :is-typing="isTyping"
+          class="my-4"
+        />
+
+        <p
+          v-if="isTyping"
+          class="text-white p-2 rounded-lg mt-2 text-center"
+        >
+          <span class="animate-pulse">
+            Preparing your insights; breathe deeply and embrace the forthcoming
+            wisdom.
+          </span>
+        </p>
+      </div>
+
+      <arcana-button
+        v-if="fortuneMessage.length > 0 && showContinueButton"
+        class="mt-12 block mx-auto"
+        @click="handleNextStep"
+      >
+        Continue
+      </arcana-button>
+    </div>
   </div>
 </template>

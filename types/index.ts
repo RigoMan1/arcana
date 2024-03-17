@@ -84,3 +84,8 @@ interface ISevenCardHorseshoeSpread {
   outcome: TarotCard | null;
   future: TarotCard | null;
 }
+
+interface ITarotPrompt {
+  user: string;
+  system: string;
+}
