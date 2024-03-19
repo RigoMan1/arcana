@@ -119,20 +119,19 @@ function handleNextStep() {
       <!-- is typing effect -->
       <div
         v-if="fortuneMessage.length || isTyping"
-        class="bg-parchment-dark p-12 border-8 border-amber-950/25 rounded-2xl max-h-[800px]
-          overflow-y-auto mt-12"
+        class="bg-parchment-dark border-8 border-amber-950/25 rounded-2xl overflow-y-auto mt-12"
       >
         <fortune-reader-message
           v-for="message in fortuneMessage"
           :key="message.content.slice(0, 10)"
           :content="message.content"
           :is-typing="isTyping"
-          class="my-4"
+          class="my-4 p-12"
         />
 
         <p
           v-if="isTyping"
-          class="text-white p-2 rounded-lg mt-2 text-center"
+          class="text-white p-12 rounded-lg mt-2 text-center"
         >
           <span class="animate-pulse">
             Preparing your insights; breathe deeply and embrace the forthcoming

@@ -45,7 +45,8 @@ const steps = ref(
 watch(
   currentStep,
   (newVal) => {
-    if (newVal.type !== 'tarot-reading') steps.value.push(newVal as any);
+    // if (newVal.type !== 'tarot-reading') steps.value.push(newVal as any);
+    steps.value.push(newVal as any);
   },
   { immediate: true }
 );
@@ -61,6 +62,7 @@ watch(
         <tarot-spread
           :tarot-deck="tarotDeck"
           :spread="$step.spread"
+          :response-type="$step.responseType"
           :prompt="
             currentPrompt || {
               user: '',

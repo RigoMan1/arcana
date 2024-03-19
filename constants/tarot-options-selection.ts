@@ -1,4 +1,4 @@
-import { efficientCommunication, testPrompt } from '@/constants/systemPrompts';
+import { mainReadingPrompt, themePrompt } from '@/constants/systemPrompts';
 
 // very simple chain reading for testing
 export const chainedReadingSample = {
@@ -9,12 +9,10 @@ export const chainedReadingSample = {
       type: 'card-select',
       spread: 'universal-guidance-spread',
     },
+    // theme reading
     {
       type: 'tarot-reading',
-      prompt: {
-        system: efficientCommunication,
-        user: 'I am open to receiving the guidance and wisdom the universe has for me. provide me with a theme for this reading',
-      },
+      prompt: themePrompt,
       isTypingMessage:
         'Take a few deep breaths to clear your mind of any specific questions or preconceived ideas. Allow your thoughts to settle, creating a space of openness and receptivity.',
     },
@@ -32,7 +30,7 @@ export const chainedReadingSample = {
     {
       type: 'tarot-reading',
       prompt: {
-        system: testPrompt,
+        system: mainReadingPrompt,
         user: 'What is my past, present, and future reading',
       },
     },
