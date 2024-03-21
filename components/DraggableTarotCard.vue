@@ -10,7 +10,9 @@ const props = defineProps<{
 const cardRef = ref();
 useDrag(cardRef, props.card.name);
 
-const { style, isDragging, resetCard } = useDraggableCard(cardRef, {});
+const { style, isDragging, resetCard } = useDraggableCard(cardRef, {
+  pointerTypes: ['touch', 'mouse'],
+});
 
 watch(isDragging, (newVal) => {
   if (!newVal) resetCard();
@@ -18,42 +20,21 @@ watch(isDragging, (newVal) => {
 </script>
 
 <template>
-  <div ref="cardRef">
-    <Teleport
-      v-if="isDragging"
-      to="body"
-    >
-      <div
-        :class="{ 'absolute top-0 left-0': isDragging }"
-        :style="style"
-        class="z-20"
-      >
-        <tarot-card
-          :card="card"
-          :flip="flip"
-        />
-      </div>
-    </Teleport>
-    <div
-      v-else
-      :class="{ 'absolute top-0 left-0': isDragging }"
-      :style="style"
-      class="z-20"
-    >
-      <tarot-card
-        :card="card"
-        :flip="flip"
-      />
-    </div>
+  <div
+    ref="cardRef"
+    class="draggable-container"
+    :class="{ 'fixed top-0 left-0': isDragging }"
+    :style="style"
+  >
+    <tarot-card
+      :card="card"
+      :flip="flip"
+    />
   </div>
 </template>
 
 <style scoped>
 .draggable-container {
-  position: absolute;
-  /* left: 0;
-  top: 0; */
-  display: inline-block;
   z-index: 20;
   will-change: transform;
 
