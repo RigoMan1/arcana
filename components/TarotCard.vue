@@ -83,19 +83,18 @@ watch(
   --neon-primary-color: #ff1177;
   --neon-secondary-color: #fff;
 
-  --neon-spread-start: 6px;
+  --neon-spread-start: 2px;
   --neon-spread-end: 4px;
   --neon-glow-opacity: 0.5;
 }
 
 .card {
   perspective: 1000px;
-  width: 200px;
-  height: 300px;
   user-select: none;
   /* --- */
   pointer-events: none;
   user-drag: none;
+  aspect-ratio: 11 / 19;
 }
 
 .card__inner {
@@ -219,8 +218,8 @@ watch(
 }
 
 .glow--active {
-  --neon-spread-start: 4px;
-  --neon-spread-end: 6px;
+  --neon-spread-start: 1.5px;
+  --neon-spread-end: 2.5px;
   opacity: var(--neon-glow-opacity);
 }
 </style>

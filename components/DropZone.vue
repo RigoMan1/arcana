@@ -27,9 +27,9 @@ watch(selectedCard, (newVal) => {
     :class="{ 'border-dashed border-4 bg-violet-950': isOver }"
   >
     <span
-      class="flex items-center justify-center absolute px-2 h-6 text-center -top-3 left-1/2
-        transform -translate-x-1/2 capitalize bg-zinc-900 border border-zinc-600
-        text-zinc-400 font-medium rounded-lg"
+      class="flex text-xs items-center justify-center absolute px-2 h-6 text-center -top-3
+        left-1/2 transform -translate-x-1/2 capitalize bg-zinc-900 border
+        border-zinc-600 text-zinc-400 font-medium rounded-lg"
     >
       {{ label }}
     </span>
@@ -42,12 +42,15 @@ watch(selectedCard, (newVal) => {
       container-data:{{ dndState.dropContainers }}  
     </pre> -->
 
-    <slot :drop-zone-data="selectedCard" />
+    <div class="w-full">
+      <slot :drop-zone-data="selectedCard" />
+    </div>
   </div>
 </template>
 
 <style>
 .drop-zone {
-  @apply border border-zinc-500 relative p-4 flex-1 h-[400px] rounded-lg;
+  @apply border border-zinc-500 relative p-2 flex-1  rounded-lg;
+  aspect-ratio: 11/19;
 }
 </style>

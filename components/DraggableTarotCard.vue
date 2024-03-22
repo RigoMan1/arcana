@@ -23,7 +23,7 @@ watch(isDragging, (newVal) => {
   <div
     ref="cardRef"
     class="draggable-container"
-    :class="{ 'fixed top-0 left-0': isDragging }"
+    :class="{ 'fixed top-0 left-0 min-w-[100px]': isDragging }"
     :style="style"
   >
     <tarot-card

@@ -85,13 +85,13 @@ function handleNextStep() {
 
 <template>
   <div>
-    <div class="flex space-x-8 max-w-[940px] mx-auto">
+    <div class="flex space-x-2 max-w-[640px] mx-auto">
       <drop-zone
         v-for="label in currentLabels"
         :key="label"
         :label="label"
         :zone-id="`zone-${label}-${uniqueZoneId}`"
-        class="border border-zinc-500 relative p-4 flex-1 h-[400px] w-[300px] rounded-lg"
+        class="border border-zinc-500 relative p-4 flex-1 rounded-lg"
         @drop="handleCardSelect"
       >
         <draggable-tarot-card
