@@ -47,3 +47,15 @@ html {
 .arcana-scrollbar ::-webkit-scrollbar-thumb:active {
   background: #cba135; /* Return to original gold to signify active scrolling */
 }
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(
+    theme('colors.zinc.900'),
+    theme('colors.zinc.950')
+  );
+}
