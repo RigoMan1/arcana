@@ -59,7 +59,7 @@ watch(
       :key="`spread-${stepIndex}`"
     >
       <template v-if="$step.type === 'card-select'">
-        <tarot-spread
+        <tarot-spread-reading
           :tarot-deck="tarotDeck"
           :spread="$step.spread"
           :response-type="$step.responseType"
