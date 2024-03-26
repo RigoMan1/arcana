@@ -2,34 +2,27 @@ import { defineStore } from 'pinia';
 const { chatCompletion } = useChatgpt();
 
 export const useChatgptStore = defineStore('chatgpt-store', () => {
-  const formattedSpread = (cards: any) => {
-    const formatCard = (position: string, card: TarotCard) =>
-      `${position}: ${card.name}`;
-
-    const spread = Object.entries(cards).map(([position, card]) => {
-      if (position === 'name' || position === 'options') return '';
-      return formatCard(position, card);
-    });
-
-    return spread.join('\n');
-  };
-
+  // ui chat tree
   const chatTree = ref([]) as Ref<IMessage[]>;
+  const fullChatTree = ref([]) as Ref<IMessage[]>;
 
-  // todo:  create  prompt type
-  async function sendMessage(prompt: ITarotPrompt, cards: any) {
-    if (!cards) return;
+  const isTyping = ref(false);
+
+  function setIsTyping(value: boolean) {
+    isTyping.value = value;
+  }
+
+  async function sendMessage(
+    prompt: ITarotPrompt,
+    addToChatTree: boolean = true
+  ) {
+    if (prompt.user.trim() === '') return; // Avoid sending empty messages
     try {
-      if (prompt.user.trim() === '') return; // Avoid sending empty messages
+      setIsTyping(true);
 
       const userMessage: IMessage = {
         role: 'user',
-        content: `
-      ${prompt.user}
-      <tarot-spread-${cards.name}>
-        ${formattedSpread(cards)}
-      </tarot-spread-${cards.name}>
-      `,
+        content: prompt.user,
       };
 
       const systemMessage: IMessage = {
@@ -37,24 +30,28 @@ export const useChatgptStore = defineStore('chatgpt-store', () => {
         content: prompt.system,
       };
 
-      chatTree.value.push(userMessage);
-      // prompt.user = ''; // clear input
+      if (addToChatTree) chatTree.value.push(userMessage);
+      fullChatTree.value.push(userMessage);
 
       const responseMessage = (await chatCompletion([
         systemMessage,
-        ...chatTree.value,
+        ...fullChatTree.value,
       ])) as IMessage;
 
       chatTree.value.push(responseMessage);
+      fullChatTree.value.push(responseMessage);
 
+      setIsTyping(false);
       return responseMessage;
     } catch (error) {
+      setIsTyping(false);
       alert(error);
     }
   }
 
   return {
     chatTree,
+    isTyping,
     sendMessage,
   };
 });
