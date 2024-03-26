@@ -9,6 +9,9 @@ const uniqueZoneId = generateId();
 
 const emit = defineEmits(['remove-card', 'reveal-fortune', 'card-selected']);
 
+const formatSelectedCard = (position: string, card: TarotCard) =>
+  `${position}: ${card.name}`;
+
 const handleCardSelect = (
   cardName: string,
   spreadLabel: ThreeCardClusterSlots
@@ -25,7 +28,6 @@ const handleCardSelect = (
 
   // 3. remove card from deck
   emit('remove-card', cardIndex);
-  emit('card-selected', formatCard(spreadLabel, foundCard));
 };
 
 const labels = {
@@ -52,31 +54,28 @@ const allCardsSelected = computed(() => {
   return Object.values(selectedCards.value).every((card) => card !== null);
 });
 
-const flipCards = ref(false);
-const revealCards = () => (flipCards.value = true);
+// reveal one card at a time
+const currentCardIndex = ref(-1); // -1 indicates no card is being revealed yet
+const fortuneRevealed = ref(false);
 
-const formatCard = (position: string, card: TarotCard) =>
-  `${position}: ${card.name}`;
+const handleButtonClick = () => {
+  if (!fortuneRevealed.value) {
+    fortuneRevealed.value = true; // Start the reveal process
+    currentCardIndex.value = 0; // Start with the first card
+  } else if (currentCardIndex.value < currentLabels.value.length - 1) {
+    currentCardIndex.value++; // Move to the next card
+  } else {
+    // Reset or handle the end of the reveal process
+    fortuneRevealed.value = false;
+    currentCardIndex.value = -1;
+  }
 
-const formattedSpread = (cards: any) => {
-  const spread = Object.entries(cards).map(([position, card]) => {
-    if (position === 'name' || position === 'options') return '';
-    return formatCard(position, card);
-  });
+  const currentCard =
+    selectedCards.value[currentLabels.value[currentCardIndex.value]];
+  const currentSpreadLabel = currentLabels.value[currentCardIndex.value];
 
-  return spread.join('\n');
+  emit('card-selected', formatSelectedCard(currentSpreadLabel, currentCard));
 };
-
-function handleClick() {
-  revealCards();
-
-  const tarotSpread = `
-    <tarot-spread-${props.spread}>
-      ${formattedSpread(selectedCards.value)}
-    </tarot-spread-${props.spread}>`;
-
-  emit('reveal-fortune', tarotSpread);
-}
 </script>
 
 <template>
@@ -88,12 +87,17 @@ function handleClick() {
         :label="label"
         :zone-id="`zone-${label}-${uniqueZoneId}`"
         class="border border-zinc-500 relative p-4 flex-1 rounded-lg"
+        :class="{
+          'current-card': currentLabels.indexOf(label) === currentCardIndex,
+        }"
         @drop="handleCardSelect"
       >
         <draggable-tarot-card
           v-if="selectedCards[label]"
           :card="selectedCards[label]!"
-          :flip="flipCards"
+          :flip="
+            fortuneRevealed && currentLabels.indexOf(label) <= currentCardIndex
+          "
         />
       </drop-zone>
     </div>
@@ -102,11 +106,36 @@ function handleClick() {
       <arcana-button
         :disabled="!allCardsSelected"
         class="block mx-auto mt-12"
-        @click="handleClick"
+        @click="handleButtonClick"
       >
-        <template v-if="!allCardsSelected"> Pick 3 Cards </template>
-        <template v-if="allCardsSelected"> Reveal Fortune </template>
+        <template v-if="!fortuneRevealed">Reveal Fortune</template>
+        <template v-else-if="currentCardIndex < currentLabels.length - 1"
+          >Next Card</template
+        >
+        <template v-else>Reset</template>
       </arcana-button>
     </div>
   </div>
 </template>
+
+<style>
+/* todo: fix the pointer move the class to the outer container */
+.current-card {
+  position: relative;
+  border: 2px solid gold;
+  box-shadow: 0 0 8px gold;
+  z-index: 10;
+}
+
+.current-card::after {
+  content: '';
+  position: absolute;
+  bottom: -10px; /* Adjust based on your design */
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 20px;
+  height: 20px;
+  background-color: gold;
+  z-index: -1;
+}
+</style>

@@ -59,16 +59,20 @@ async function handleSingleCardFortune(card: string) {
 
 <template>
   <div class="h-full flex flex-col justify-center container px-20">
-    <fortune-teller-message
-      v-if="mostRecentMessage && !$state.isTyping"
-      :message="mostRecentMessage"
-    />
+    <div class="flex h-1/3 min-h-[200px] mt-4 items-center justify-center">
+      <div>
+        <fortune-teller-message
+          v-if="mostRecentMessage && !$state.isTyping"
+          :message="mostRecentMessage"
+        />
+      </div>
 
-    <div
-      v-if="$state.isTyping"
-      class="chat-bubble bg-teal-950 self-end animate-pulse"
-    >
-      Seeking insights... 🧙‍♂️
+      <div
+        v-if="$state.isTyping"
+        class="chat-bubble bg-teal-950 animate-pulse"
+      >
+        Seeking insights... 🧙‍♂️
+      </div>
     </div>
 
     <div class="flex-1"></div>
@@ -78,6 +82,7 @@ async function handleSingleCardFortune(card: string) {
       spread="three-card-cluster"
       class="mt-8"
       @remove-card="removeCard"
+      @card-selected="handleSingleCardFortune"
     />
     <div class="flex-1"></div>
 
@@ -94,6 +99,6 @@ async function handleSingleCardFortune(card: string) {
 
 <style>
 .chat-bubble {
-  @apply p-4 rounded-lg shadow-md text-lg mt-4 max-w-md;
+  @apply p-4 rounded-lg shadow-md text-lg mt-4 max-w-2xl;
 }
 </style>
