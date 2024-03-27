@@ -12,12 +12,14 @@ const parsedContent =
 </script>
 
 <template>
-  <div class="chat-bubble bg-teal-950 self-end">
+  <parchment-sheet>
     <content-renderer
       v-if="message.content"
+      class="w-full "
       :value="parsedContent"
+      style="z-index: 10"
     />
-  </div>
+  </parchment-sheet>
 </template>
 
 <style>

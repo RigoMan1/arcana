@@ -58,21 +58,24 @@ async function handleSingleCardFortune(card: string) {
 </script>
 
 <template>
-  <div class="h-full flex flex-col justify-center container px-20">
-    <div class="flex h-1/3 min-h-[200px] mt-4 items-center justify-center">
-      <div>
+  <div
+    class="h-full flex flex-col justify-center container px-20"
+    
+  >
+    <div
+      class="flex min-h-[200px] items-center justify-center max-w-3xl mx-auto relative h-[250px]"
+      
+    >
+      <transition-group name="scale">
         <fortune-teller-message
           v-if="mostRecentMessage && !$state.isTyping"
           :message="mostRecentMessage"
         />
-      </div>
 
-      <div
-        v-if="$state.isTyping"
-        class="chat-bubble bg-teal-950 animate-pulse"
-      >
-        Seeking insights... 🧙‍♂️
-      </div>
+        <parchment-sheet v-if="$state.isTyping">
+          <span class="animate-pulse"> Seeking insights... 🧙‍♂️ </span>
+        </parchment-sheet>
+      </transition-group>
     </div>
 
     <div class="flex-1"></div>
