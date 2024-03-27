@@ -35,8 +35,34 @@ watch(
         'glow--active': showOverlay,
         'card--major': card.arcana === 'major',
         [`card--${card.suit}`]: card.suit,
+        'opacity-0': !showOverlay,
       }"
-    />
+    >
+      <svg>
+        <filter id="mysticalGlow">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.02"
+            numOctaves="2"
+            seed="1"
+            class="noise-anim"
+          >
+            <animate
+              attributeName="baseFrequency"
+              dur="6s"
+              values="0.02; 0.0275; 0.02"
+              repeatCount="indefinite"
+            />
+          </feTurbulence>
+
+          <feDisplacementMap
+            in="SourceGraphic"
+            scale="20"
+          />
+        </filter>
+      </svg>
+    </div>
+
     <div class="card overflow-hidden">
       <div
         class="card__inner rounded-lg border-4 border-zinc-200"
@@ -208,8 +234,13 @@ watch(
 }
 
 .card__overlay {
-  @apply absolute top-0 left-0 w-full h-full rounded-lg;
+  @apply absolute top-0 left-0 w-[95%] h-[97%] rounded-lg;
   animation: neon-glow 1s ease-in-out infinite alternate;
+  filter: url(#mysticalGlow);
+  /* center it */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .glow--inactive {
@@ -218,8 +249,11 @@ watch(
 }
 
 .glow--active {
-  --neon-spread-start: 1.5px;
-  --neon-spread-end: 2.5px;
+  /* --neon-spread-start: 1.5px;
+  --neon-spread-end: 2.5px; */
+  --neon-spread-start: 2px;
+  --neon-spread-end: 3px;
+  --neon-glow-opacity: 1;
   opacity: var(--neon-glow-opacity);
 }
 </style>
