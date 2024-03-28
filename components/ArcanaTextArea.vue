@@ -12,6 +12,17 @@ function handleEnterKey(event: KeyboardEvent) {
     message.value = '';
   }
 }
+
+// Resize the textarea based on its content
+const inputEl = ref<HTMLTextAreaElement>();
+function autoGrow() {
+  inputEl.value!.style.height = 'inherit'; // Reset height to recalculate
+  inputEl.value!.style.height = `${inputEl.value!.scrollHeight}px`;
+}
+
+onMounted(() => autoGrow());
+
+const throttledAutoGrow = useThrottleFn(autoGrow, 100);
 </script>
 
 <template>
@@ -22,9 +33,8 @@ function handleEnterKey(event: KeyboardEvent) {
     >
       Your message
     </label>
-    <div
-      class="flex items-center py-2 px-3 bg-zinc-50 rounded-lg dark:bg-zinc-700"
-    >
+
+    <div class="flex items-center py-2 px-3 rounded-xl mt-8 !bg-zinc-800">
       <button
         type="button"
         class="p-2 text-zinc-500 rounded-lg cursor-pointer hover:text-zinc-900
@@ -46,15 +56,18 @@ function handleEnterKey(event: KeyboardEvent) {
       </button>
       <textarea
         id="chat"
+        ref="inputEl"
         v-model="message"
         rows="1"
-        class="block mx-4 p-2.5 w-full text-sm text-zinc-900 bg-white rounded-lg border
+        class="block mx-4 p-2.5 w-full text-sm text-zinc-900 bg-white rounded-lg
           border-zinc-300 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800
           dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white
-          dark:focus:ring-indigo-500 dark:focus:border-indigo-500 resize-none"
+          dark:focus:ring-indigo-500 dark:focus:border-indigo-500 resize-none outline-none
+          max-h-40 overflow-y-auto"
         placeholder="Your message..."
         @keydown.enter="handleEnterKey"
-      ></textarea>
+        @input="throttledAutoGrow"
+      />
       <button
         :class="{ 'button--disabled': !message }"
         class="inline-flex justify-center p-2 text-teal-600 rounded-full cursor-pointer
