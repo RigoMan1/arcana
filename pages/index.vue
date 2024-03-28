@@ -12,6 +12,7 @@ function removeCard(cardIndex: number) {
 
 // --- fortune reading logic ---
 
+import { useEnergyStore } from '@/stores/useEnergyStore';
 import { useChatgptStore } from '~/stores/useChatgptStore';
 import {
   fortuneTellerPrompt,
@@ -36,7 +37,14 @@ async function handleSendMessage(prompt: string, userMessage: string) {
   }
 }
 
+const { useBasicEnergy } = useEnergyStore();
 async function handleClick(message: string) {
+  // calculate cost of message min 1
+  const messageCost = Math.max(1, Math.ceil(message.length / 20));
+
+  console.log('messageCost', messageCost);
+
+  useBasicEnergy(messageCost);
   await handleSendMessage(fortuneTellerPrompt, message);
 }
 
@@ -45,6 +53,7 @@ async function handleSingleCardFortune(card: string) {
     The user has drawn this card, for a 3 card cluster spread:
     ${card}
   `;
+  useBasicEnergy(5);
   await handleSendMessage(cardReadingPrompt, userMessage);
 }
 
