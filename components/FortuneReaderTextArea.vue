@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const emit = defineEmits(['message']);
+const emit = defineEmits(['message', 'toggleCards']);
 
 const message = ref('');
 
@@ -30,18 +30,18 @@ function handleEnterKey(event: KeyboardEvent) {
         class="p-2 text-zinc-500 rounded-lg cursor-pointer hover:text-zinc-900
           hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-white
           dark:hover:bg-zinc-600"
+        @click="emit('toggleCards')"
       >
         <svg
           class="w-6 h-6"
           fill="currentColor"
-          viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
         >
+          <title>cards-playing</title>
           <path
-            fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.535a1 1 0 10-1.415-1.414 3 3 0 01-4.242 0 1 1 0 00-1.415 1.414 5 5 0 007.072 0z"
-            clip-rule="evenodd"
-          ></path>
+            d="M14.7 2.2H16.2C17.3 2.2 18.2 3.1 18.2 4.2V10.6L14.7 2.2M20.1 3.8L21.4 4.4C22.4 4.8 22.9 6 22.5 7L20.1 12.9V3.8M18 15.5L13 3.5C12.7 2.7 12 2.3 11.2 2.3C10.9 2.3 10.7 2.4 10.4 2.5L3 5.5C2 5.9 1.5 7 2 8L7 20C7.3 20.8 8 21.2 8.8 21.2C9.1 21.2 9.3 21.2 9.6 21L17 18C17.8 17.7 18.2 17 18.2 16.2C18.1 16 18.1 15.7 18 15.5M11.4 15L8.2 12.6L8.6 8.6L11.8 11L11.4 15"
+          />
         </svg>
       </button>
       <textarea
@@ -56,8 +56,9 @@ function handleEnterKey(event: KeyboardEvent) {
         @keydown.enter="handleEnterKey"
       ></textarea>
       <button
-        class="inline-flex justify-center p-2 text-indigo-600 rounded-full cursor-pointer
-          hover:bg-indigo-100 dark:text-indigo-500 dark:hover:bg-zinc-600"
+        :class="{ 'button--disabled': !message }"
+        class="inline-flex justify-center p-2 text-teal-600 rounded-full cursor-pointer
+          hover:bg-teal-100 dark:text-teal-500 dark:hover:bg-zinc-600"
         @click="emit('message', message)"
       >
         <svg
@@ -74,3 +75,9 @@ function handleEnterKey(event: KeyboardEvent) {
     </div>
   </div>
 </template>
+
+<style>
+.button--disabled {
+  @apply opacity-50 pointer-events-none text-zinc-300;
+}
+</style>

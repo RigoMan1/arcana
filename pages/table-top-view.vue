@@ -55,22 +55,21 @@ async function handleSingleCardFortune(card: string) {
   `;
   await handleSendMessage(interactiveReaderCardReadingPrompt, userMessage);
 }
+
+const showCards = ref(true);
 </script>
 
 <template>
-  <div
-    class="h-full flex flex-col justify-center container px-20"
-    
-  >
-    <div
-      class="flex min-h-[200px] items-center justify-center max-w-3xl mx-auto relative h-[250px]"
-      
-    >
+  <div class="container flex flex-col h-full space-y-8">
+    <!-- 1. fortune message  -->
+    <div class="h-2/6 flex items-center justify-center">
       <transition-group name="scale">
-        <fortune-teller-message
-          v-if="mostRecentMessage && !$state.isTyping"
-          :message="mostRecentMessage"
-        />
+        <div class="pb-3 pt-1 px-3 overflow-y-auto max-w-4xl h-full">
+          <fortune-teller-message
+            v-if="mostRecentMessage && !$state.isTyping"
+            :message="mostRecentMessage"
+          />
+        </div>
 
         <parchment-sheet v-if="$state.isTyping">
           <span class="animate-pulse"> Seeking insights... 🧙‍♂️ </span>
@@ -78,25 +77,29 @@ async function handleSingleCardFortune(card: string) {
       </transition-group>
     </div>
 
-    <div class="flex-1"></div>
+    <!-- 2. tarot spread -->
+    <div class="h-2/6">
+      <tarot-spread
+        :tarot-deck="tarotDeck"
+        spread="three-card-cluster"
+        @remove-card="removeCard"
+        @card-selected="handleSingleCardFortune"
+      />
+    </div>
 
-    <tarot-spread
-      :tarot-deck="tarotDeck"
-      spread="three-card-cluster"
-      class="mt-8"
-      @remove-card="removeCard"
-      @card-selected="handleSingleCardFortune"
-    />
-    <div class="flex-1"></div>
+    <!-- 3. controls -->
+    <div class="h-2/6 flex flex-col justify-end">
+      <card-selection
+        v-if="showCards"
+        :tarot-deck="tarotDeck"
+      />
 
-    <fortune-reader-text-area
-      class="mt-4 w-full"
-      @message="handleClick"
-    />
-  </div>
-
-  <div class="h-[400px]">
-    <card-selection :tarot-deck="tarotDeck" />
+      <fortune-reader-text-area
+        class="w-2/3 self-center"
+        @message="handleClick"
+        @toggle-cards="showCards = !showCards"
+      />
+    </div>
   </div>
 </template>
 
