@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/eslint-module',
     '@nuxt/content',
+    './modules/sui/module.ts',
   ],
   tailwindcss: {
     exposeConfig: true,

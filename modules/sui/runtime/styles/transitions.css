@@ -1,0 +1,42 @@
+/* Component specific transitions */
+.dialog-transition-enter-active,
+.dialog-bottom-transition-enter-active,
+.dialog-top-transition-enter-active {
+  transition-duration: 225ms !important;
+  transition-timing-function: var(--v-ease-out) !important;
+}
+.dialog-transition-leave-active,
+.dialog-bottom-transition-leave-active,
+.dialog-top-transition-leave-active {
+  transition-duration: 125ms !important;
+  transition-timing-function: var(--v-ease-in) !important;
+}
+.dialog-transition-enter-active,
+.dialog-transition-leave-active,
+.dialog-bottom-transition-enter-active,
+.dialog-bottom-transition-leave-active,
+.dialog-top-transition-enter-active,
+.dialog-top-transition-leave-active {
+  transition-property: transform, opacity !important;
+  pointer-events: none;
+}
+
+.dialog-transition-enter-from,
+.dialog-transition-leave-to {
+  transform: scale(0.9);
+  opacity: 0;
+}
+.dialog-transition-enter-to,
+.dialog-transition-leave-from {
+  opacity: 1;
+}
+
+.dialog-bottom-transition-enter-from,
+.dialog-bottom-transition-leave-to {
+  transform: translateY(calc(50vh + 50%));
+}
+
+.dialog-top-transition-enter-from,
+.dialog-top-transition-leave-to {
+  transform: translateY(calc(-50vh - 50%));
+}
