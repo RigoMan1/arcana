@@ -2,9 +2,7 @@ import { defineStore } from 'pinia';
 const { chatCompletion } = useChatgpt();
 
 export const useChatgptStore = defineStore('chatgpt-store', () => {
-  // ui chat tree
   const chatTree = ref([]) as Ref<IMessage[]>;
-  const fullChatTree = ref([]) as Ref<IMessage[]>;
 
   const isTyping = ref(false);
 
@@ -12,10 +10,7 @@ export const useChatgptStore = defineStore('chatgpt-store', () => {
     isTyping.value = value;
   }
 
-  async function sendMessage(
-    prompt: ITarotPrompt,
-    addToChatTree: boolean = true
-  ) {
+  async function sendMessage(prompt: ITarotPrompt) {
     if (prompt.user.trim() === '') return; // Avoid sending empty messages
     try {
       setIsTyping(true);
@@ -30,16 +25,14 @@ export const useChatgptStore = defineStore('chatgpt-store', () => {
         content: prompt.system,
       };
 
-      if (addToChatTree) chatTree.value.push(userMessage);
-      fullChatTree.value.push(userMessage);
+      chatTree.value.push(userMessage);
 
       const responseMessage = (await chatCompletion([
         systemMessage,
-        ...fullChatTree.value,
+        ...chatTree.value,
       ])) as IMessage;
 
       chatTree.value.push(responseMessage);
-      fullChatTree.value.push(responseMessage);
 
       setIsTyping(false);
       return responseMessage;
@@ -50,7 +43,6 @@ export const useChatgptStore = defineStore('chatgpt-store', () => {
   }
 
   return {
-    chatTree,
     isTyping,
     sendMessage,
   };

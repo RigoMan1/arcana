@@ -18,26 +18,20 @@ import {
   fortuneTellerPrompt,
   cardReadingPrompt,
 } from '@/constants/systemPrompts';
-const { sendMessage, $state } = useChatgptStore();
 
-const fortuneMessages = ref([]) as Ref<IMessage[]>;
-const mostRecentMessage = ref('') as Ref<IMessage | null>;
+const { useBasicEnergy } = useEnergyStore();
+const { sendMessage, $state } = useChatgptStore();
 
 async function handleSendMessage(prompt: string, userMessage: string) {
   mostRecentMessage.value = null; // Clear the most recent message
 
-  const res = await sendMessage({
+  return await sendMessage({
     system: prompt,
     user: userMessage,
   });
-
-  if (res) {
-    fortuneMessages.value.push(res); // Update the list of messages
-    mostRecentMessage.value = res; // Update the most recent message
-  }
 }
 
-const { useBasicEnergy } = useEnergyStore();
+const mostRecentMessage = ref() as Ref<IMessage | null>;
 async function handleClick(message: string) {
   // calculate cost of message min 1
   const messageCost = Math.max(1, Math.ceil(message.length / 20));
@@ -45,37 +39,56 @@ async function handleClick(message: string) {
   console.log('messageCost', messageCost);
 
   useBasicEnergy(messageCost);
-  await handleSendMessage(fortuneTellerPrompt, message);
+  const res = await handleSendMessage(fortuneTellerPrompt, message);
+  if (res) mostRecentMessage.value = res;
 }
 
+const dialog = ref(false);
+const readings = ref([]) as Ref<IMessage[]>;
 async function handleSingleCardFortune(card: string) {
   const userMessage = `
     The user has drawn this card, for a 3 card cluster spread:
     ${card}
   `;
   useBasicEnergy(5);
-  await handleSendMessage(cardReadingPrompt, userMessage);
+  const reading = await handleSendMessage(cardReadingPrompt, userMessage);
+
+  reading && readings.value.push(reading);
+  dialog.value = true;
 }
 
-const showCards = ref(true);
+const showCards = ref(false);
 </script>
 
 <template>
+  <fortune-readings-dialog
+    v-model="dialog"
+    :readings="readings"
+  />
+
   <div class="container flex flex-col h-full space-y-8">
     <!-- 1. fortune message  -->
     <div class="h-2/6 flex items-center justify-center">
-      <transition-group name="scale">
-        <div class="pb-3 pt-1 px-3 overflow-y-auto max-w-4xl h-full">
+      <card-selection
+        v-if="showCards"
+        :tarot-deck="tarotDeck"
+      />
+      <div
+        class="pb-3 pt-1 px-3 overflow-y-auto max-w-4xl h-full flex items-center"
+      >
+        <transition name="scale">
           <fortune-teller-message
             v-if="mostRecentMessage && !$state.isTyping"
             :message="mostRecentMessage"
           />
-        </div>
+        </transition>
+      </div>
 
+      <transition name="scale">
         <parchment-sheet v-if="$state.isTyping">
           <span class="animate-pulse"> Seeking insights... 🧙‍♂️ </span>
         </parchment-sheet>
-      </transition-group>
+      </transition>
     </div>
 
     <!-- 2. tarot spread -->
@@ -89,12 +102,7 @@ const showCards = ref(true);
     </div>
 
     <!-- 3. controls -->
-    <div class="h-2/6 flex flex-col justify-end">
-      <card-selection
-        v-if="showCards"
-        :tarot-deck="tarotDeck"
-      />
-
+    <div class="h-2/6 flex flex-col justify-end pb-8">
       <arcana-text-area
         class="w-2/3 self-center"
         @message="handleClick"
