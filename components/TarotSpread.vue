@@ -122,8 +122,8 @@ const handleButtonClick = () => {
 /* todo: fix the pointer move the class to the outer container */
 .current-card {
   position: relative;
-  border: 2px solid gold;
-  box-shadow: 0 0 8px gold;
+  border: 2px solid #d4cbf0;
+  box-shadow: 0 0 8px #d4cbf0;
   z-index: 10;
 }
 
@@ -135,7 +135,7 @@ const handleButtonClick = () => {
   transform: translateX(-50%) rotate(45deg);
   width: 20px;
   height: 20px;
-  background-color: gold;
+  background-color: #d4cbf0;
   z-index: -1;
 }
 </style>

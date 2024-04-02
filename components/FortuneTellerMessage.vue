@@ -12,14 +12,12 @@ const parsedContent =
 </script>
 
 <template>
-  <parchment-sheet class="markdown prose prose-sm text-center">
-    <content-renderer
-      v-if="message.content"
-      class="w-full"
-      :value="parsedContent"
-      style="z-index: 10"
-    />
-  </parchment-sheet>
+  <content-renderer
+    v-if="message.content"
+    class="w-full markdown prose prose-sm text-center"
+    :value="parsedContent"
+    style="z-index: 10"
+  />
 </template>
 
 <style>
@@ -38,5 +36,14 @@ const parsedContent =
 .markdown.prose h2,
 .markdown.prose h3 {
   @apply mt-6 mb-4;
+}
+
+.fortune-oracle {
+  @apply p-20 rounded-full text-indigo-100;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(57, 58, 88, 0.5) 0%,
+    rgba(20, 21, 47, 0.1) 100%
+  );
 }
 </style>

@@ -70,8 +70,8 @@ const throttledAutoGrow = useThrottleFn(autoGrow, 100);
       />
       <button
         :class="{ 'button--disabled': !message }"
-        class="inline-flex justify-center p-2 text-teal-600 rounded-full cursor-pointer
-          hover:bg-teal-100 dark:text-teal-500 dark:hover:bg-zinc-600"
+        class="inline-flex justify-center p-2 text-indigo-600 rounded-full cursor-pointer
+          hover:bg-indigo-100 dark:text-indigo-500 dark:hover:bg-zinc-600"
         @click="emit('message', message)"
       >
         <svg

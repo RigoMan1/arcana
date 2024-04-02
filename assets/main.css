@@ -1,7 +1,13 @@
 @import url('./typography.css');
 
-html {
+html,
+body {
+  height: 100%;
   color-scheme: dark;
+}
+
+body {
+  background: radial-gradient(circle, #0b0b13 75%, #393a58 200%);
 }
 
 .bd,
@@ -14,50 +20,31 @@ html {
   --v-ease-out: cubic-bezier(0, 0, 0.2, 1);
   --v-ease-in: cubic-bezier(0.4, 0, 1, 1);
 
-  --color-primary: theme('colors.violet.500');
-  --color-primary-dark: #1e1e24;
-  --color-secondary: #cba135;
+  --color-primary: #7f55da;
+  --color-secondary: #393a58;
 }
 
-.bg-parchment-dark {
-  background-color: rgb(26, 17, 13);
-  background-image: url('../public/images/textures/parchment-dark.jpg');
-}
-
-/* Custom Scrollbar Styles for the Tarot Reading App */
 .arcana-scrollbar ::-webkit-scrollbar {
-  width: 12px; /* Adjust width of scrollbar */
+  width: 12px;
 }
 
 .arcana-scrollbar ::-webkit-scrollbar-track {
   background: #1e1e24;
-  border-left: 2px solid var(--color-primary-dark); /* Darken the track to match the thumb */
+  border-left: 2px solid var(--color-primary-dark);
 }
 
 .arcana-scrollbar ::-webkit-scrollbar-thumb {
-  background: var(--color-primary); /* Gold thumb */
-  border-radius: 6px; /* Rounded corners for the thumb */
-  border: 2px solid var(--color-primary-dark); /* Dark border to match the track */
+  background: var(--color-primary);
+  border-radius: 6px;
+  border: 2px solid var(--color-primary-dark);
 }
 
 .arcana-scrollbar ::-webkit-scrollbar-thumb:hover {
-  background: #ffd700; /* Lighter gold when hovered for an interactive feel */
+  background: #653cbf;
 }
 
 .arcana-scrollbar ::-webkit-scrollbar-thumb:active {
-  background: #cba135; /* Return to original gold to signify active scrolling */
-}
-
-html,
-body {
-  height: 100%;
-}
-
-body {
-  background: radial-gradient(
-    theme('colors.zinc.900'),
-    theme('colors.zinc.950')
-  );
+  background: #3b266d;
 }
 
 .neu-inset {

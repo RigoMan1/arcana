@@ -21,7 +21,7 @@ const { $state, useBasicEnergy } = useEnergyStore();
       <!-- basic energy -->
 
       <div
-        class="w-20 rounded-full neu-inset flex items-center p-1 justify-center"
+        class="w-20 rounded-full energy-bar flex items-center p-1 justify-center"
         :class="{
           'filter grayscale':
             $state.basicEnergy === 0 && $state.cosmicEnergy === 0,
@@ -42,7 +42,7 @@ const { $state, useBasicEnergy } = useEnergyStore();
       <!-- cosmic energy -->
       <div
         :class="{ 'filter grayscale': $state.cosmicEnergy === 0 }"
-        class="w-20 rounded-full neu-inset flex items-center p-1 justify-center shadow-"
+        class="w-20 rounded-full energy-bar flex items-center p-1 justify-center shadow-"
       >
         <img
           class="w-4 shadow-purple-400 rounded-full"
@@ -66,5 +66,10 @@ const { $state, useBasicEnergy } = useEnergyStore();
   box-shadow:
     0 0 1em var(--glow-color),
     0 0 0.25em var(--glow-color);
+}
+
+.energy-bar {
+  background: #12122b;
+  border: 1px solid #1e1e3e;
 }
 </style>

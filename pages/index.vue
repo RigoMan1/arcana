@@ -46,6 +46,7 @@ async function handleClick(message: string) {
 const dialog = ref(false);
 const readings = ref([]) as Ref<IMessage[]>;
 async function handleSingleCardFortune(card: string) {
+  showCards.value = false;
   const userMessage = `
     The user has drawn this card, for a 3 card cluster spread:
     ${card}
@@ -73,26 +74,39 @@ const showCards = ref(false);
         v-if="showCards"
         :tarot-deck="tarotDeck"
       />
+
       <div
+        v-if="!showCards"
         class="pb-3 pt-1 px-3 overflow-y-auto max-w-4xl h-full flex items-center"
       >
         <transition name="scale">
-          <fortune-teller-message
+          <div
             v-if="mostRecentMessage && !$state.isTyping"
-            :message="mostRecentMessage"
-          />
+            class="fortune-oracle"
+          >
+            <fortune-teller-message
+              class="!text-indigo-100"
+              :message="mostRecentMessage"
+            />
+          </div>
         </transition>
       </div>
 
       <transition name="scale">
-        <parchment-sheet v-if="$state.isTyping">
+        <div
+          v-if="$state.isTyping && !showCards"
+          class="fortune-oracle"
+        >
           <span class="animate-pulse"> Seeking insights... 🧙‍♂️ </span>
-        </parchment-sheet>
+        </div>
       </transition>
     </div>
 
     <!-- 2. tarot spread -->
-    <div class="h-2/6">
+    <div
+      class="h-2/6"
+      style="z-index: 10"
+    >
       <tarot-spread
         :tarot-deck="tarotDeck"
         spread="three-card-cluster"
@@ -115,5 +129,36 @@ const showCards = ref(false);
 <style>
 .chat-bubble {
   @apply p-4 rounded-lg shadow-md text-lg mt-4 max-w-2xl;
+}
+
+/* anim */
+:root {
+  --scale-duration: 0.3s;
+}
+.scale-enter-active {
+  transition-duration: 0.3s !important;
+  transition-timing-function: var(--v-ease-out) !important;
+}
+.scale-leave-active {
+  transition-duration: 0.3s !important;
+  transition-timing-function: var(--v-ease-in) !important;
+  position: absolute;
+}
+.scale-move {
+  transition-duration: 0.5s !important;
+  transition-property: transform !important;
+  transition-timing-function: var(--v-ease-out) !important;
+}
+.scale-leave-to {
+  opacity: 0;
+}
+
+.scale-enter-from {
+  opacity: 0;
+  transform: scale(0.9);
+}
+.scale-enter-active,
+.scale-leave-active {
+  transition-property: transform, opacity !important;
 }
 </style>

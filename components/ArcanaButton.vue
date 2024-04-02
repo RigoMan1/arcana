@@ -20,6 +20,37 @@ defineProps<{
 
 <style scoped>
 .arcana-button {
+  @apply text-white border border-[#6F7391];
+  @apply rounded-xl;
+  @apply whitespace-nowrap cursor-pointer;
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-slate-300;
+  @apply px-7 text-lg;
+  height: 3.75rem;
+  transition-duration: 0.2s !important;
+  background: linear-gradient(86deg, #4a5568 15.29%, #2d3748 58.19%);
+  background-size: 200%;
+  cursor: pointer;
+  background-position: 28% 0;
+}
+
+.arcana-button:hover {
+  background-position: 0 0;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+}
+
+.arcana-button:active {
+  transform: scale(0.98); /* Slightly shrink when clicked */
+}
+
+.arcana-button--state-disabled {
+  @apply opacity-50;
+
+  pointer-events: none;
+}
+</style>
+
+<!-- <style scoped>
+.arcana-button {
   @apply bg-blue-600 hover:bg-blue-700 text-white font-bold py-5 px-10
       rounded-xl shadow-lg hover:shadow-xl transition duration-100 ease-in-out;
 
@@ -49,4 +80,4 @@ defineProps<{
 .arcana-button:active {
   transform: scale(0.98); /* Slightly shrink when clicked */
 }
-</style>
+</style> -->

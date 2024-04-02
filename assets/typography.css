@@ -2,10 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
 
 html {
-  @apply text-amber-100/85;
   font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-  /* color: rgb(228, 211, 174); */
-  font-size: 18px;
 }
 
 h1,

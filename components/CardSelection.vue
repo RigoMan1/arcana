@@ -15,7 +15,7 @@ onMounted(() => {
 <template>
   <div
     ref="deckContainer"
-    class="bg-parchment-dark deck-container flex mt-8 overflow-auto p-4 mx-auto select-none"
+    class="deck-container flex mt-8 overflow-auto p-4 mx-auto select-none"
   >
     <div
       v-for="(card, cardIndex) in tarotDeck"
@@ -63,6 +63,6 @@ onMounted(() => {
 <style>
 .deck-container {
   @apply sticky bottom-4 z-20 backdrop-filter transition duration-300 w-[95%] rounded-xl shadow-lg
-    border-8 border-amber-950/25;
+    border-8 border-indigo-950/50;
 }
 </style>

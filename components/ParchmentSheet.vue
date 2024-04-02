@@ -28,7 +28,7 @@
 
 <style scoped>
 .parchment-content {
-  color: #7f3300;
+  color: #7f3300 !important;
 }
 
 .parchment {
@@ -39,35 +39,5 @@
   background: #fffef0;
   filter: url(#wavy2);
   border-radius: 2rem;
-}
-/* anim */
-:root {
-  --scale-duration: 0.3s;
-}
-.scale-enter-active {
-  transition-duration: 0.3s !important;
-  transition-timing-function: var(--v-ease-out) !important;
-}
-.scale-leave-active {
-  transition-duration: 0.3s !important;
-  transition-timing-function: var(--v-ease-in) !important;
-  position: absolute;
-}
-.scale-move {
-  transition-duration: 0.5s !important;
-  transition-property: transform !important;
-  transition-timing-function: var(--v-ease-out) !important;
-}
-.scale-leave-to {
-  opacity: 0;
-}
-
-.scale-enter-from {
-  opacity: 0;
-  transform: scale(0.9);
-}
-.scale-enter-active,
-.scale-leave-active {
-  transition-property: transform, opacity !important;
 }
 </style>

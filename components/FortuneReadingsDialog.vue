@@ -35,6 +35,8 @@ const dialog = defineModel<boolean>();
       <span>Close</span>
     </button>
 
-    <fortune-teller-message :message="readings[readings.length - 1]" />
+    <parchment-sheet>
+      <fortune-teller-message :message="readings[readings.length - 1]" />
+    </parchment-sheet>
   </v-overlay>
 </template>
