@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useEnergyStore } from '@/stores/useEnergyStore';
-const { $state, useBasicEnergy } = useEnergyStore();
+const { $state } = useEnergyStore();
 </script>
 
 <template>
-  <div
-    class="flex items-center justify-between py-4 px-8 sticky top-0 z-50 arcana-navbar"
+  <v-app-bar
+    class="flex items-center justify-between py-4 px-8"
+    height="80"
   >
     <div class="flex">
       <nuxt-link to="/">
@@ -56,7 +57,7 @@ const { $state, useBasicEnergy } = useEnergyStore();
         </span>
       </div>
     </div>
-  </div>
+  </v-app-bar>
 </template>
 
 <style scoped>

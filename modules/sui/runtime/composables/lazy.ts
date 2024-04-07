@@ -5,6 +5,10 @@ import { propsFactory } from '../util';
 // Types
 import type { Ref } from 'vue';
 
+export interface LazyProps {
+  eager?: boolean;
+}
+
 export const makeLazyProps = propsFactory(
   {
     eager: Boolean,

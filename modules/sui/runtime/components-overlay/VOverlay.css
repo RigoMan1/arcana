@@ -41,6 +41,7 @@ html.v-overlay-scroll-blocked {
   right: 0;
 }
 
+
 .v-overlay__content {
   outline: none;
   position: absolute;

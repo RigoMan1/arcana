@@ -1,23 +1,23 @@
 <script setup lang="ts">
 // Composables
-import { useLocationStrategies } from './locationStrategies';
-import { useScrollStrategies } from './scrollStrategies';
-import { useActivator } from './useActivator';
+import { useLocationStrategies } from './composables/locationStrategies';
+import { useScrollStrategies } from './composables/scrollStrategies';
+import { useActivator } from './composables/useActivator';
+import { useBackButton } from './composables/useBackButton';
 
-import { useDimension } from '../../composables/dimensions';
-import { useHydration } from '../../composables/hydration';
-import { useLazy } from '../../composables/lazy';
-// import { useRtl } from '../../composables/locale'
-import { useProxiedModel } from '../../composables/proxiedModel';
-import { useBackButton } from './useBackButton';
-import { useScopeId } from '../../composables/scopeId';
-import { useStack } from '../../composables/stack';
-import { useTeleport } from '../../composables/teleport';
-import { useToggleScope } from '../../composables/toggleScope';
-import { MaybeTransition } from '../../composables/transition';
+import { useDimension } from '../composables/dimensions';
+import { useHydration } from '../composables/hydration';
+import { useLazy } from '../composables/lazy';
+import { useProxiedModel } from '../composables/proxiedModel';
+import { useScopeId } from '../composables/scopeId';
+import { useStack } from '../composables/stack';
+import { useTeleport } from '../composables/teleport';
+import { useToggleScope } from '../composables/toggleScope';
+import { MaybeTransition } from '../composables/transition';
+// import { useRtl } from '../composables/locale'
 
 // Directives
-import { ClickOutside as vClickOutside } from '../../directives/click-outside';
+import { ClickOutside as vClickOutside } from '../directives/click-outside';
 
 // Utilities
 import {
@@ -37,7 +37,7 @@ import {
   getScrollParent,
   IN_BROWSER,
   standardEasing,
-} from '../../util';
+} from '../util';
 
 import { makeVOverlayProps } from './VOverlayMeta';
 

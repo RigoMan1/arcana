@@ -3,7 +3,7 @@ import { useToggleScope } from '../../composables/toggleScope';
 
 // Utilities
 import { computed, nextTick, onScopeDispose, ref, watch } from 'vue';
-import { anchorToPoint, getOffset } from './util/point';
+import { anchorToPoint, getOffset } from '../util/point';
 import {
   clamp,
   convertToUnit,

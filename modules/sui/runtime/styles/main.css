@@ -2,4 +2,13 @@
 @import './variables.css';
 @import './transitions.css';
 
-@import '../components/VOverlay/VOverlay.css';
+/* Application Layout */
+@import '../components-layout/VApp/VApp.css';
+@import '../components-layout/VMain/VMain.css';
+@import '../components-layout/VAppBar/VAppBar.css';
+@import '../components-layout/VFooter/VFooter.css';
+@import '../components-layout/VNavigationDrawer/VNavigationDrawer.css';
+
+/* Components */
+@import '../components-overlay/VOverlay.css';
+@import '../components/VSlides//VSlides.css';

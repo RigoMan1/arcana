@@ -1,22 +1,18 @@
-import { propsFactory } from '../../util';
+import { propsFactory } from '../util';
 
-import { makeLocationStrategyProps } from './locationStrategies';
-import { makeScrollStrategyProps } from './scrollStrategies';
-import { makeTransitionProps } from '../../composables/transition';
-import { makeLazyProps } from '../../composables/lazy';
-import { makeActivatorProps } from './useActivator';
-
-import { makeDimensionProps } from '../../composables/dimensions';
+import { makeLocationStrategyProps } from './composables/locationStrategies';
+import { makeScrollStrategyProps } from './composables/scrollStrategies';
+import { makeTransitionProps } from '../composables/transition';
+import { makeLazyProps } from '../composables/lazy';
+import { makeActivatorProps } from './composables/useActivator';
+import { makeComponentProps } from '../composables/component';
+import { makeDimensionProps } from '../composables/dimensions';
 
 import type { PropType } from 'vue';
 
 export const makeVOverlayProps = propsFactory(
   {
     _disableGlobalStack: Boolean,
-    tag: {
-      type: String,
-      default: 'div',
-    },
     arrow: Boolean,
     absolute: Boolean,
     attach: [Boolean, String, Object] as PropType<boolean | string | Element>,
@@ -42,6 +38,7 @@ export const makeVOverlayProps = propsFactory(
     },
 
     ...makeActivatorProps(),
+    ...makeComponentProps(),
     ...makeDimensionProps(),
     ...makeLazyProps(),
     ...makeLocationStrategyProps(),

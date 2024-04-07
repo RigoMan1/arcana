@@ -1,6 +1,6 @@
 // Utilities
 import { effectScope, nextTick, onScopeDispose, watchEffect } from 'vue';
-import { requestNewFrame } from './requestNewFrame';
+import { requestNewFrame } from '../util/requestNewFrame';
 import {
   convertToUnit,
   getScrollParents,

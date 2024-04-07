@@ -6,6 +6,7 @@ import { nextTick } from 'vue';
 import { getUid, IN_BROWSER } from './util';
 
 // Types
+import './types/index.d.ts';
 import type { App } from 'vue';
 import type { DisplayOptions, SSROptions } from './composables/display';
 

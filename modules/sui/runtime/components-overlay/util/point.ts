@@ -1,6 +1,6 @@
 // Types
-import type { ParsedAnchor } from '../../../util';
-import type { Box } from '../../../util/box';
+import type { ParsedAnchor } from '../../util';
+import type { Box } from '../../util/box';
 
 type Point = { x: number; y: number };
 declare class As<T extends string> {

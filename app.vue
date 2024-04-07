@@ -1,17 +1,11 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="arcana-scrollbar h-screen">
+  <v-app>
     <arcana-navbar />
 
-    <div class="flex flex-col main">
+    <v-main>
       <nuxt-page />
-    </div>
-  </div>
+    </v-main>
+  </v-app>
 </template>
-
-<style>
-.main {
-  height: calc(100vh - 81px);
-}
-</style>
