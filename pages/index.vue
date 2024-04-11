@@ -6,8 +6,11 @@ const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
 
 onMounted(() => (tarotDeck.value = shuffleCards(TarotCards)));
 
+// exposing index from prizewheel to reset the button
+const selectedCardIndex = ref(null) as Ref<TarotCard | null>;
 function removeCard(cardIndex: number) {
   tarotDeck.value.splice(cardIndex, 1, null);
+  selectedCardIndex.value = null;
 }
 
 // --- fortune reading logic ---
@@ -66,12 +69,13 @@ const showCards = ref(false);
     v-model="dialog"
     :readings="readings"
   />
-
   <div class="container flex flex-col h-full space-y-8">
     <!-- 1. fortune message  -->
     <div class="h-2/6 flex items-center justify-center">
-      <card-selection
+      <card-wheel
         v-if="showCards"
+        class="w-full h-full"
+        v-model="selectedCardIndex"
         :tarot-deck="tarotDeck"
       />
 
