@@ -2,6 +2,8 @@
 import { shuffleCards } from '@/utils/helpers';
 import TarotCards from '~/constants/tarot-card-data';
 
+const { $state: $fortuneReadingState } = useFortuneReading();
+
 const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
 
 onMounted(() => (tarotDeck.value = shuffleCards(TarotCards)));
@@ -62,6 +64,8 @@ async function handleSingleCardFortune(card: string) {
 }
 
 const showCards = ref(false);
+
+const { $state: $readingState } = useFortuneReading();
 </script>
 
 <template>
@@ -120,8 +124,12 @@ const showCards = ref(false);
     </div>
 
     <!-- 3. controls -->
-    <div class="pb-4 flex items-center justify-center">
+    <div
+      v-if="!$fortuneReadingState.cardDrawn"
+      class="pb-4 flex items-center justify-center"
+    >
       <arcana-text-area
+        v-if="!$readingState.fortuneInitiated"
         class="self-center"
         @message="handleClick"
         @toggle-cards="showCards = !showCards"

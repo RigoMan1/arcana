@@ -2,6 +2,7 @@
 const props = defineProps<{
   tarotDeck: TarotCard[] | null[];
 }>();
+const { $state: $fortuneReadingState } = useFortuneReading();
 
 const circle = ref() as Ref<HTMLDivElement | null>;
 
@@ -15,6 +16,7 @@ const removedIndexes = ref<number[]>([]); // Track removed indexes to avoid dupl
 const isSpinning = ref(false);
 const spinCarousel = () => {
   if (isSpinning.value) return;
+  $fortuneReadingState.cardDrawn = true;
   isSpinning.value = true;
   const targetIndex = Math.floor(Math.random() * totalItems); // Randomly select a target card index
   const stepDegrees = 360 / totalItems; // Degrees each card takes up on the circle

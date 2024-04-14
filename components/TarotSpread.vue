@@ -66,8 +66,9 @@ const someCardsSelected = computed(() => {
 
 // reveal one card at a time
 const currentCardIndex = ref(-1); // -1 indicates no card is being revealed yet
-const fortuneInitiated = ref(false);
-const fortuneComplete = ref(false);
+
+const { $state, completeFortuneReading, initiateFortuneReading } =
+  useFortuneReading();
 
 const findNextAvailableCardIndex = (startIndex: number): number => {
   let index = startIndex;
@@ -80,9 +81,29 @@ const findNextAvailableCardIndex = (startIndex: number): number => {
   return index;
 };
 
+function nextCard() {
+  const nextIndex = findNextAvailableCardIndex(currentCardIndex.value + 1);
+
+  if (nextIndex < currentLabels.value.length) {
+    currentCardIndex.value = nextIndex; // Move to the next card
+  }
+}
+
+function checkNextCard() {
+  const nextIndexCheck = findNextAvailableCardIndex(currentCardIndex.value + 1);
+  if (nextIndexCheck === currentLabels.value.length) {
+    completeFortuneReading();
+  }
+}
+
 const handleButtonClick = () => {
-  if (!fortuneInitiated.value) {
-    fortuneInitiated.value = true; // Start the reveal process
+  if ($state.fortuneComplete) {
+    console.log('Fortune reading complete');
+    return;
+  }
+
+  if (!$state.fortuneInitiated) {
+    initiateFortuneReading();
 
     const firstIndex = findNextAvailableCardIndex(0);
     if (firstIndex < currentLabels.value.length) {
@@ -92,20 +113,10 @@ const handleButtonClick = () => {
       return;
     }
   } else {
-    const nextIndex = findNextAvailableCardIndex(currentCardIndex.value + 1);
-
-    if (nextIndex < currentLabels.value.length) {
-      currentCardIndex.value = nextIndex; // Move to the next card
-
-      const nextIndexCheck = findNextAvailableCardIndex(
-        currentCardIndex.value + 1
-      );
-      // check if there are any more cards to reveal
-      if (nextIndexCheck === currentLabels.value.length) {
-        fortuneComplete.value = true;
-      }
-    }
+    nextCard();
   }
+
+  checkNextCard();
 
   const currentCard =
     selectedCards.value[currentLabels.value[currentCardIndex.value]];
@@ -136,7 +147,8 @@ const handleButtonClick = () => {
           v-if="selectedCards[label]"
           :card="selectedCards[label]!"
           :flip="
-            fortuneInitiated && currentLabels.indexOf(label) <= currentCardIndex
+            $state.fortuneInitiated &&
+            currentLabels.indexOf(label) <= currentCardIndex
           "
         />
       </drop-zone>
@@ -144,16 +156,20 @@ const handleButtonClick = () => {
 
     <div>
       <arcana-button
-        v-if="someCardsSelected && !fortuneComplete"
+        v-if="someCardsSelected"
         :disabled="!someCardsSelected"
         class="block mx-auto mt-12"
         @click="handleButtonClick"
       >
-        <template v-if="!fortuneInitiated">Reveal Fortune</template>
-        <template v-else-if="currentCardIndex < currentLabels.length - 1"
+        <template v-if="!$state.fortuneInitiated">Reveal Fortune</template>
+        <template
+          v-else-if="
+            currentCardIndex < currentLabels.length - 1 &&
+            !$state.fortuneComplete
+          "
           >Next Card</template
         >
-        <template v-else>Reset</template>
+        <template v-else> Conclude Reading </template>
       </arcana-button>
     </div>
   </div>
