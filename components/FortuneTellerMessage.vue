@@ -39,7 +39,7 @@ const parsedContent =
 }
 
 .fortune-oracle {
-  @apply p-20 rounded-full text-indigo-100;
+  @apply rounded-full text-indigo-100 h-full flex items-center;
   background: radial-gradient(
     50% 50% at 50% 50%,
     rgba(57, 58, 88, 0.5) 0%,

@@ -69,9 +69,9 @@ const showCards = ref(false);
     v-model="dialog"
     :readings="readings"
   />
-  <div class="container flex flex-col h-full space-y-8">
+  <div class="container flex flex-col h-full space-y-2">
     <!-- 1. fortune message  -->
-    <div class="h-2/6 flex items-center justify-center">
+    <div class="h-1/6 flex items-center justify-center">
       <card-wheel
         v-if="showCards"
         class="w-full h-full"
@@ -81,7 +81,7 @@ const showCards = ref(false);
 
       <div
         v-if="!showCards"
-        class="pb-3 pt-1 px-3 overflow-y-auto max-w-4xl h-full flex items-center"
+        class="px-4 overflow-y-auto max-w-4xl h-full flex items-center"
       >
         <transition name="scale">
           <div
@@ -108,7 +108,7 @@ const showCards = ref(false);
 
     <!-- 2. tarot spread -->
     <div
-      class="h-2/6"
+      class="flex-1 items-center justify-center flex"
       style="z-index: 10"
     >
       <tarot-spread
@@ -120,9 +120,9 @@ const showCards = ref(false);
     </div>
 
     <!-- 3. controls -->
-    <div class="h-2/6 flex flex-col justify-end pb-8">
+    <div class="pb-4 flex items-center justify-center">
       <arcana-text-area
-        class="w-2/3 self-center"
+        class="self-center"
         @message="handleClick"
         @toggle-cards="showCards = !showCards"
       />

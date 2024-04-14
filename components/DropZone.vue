@@ -29,7 +29,7 @@ watch(selectedCard, (newVal) => {
     <span
       class="flex text-xs items-center justify-center absolute px-2 h-6 text-center -top-3
         left-1/2 transform -translate-x-1/2 capitalize bg-zinc-900 border
-        border-zinc-600 text-zinc-400 font-medium rounded-lg"
+        border-zinc-600 text-zinc-400 font-medium rounded-lg whitespace-nowrap"
     >
       {{ label }}
     </span>

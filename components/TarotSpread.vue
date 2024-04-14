@@ -33,15 +33,25 @@ const handleCardSelect = (
 const labels = {
   'universal-guidance-spread': ['energy', 'theme', 'challenge', 'opportunity'],
   'three-card-cluster': ['past', 'present', 'future'],
+  all: [
+    'past',
+    'present',
+    'future',
+    'challenge',
+    'conscious',
+    'subconscious',
+    'outcome',
+    'fears-hopes',
+    'influences',
+    'advice',
+  ],
 } as Record<string, string[]>;
 
-const currentLabels = computed(() => labels[props.spread]);
+// const currentLabels = computed(() => labels[props.spread]);
+const currentLabels = computed(() => labels['all']);
 
 const createSpread = (spreadLabels: string[]) => {
-  const spread: Record<string, any | null> = {
-    name: props.spread,
-    options: spreadLabels,
-  };
+  const spread: Record<string, any | null> = {};
   spreadLabels.forEach((label) => {
     spread[label] = null;
   });
@@ -50,24 +60,51 @@ const createSpread = (spreadLabels: string[]) => {
 
 const selectedCards = ref(createSpread(currentLabels.value));
 
-const allCardsSelected = computed(() => {
-  return Object.values(selectedCards.value).every((card) => card !== null);
+const someCardsSelected = computed(() => {
+  return Object.values(selectedCards.value).some((card) => card !== null);
 });
 
 // reveal one card at a time
 const currentCardIndex = ref(-1); // -1 indicates no card is being revealed yet
-const fortuneRevealed = ref(false);
+const fortuneInitiated = ref(false);
+const fortuneComplete = ref(false);
+
+const findNextAvailableCardIndex = (startIndex: number): number => {
+  let index = startIndex;
+  while (
+    index < currentLabels.value.length &&
+    !selectedCards.value[currentLabels.value[index]]
+  ) {
+    index++;
+  }
+  return index;
+};
 
 const handleButtonClick = () => {
-  if (!fortuneRevealed.value) {
-    fortuneRevealed.value = true; // Start the reveal process
-    currentCardIndex.value = 0; // Start with the first card
-  } else if (currentCardIndex.value < currentLabels.value.length - 1) {
-    currentCardIndex.value++; // Move to the next card
+  if (!fortuneInitiated.value) {
+    fortuneInitiated.value = true; // Start the reveal process
+
+    const firstIndex = findNextAvailableCardIndex(0);
+    if (firstIndex < currentLabels.value.length) {
+      currentCardIndex.value = firstIndex; // Start with the first available card
+    } else {
+      // If no cards are selected, do not start the reveal process
+      return;
+    }
   } else {
-    // Reset or handle the end of the reveal process
-    fortuneRevealed.value = false;
-    currentCardIndex.value = -1;
+    const nextIndex = findNextAvailableCardIndex(currentCardIndex.value + 1);
+
+    if (nextIndex < currentLabels.value.length) {
+      currentCardIndex.value = nextIndex; // Move to the next card
+
+      const nextIndexCheck = findNextAvailableCardIndex(
+        currentCardIndex.value + 1
+      );
+      // check if there are any more cards to reveal
+      if (nextIndexCheck === currentLabels.value.length) {
+        fortuneComplete.value = true;
+      }
+    }
   }
 
   const currentCard =
@@ -79,24 +116,27 @@ const handleButtonClick = () => {
 </script>
 
 <template>
-  <div>
-    <div class="flex space-x-2 max-w-[640px] mx-auto">
+  <div class="flex flex-col">
+    <div class="spread-grid gap-6 sm:gap-8">
       <drop-zone
         v-for="label in currentLabels"
         :key="label"
         :label="label"
         :zone-id="`zone-${label}-${uniqueZoneId}`"
-        class="border border-zinc-500 relative p-4 flex-1 rounded-lg"
-        :class="{
-          'current-card': currentLabels.indexOf(label) === currentCardIndex,
-        }"
+        class="w-[15vw] min-w-[60px]"
+        :class="[
+          label,
+          {
+            'current-card': currentLabels.indexOf(label) === currentCardIndex,
+          },
+        ]"
         @drop="handleCardSelect"
       >
         <draggable-tarot-card
           v-if="selectedCards[label]"
           :card="selectedCards[label]!"
           :flip="
-            fortuneRevealed && currentLabels.indexOf(label) <= currentCardIndex
+            fortuneInitiated && currentLabels.indexOf(label) <= currentCardIndex
           "
         />
       </drop-zone>
@@ -104,11 +144,12 @@ const handleButtonClick = () => {
 
     <div>
       <arcana-button
-        :disabled="!allCardsSelected"
+        v-if="someCardsSelected && !fortuneComplete"
+        :disabled="!someCardsSelected"
         class="block mx-auto mt-12"
         @click="handleButtonClick"
       >
-        <template v-if="!fortuneRevealed">Reveal Fortune</template>
+        <template v-if="!fortuneInitiated">Reveal Fortune</template>
         <template v-else-if="currentCardIndex < currentLabels.length - 1"
           >Next Card</template
         >
@@ -119,6 +160,56 @@ const handleButtonClick = () => {
 </template>
 
 <style>
+.spread-grid {
+  display: grid;
+  grid-template-areas:
+    'outcome     conscious     fears-hopes'
+    'past        present       future'
+    'influences  subconscious  advice';
+}
+
+.spread-grid .challenge {
+  grid-area: 2 / 2 / 3 / 3;
+  transform: rotate(-90deg) translate(-1rem, 0rem);
+  z-index: 1;
+}
+
+.spread-grid .conscious {
+  grid-area: conscious;
+}
+
+.spread-grid .subconscious {
+  grid-area: subconscious;
+}
+
+.spread-grid .past {
+  grid-area: past;
+}
+
+.spread-grid .present {
+  grid-area: present;
+}
+
+.spread-grid .future {
+  grid-area: future;
+}
+
+.spread-grid .outcome {
+  grid-area: outcome;
+}
+
+.spread-grid .fears-hopes {
+  grid-area: fears-hopes;
+}
+
+.spread-grid .influences {
+  grid-area: influences;
+}
+
+.spread-grid .advice {
+  grid-area: advice;
+}
+
 /* todo: fix the pointer move the class to the outer container */
 .current-card {
   position: relative;
