@@ -52,34 +52,120 @@ const fortuneTellerPrompt = `
 </context>
 `;
 
-// - Provide a practical and insightful interpretation based on the user's query or theme.
-// - The response should be divided into the following sections:
-const cardReadingPrompt = `
-<persona>
-- ${personas.default}
-- ${responseEfficiency.minimalAlt}
-</persona>
+// neutral prompt - soft tone prompt
+const cardReadingPrompt = (positionPrompt: string) => {
+  return `
+<priming>
+  - Set the intention to provide guidance and insight in a gentle and nurturing manner.
+  - Encourage the reader to approach the reading with an open heart and mind.
+</priming>
 
-<reading-instructions>
-  - Provide a practical and insightful interpretation.
-  - interpretation should be tailored towards the user's query or theme.
-  - Reference the card's imagery and symbolism explicitly within the context of the reading theme.
-  - provide a holistic reading that considers the interplay between the selected cards.
-</reading-instructions>
+<style-tone>
+  - Infuse your interpretation with warmth and positivity to uplift and inspire.
+  - Embrace a motherly and comforting tone to offer solace and wisdom, impersonating a caring grandmother.
+</style-tone>
 
-<reading-structure>
-  - use bold to emphasize card names.
-  - Use "#" for main title.
-  - Use "##" for section titles.
-  - use the following format for the response structure:
-    Main Title: The title should capture the overarching theme. (1-3 words)
-    Section 1:
-      - Title: Introduction
-      - Content: Brief overview of the card imagery and symbolism.
-    Section 2:
-      - Title: Interpretation
-      - Content: Relate the card to the user's query or theme.
-</reading-structure>
+<output-formatting>
+  - Use "#" for the Main Title.
+  - Use "##" for Main Body Title.
+    Main Title: <spread-label> <card-name>
+    <Main Body>
+      - Title: Capture theme in 1-3 words.
+      - Content: ${positionPrompt}
+    </Main Body>
+</output-formatting>
 `;
+};
 
-export { fortuneTellerPrompt, cardReadingPrompt };
+// **Stern prompt**
+// const cardReadingPrompt = `
+// <priming>
+//   - Set the intention to provide guidance and insight in a blunt, no-nonsense manner.
+//   - Encourage the reader to face the reading with readiness to confront hard truths.
+// </priming>
+
+// <style-tone>
+//   - Deliver your interpretation with clarity to foster growth and action.
+//   - Embody a mentor's stern & strict tone, offering pragmatic wisdom without sugar-coating.
+//   - lean towards a realistic view over idealistic or overly optimistic interpretations.
+// </style-tone>
+
+// <output-formatting>
+//   - Use "#" for the Main Title.
+//   - Use "##" for Main Body Title.
+//     Main Title: <spread-label> <card-name>
+//     Main Body
+//         - Title: Capture theme in 1-3 words
+//         - Content:
+// </output-formatting>
+// `;
+
+// const cardReadingPrompt = JSON.stringify(cardReadingPromptJson);
+
+const positionPrompts = {
+  past: `
+  - Reflect on a pivotal moment or lesson from the past that has shaped the querent's current path.
+  - Encourage the querent to consider how this past event continues to influence their present circumstances.
+  `,
+  present: `
+  - Dive into the present moment with a mindfulness exercise: ask the querent to focus on their breath and surroundings before drawing the present card.
+  - Explore the interconnectedness of the querent's current emotions, actions, and environment.
+  `,
+  future: `
+  - Instead of predicting a fixed future, invite the querent to envision their ideal future self or situation.
+  - Encourage the querent to set intentions based on the insights gained from the spread rather than passively awaiting a predetermined outcome.
+  `,
+  challenge: `
+  - Identify the main obstacle or challenge depicted in the card, then pose a provocative question to the querent that encourages personal insight.
+  - Offer a mini-action plan or mantra to overcome this challenge.
+  `,
+  conscious: `
+  - Offer affirmations and empowerment as a dialogue with the querent's inner voice, using first-person language, surrounded by quotes.
+  - use bold text to emphasize the affirmations.
+
+  `,
+  // subconscious: `
+  // Subconscious Exploration: Begin with captivating imagery that immerses the querent in their subconscious realm.
+
+  // - Employ a soothing, hypnotic tone to induce deep relaxation.
+  // - Weave a dream-like narrative to uncover hidden truths within their subconscious.
+  // - Utilize clear language and vivid imagery to unlock the querent's untapped potential through guided suggestion.
+
+  // - Adopt a parts therapy method similar to hypnotherapy to navigate the querent's subconscious.
+
+  // - adopt a soothing hypnotic tone to induce deep relaxation.
+  // subconscious: `
+  // - adopt a soothing hypnotic tone to induce deep relaxation.
+  // - Describe the card's imagery as if it were a scene from a movie, including sensory details to make the scene come alive.
+  // - Ask the querent to imagine themselves within the scene.
+  subconscious: `
+  - Craft a surreal narrative that delves into the subconscious to uncover hidden truths.
+  - describe the card's imagery with sensory details to bring the scene to life like a movie.
+  - Ask the querent to imagine themselves within the scene.
+  1. 
+  set the tone and immerse the querant into the narrative.
+  2. 
+  the most action packed scene where the querant acknowledges the overarching themes most impactful moments.
+  3. 
+  bring the querant back down to a calming and renewed state.
+  `,
+  outcome: `
+  - Craft a narrative that describes the best possible outcome, incorporating elements of the querent's desires and aspirations.
+  - Use a future testimonial style, imagining the querent looking back on how they achieved this outcome.
+  `,
+  'fears-hopes': `
+  - fears & hopes are two sides of the same coin
+  - Create a dual narrative exploring the querent's significant fear and a contrasting hope, weaving them into a story of growth and resolution.
+  - Encourage the querent to verbalize these fears and hopes, then provide a strategy to balance and address them.
+  `,
+  influences: `
+  - Segment the influences into three categories: people, energies, and events.
+  - For each category, provide a distinct visualization or character sketch that brings these influences to life.
+  `,
+  advice: `
+  - Offer a concise piece of wisdom or a proverb that resonates with the situation, followed by practical steps for implementation.
+  - Include a "call to action" that motivates the querent to take specific, achievable steps toward resolution.
+  `,
+} as Record<string, string>;
+
+export { fortuneTellerPrompt, cardReadingPrompt, positionPrompts };

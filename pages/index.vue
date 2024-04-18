@@ -50,14 +50,20 @@ async function handleClick(message: string) {
 
 const dialog = ref(false);
 const readings = ref([]) as Ref<IMessage[]>;
-async function handleSingleCardFortune(card: string) {
+async function handleSingleCardFortune(
+  cardPrompt: string,
+  positionPrompt: string
+) {
   showCards.value = false;
   const userMessage = `
     The user has drawn this card, for a 3 card cluster spread:
-    ${card}
+    ${cardPrompt}
   `;
   useBasicEnergy(5);
-  const reading = await handleSendMessage(cardReadingPrompt, userMessage);
+  const reading = await handleSendMessage(
+    cardReadingPrompt(positionPrompt),
+    userMessage
+  );
 
   reading && readings.value.push(reading);
   dialog.value = true;
@@ -78,8 +84,8 @@ const { $state: $readingState } = useFortuneReading();
     <div class="h-1/6 flex items-center justify-center">
       <card-wheel
         v-if="showCards"
-        class="w-full h-full"
         v-model="selectedCardIndex"
+        class="w-full h-full"
         :tarot-deck="tarotDeck"
       />
 

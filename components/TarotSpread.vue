@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { generateId } from '~/utils/helpers';
+import { positionPrompts } from '~/constants/systemPrompts';
 const props = defineProps<{
   tarotDeck: TarotCard[] | null[];
   spread: string;
@@ -8,9 +9,6 @@ const props = defineProps<{
 const uniqueZoneId = generateId();
 
 const emit = defineEmits(['remove-card', 'reveal-fortune', 'card-selected']);
-
-const formatSelectedCard = (position: string, card: TarotCard) =>
-  `${position}: ${card.name}`;
 
 const handleCardSelect = (
   cardName: string,
@@ -96,6 +94,11 @@ function checkNextCard() {
   }
 }
 
+const formatSelectedCard = (position: string, card: TarotCard) =>
+  `
+  spread-label: ${position}
+  card-name: ${card.name}`;
+
 const handleButtonClick = () => {
   if ($state.fortuneComplete) {
     console.log('Fortune reading complete');
@@ -122,7 +125,11 @@ const handleButtonClick = () => {
     selectedCards.value[currentLabels.value[currentCardIndex.value]];
   const currentSpreadLabel = currentLabels.value[currentCardIndex.value];
 
-  emit('card-selected', formatSelectedCard(currentSpreadLabel, currentCard));
+  emit(
+    'card-selected',
+    formatSelectedCard(currentSpreadLabel, currentCard),
+    positionPrompts[currentSpreadLabel]
+  );
 };
 </script>
 
