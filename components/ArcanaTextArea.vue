@@ -26,12 +26,12 @@ const throttledAutoGrow = useThrottleFn(autoGrow, 100);
 </script>
 
 <template>
-  <div class="flex items-center py-2 px-3 rounded-xl !bg-zinc-800">
+  <div class="flex items-center py-2 px-3 rounded-full bg-primary-900">
     <button
       type="button"
-      class="p-2 text-zinc-500 rounded-lg cursor-pointer hover:text-zinc-900
-        hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-white
-        dark:hover:bg-zinc-600"
+      class="p-2 text-primary-500 rounded-lg cursor-pointer hover:text-primary-900
+        hover:bg-primary-100 dark:text-primary-400 dark:hover:text-white
+        dark:hover:bg-primary-600"
       @click="emit('toggleCards')"
     >
       <svg
@@ -51,19 +51,19 @@ const throttledAutoGrow = useThrottleFn(autoGrow, 100);
       ref="inputEl"
       v-model="message"
       rows="1"
-      class="block mx-4 p-2.5 w-full text-sm text-zinc-900 bg-white rounded-lg
-        border-zinc-300 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-zinc-800
-        dark:border-zinc-600 dark:placeholder-zinc-400 dark:text-white
-        dark:focus:ring-indigo-500 dark:focus:border-indigo-500 resize-none outline-none
-        max-h-40 overflow-y-auto"
+      class="block mx-4 p-2.5 w-full text-sm text-primary-900 bg-white rounded-lg
+        border-primary-300 focus:ring-secondary-500 focus:border-secondary-500
+        dark:bg-primary-900 dark:border-primary-600 dark:placeholder-primary-400
+        dark:text-white dark:focus:ring-secondary-500 dark:focus:border-secondary-500
+        resize-none outline-none max-h-40 overflow-y-auto"
       placeholder="Your message..."
       @keydown.enter="handleEnterKey"
       @input="throttledAutoGrow"
     />
     <button
       :class="{ 'button--disabled': !message }"
-      class="inline-flex justify-center p-2 text-indigo-600 rounded-full cursor-pointer
-        hover:bg-indigo-100 dark:text-indigo-500 dark:hover:bg-zinc-600"
+      class="inline-flex justify-center p-2 text-secondary-600 rounded-full cursor-pointer
+        hover:bg-secondary-100 dark:text-secondary-500 dark:hover:bg-primary-600"
       @click="emit('message', message)"
     >
       <svg
@@ -82,6 +82,6 @@ const throttledAutoGrow = useThrottleFn(autoGrow, 100);
 
 <style>
 .button--disabled {
-  @apply opacity-50 pointer-events-none text-zinc-300;
+  @apply opacity-50 pointer-events-none text-primary-300;
 }
 </style>

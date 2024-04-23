@@ -113,8 +113,7 @@ const first40Cards = computed(() => props.tarotDeck.slice(0, totalItems));
           </mask>
           <path
             d="M393 196.5C393 305.024 305.024 393 196.5 393C87.976 393 0 305.024 0 196.5C0 87.976 87.976 0 196.5 0C305.024 0 393 87.976 393 196.5ZM98.25 196.5C98.25 250.762 142.238 294.75 196.5 294.75C250.762 294.75 294.75 250.762 294.75 196.5C294.75 142.238 250.762 98.25 196.5 98.25C142.238 98.25 98.25 142.238 98.25 196.5Z"
-            fill="#2B2D45"
-            stroke="#393D60"
+            class="fill-primary-900 stroke-primary-800"
             stroke-width="4"
             mask="url(#path-1-inside-1_194_285)"
           />
@@ -128,13 +127,13 @@ const first40Cards = computed(() => props.tarotDeck.slice(0, totalItems));
         xmlns="http://www.w3.org/2000/svg"
         class="pointer"
       >
-        <path
-          d="M96 207L96 45.6828L192 1.85966e-05L96 207Z"
-          fill="#6150A1"
+      <path
+          d="M96 207L96 45.6827L1.80965e-05 -2.46167e-05L96 207Z"
+          class="fill-secondary-300"
         />
         <path
-          d="M96 207L96 45.6827L1.80965e-05 -2.46167e-05L96 207Z"
-          fill="#362575"
+          d="M96 207L96 45.6828L192 1.85966e-05L96 207Z"
+          class="fill-secondary-400"
         />
       </svg>
     </div>

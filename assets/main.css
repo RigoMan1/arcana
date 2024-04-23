@@ -1,4 +1,16 @@
 @import url('./typography.css');
+@import url('./scrollbar.css');
+
+:root {
+  --v-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --v-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --v-ease-in: cubic-bezier(0.4, 0, 1, 1);
+}
+
+.bd,
+[bd] {
+  border: 1px solid magenta;
+}
 
 html,
 body {
@@ -7,52 +19,5 @@ body {
 }
 
 body {
-  background: radial-gradient(circle, #0b0b13 75%, #393a58 200%);
-}
-
-.bd,
-[bd] {
-  border: 1px solid magenta;
-}
-
-:root {
-  --v-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-  --v-ease-out: cubic-bezier(0, 0, 0.2, 1);
-  --v-ease-in: cubic-bezier(0.4, 0, 1, 1);
-
-  --color-primary: #7f55da;
-  --color-secondary: #393a58;
-}
-
-.arcana-scrollbar ::-webkit-scrollbar {
-  width: 12px;
-}
-
-.arcana-scrollbar ::-webkit-scrollbar-track {
-  background: #1e1e24;
-  border-left: 2px solid var(--color-primary-dark);
-}
-
-.arcana-scrollbar ::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
-  border-radius: 6px;
-  border: 2px solid var(--color-primary-dark);
-}
-
-.arcana-scrollbar ::-webkit-scrollbar-thumb:hover {
-  background: #653cbf;
-}
-
-.arcana-scrollbar ::-webkit-scrollbar-thumb:active {
-  background: #3b266d;
-}
-
-.neu-inset {
-  background: theme('colors.zinc.900');
-  --shadow-color-1: #111;
-  --shadow-color-2: #222;
-
-  box-shadow:
-    inset 0.25em 0.25em 0.25em var(--shadow-color-1),
-    inset -0.25em -0.25em 0.25em var(--shadow-color-2);
+  @apply bg-primary-800/50;
 }

@@ -5,24 +5,13 @@ const { $state } = useEnergyStore();
 
 <template>
   <v-app-bar
-    class="flex items-center justify-between py-4 px-8"
+    class="flex items-center justify-between py-4 px-8 bg-primary-900"
     height="80"
   >
-    <div class="flex">
-      <nuxt-link to="/">
-        <img
-          class="w-10"
-          src="/images/logo.png"
-          alt=""
-        />
-      </nuxt-link>
-    </div>
-
     <div class="space-x-4 flex">
       <!-- basic energy -->
-
       <div
-        class="w-20 rounded-full energy-bar flex items-center p-1 justify-center"
+        class="energy-bar"
         :class="{
           'filter grayscale':
             $state.basicEnergy === 0 && $state.cosmicEnergy === 0,
@@ -43,7 +32,7 @@ const { $state } = useEnergyStore();
       <!-- cosmic energy -->
       <div
         :class="{ 'filter grayscale': $state.cosmicEnergy === 0 }"
-        class="w-20 rounded-full energy-bar flex items-center p-1 justify-center shadow-"
+        class="energy-bar"
       >
         <img
           class="w-4 shadow-purple-400 rounded-full"
@@ -56,6 +45,23 @@ const { $state } = useEnergyStore();
           {{ $state.cosmicEnergy }}
         </span>
       </div>
+    </div>
+
+    <div class="flex space-x-2">
+      <!-- <nuxt-link to="/">
+        <img
+          class="w-10"
+          src="/images/logo.png"
+          alt=""
+        />
+      </nuxt-link> -->
+      <!-- <arcana-button
+        size="small"
+        disabled
+      >
+        1
+      </arcana-button> -->
+      <!-- <arcana-button size="small"> 2 </arcana-button> -->
     </div>
   </v-app-bar>
 </template>
@@ -70,7 +76,7 @@ const { $state } = useEnergyStore();
 }
 
 .energy-bar {
-  background: #12122b;
-  border: 1px solid #1e1e3e;
+  @apply w-20 rounded-full flex items-center p-1 justify-center;
+  @apply border-2 !bg-primary-800/75 border-primary-800 text-white/30;
 }
 </style>

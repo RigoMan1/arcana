@@ -1,5 +1,6 @@
 // import type { Config } from 'tailwind';
 import type { ModuleOptions } from '@nuxtjs/tailwindcss';
+import colors from 'tailwindcss/colors';
 
 export default {
   content: [],
@@ -7,7 +8,12 @@ export default {
     container: {
       center: true,
     },
-    extend: {},
+    extend: {
+      colors: {
+        primary: colors.zinc,
+        secondary: colors.indigo,
+      },
+    },
   },
   plugins: [require('@tailwindcss/typography')],
 } satisfies ModuleOptions['config'];
