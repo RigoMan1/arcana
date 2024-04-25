@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useDraggableCard } from '@/composables/useDraggableCard';
-import { useDrag } from '@/composables/useDragAndDrop/useDrag';
+// import { useDraggableCard } from '@/composables/useDraggableCard';
+import { useDrag, useDraggableEl } from '@/composables/useDragAndDrop';
 
 const props = defineProps<{
   card: TarotCard;
@@ -10,13 +10,12 @@ const props = defineProps<{
 const cardRef = ref();
 useDrag(cardRef, props.card.name);
 
-const { style, isDragging, resetCard } = useDraggableCard(cardRef, {
-  pointerTypes: ['touch', 'mouse'],
-});
+// const { style, isDragging, resetCard } = useDraggableCard(cardRef);
+const { isDragging, style } = useDraggableEl(cardRef);
 
-watch(isDragging, (newVal) => {
-  if (!newVal) resetCard();
-});
+// watch(isDragging, (newVal) => {
+//   if (!newVal) resetCard();
+// });
 </script>
 
 <template>

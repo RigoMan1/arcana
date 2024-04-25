@@ -1,4 +1,8 @@
 import { useDndStore } from './dndStore'; // Adjust the path as necessary
+import {
+  getEventCoordinates,
+  type Coordinates,
+} from '../../utils/dnd-utils';
 
 export function useDrag(target: Ref<HTMLElement | null>, data: any) {
   const {
@@ -9,8 +13,10 @@ export function useDrag(target: Ref<HTMLElement | null>, data: any) {
     $state,
   } = useDndStore();
 
-  function checkOverlap(event: MouseEvent) {
-    const { clientX, clientY } = event;
+  function checkOverlap(event: MouseEvent | TouchEvent) {
+    const { x: clientX, y: clientY } = getEventCoordinates(
+      event
+    ) as Coordinates;
 
     // let isOverAnyContainer = false;
     let overContainerId = null;
@@ -38,13 +44,13 @@ export function useDrag(target: Ref<HTMLElement | null>, data: any) {
   }
 
   function startDrag(event: MouseEvent | TouchEvent) {
-    console.log('startDrag');
     event.preventDefault();
 
     setDragging(true);
     setDragData(data);
 
-    // document.addEventListener('mousemove', checkOverlap);
+    document.addEventListener('touchmove', checkOverlap);
+    document.addEventListener('touchend', endDrag, { once: true });
 
     document.addEventListener('mousemove', checkOverlap);
     document.addEventListener('mouseup', endDrag, { once: true });
@@ -52,24 +58,30 @@ export function useDrag(target: Ref<HTMLElement | null>, data: any) {
 
   // ! this won't get called unless mouse pointer is over a draggable element
   function endDrag(event: MouseEvent | TouchEvent) {
-    console.log('endDrag');
     event.preventDefault();
 
     setDragging(false); // this will trigger onDrop
+
+    document.removeEventListener('touchmove', checkOverlap);
 
     document.removeEventListener('mousemove', checkOverlap);
   }
 
   onMounted(() => {
     if (target.value) {
+      target.value.addEventListener('touchstart', startDrag, {
+        passive: true,
+      });
+
       target.value.addEventListener('mousedown', startDrag);
     }
   });
 
   onUnmounted(() => {
     if (target.value) {
+      target.value.removeEventListener('touchstart', startDrag);
+
       target.value.removeEventListener('mousedown', startDrag);
-      // target.value.removeEventListener('mouseup', endDrag); // handled by once
     }
   });
 
