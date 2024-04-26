@@ -4,10 +4,7 @@ const { $state } = useEnergyStore();
 </script>
 
 <template>
-  <v-app-bar
-    class="flex items-center justify-between py-4 px-8 bg-primary-900"
-    height="80"
-  >
+  <v-app-bar class="flex items-center justify-between py-4 px-8 bg-primary-900">
     <div class="space-x-4 flex">
       <!-- basic energy -->
       <div

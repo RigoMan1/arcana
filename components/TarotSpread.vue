@@ -100,6 +100,7 @@ const formatSelectedCard = (position: string, card: TarotCard) =>
   card-name: ${card.name}`;
 
 const handleButtonClick = () => {
+  console.log('handleButtonClick');
   if ($state.fortuneComplete) {
     console.log('Fortune reading complete');
     return;
@@ -131,6 +132,28 @@ const handleButtonClick = () => {
     positionPrompts[currentSpreadLabel]
   );
 };
+
+const buttonLabel = computed(() => {
+  if (someCardsSelected.value) {
+    if (!$state.fortuneInitiated) {
+      return 'Reveal Fortune';
+    } else if (
+      currentCardIndex.value < currentLabels.value.length - 1 &&
+      !$state.fortuneComplete
+    ) {
+      return 'Next Card';
+    } else {
+      return 'Conclude Reading';
+    }
+  }
+  return 'Select Cards';
+});
+
+defineExpose({
+  someCardsSelected,
+  buttonLabel,
+  handleButtonClick,
+});
 </script>
 
 <template>
@@ -141,7 +164,7 @@ const handleButtonClick = () => {
         :key="label"
         :label="label"
         :zone-id="`zone-${label}-${uniqueZoneId}`"
-        class="w-[15vw] min-w-[60px]"
+        class="w-[15vw] min-w-[4rem]"
         :class="[
           label,
           {
@@ -159,25 +182,6 @@ const handleButtonClick = () => {
           "
         />
       </drop-zone>
-    </div>
-
-    <div>
-      <arcana-button
-        v-if="someCardsSelected"
-        :disabled="!someCardsSelected"
-        class="block mx-auto mt-12"
-        @click="handleButtonClick"
-      >
-        <template v-if="!$state.fortuneInitiated">Reveal Fortune</template>
-        <template
-          v-else-if="
-            currentCardIndex < currentLabels.length - 1 &&
-            !$state.fortuneComplete
-          "
-          >Next Card</template
-        >
-        <template v-else> Conclude Reading </template>
-      </arcana-button>
     </div>
   </div>
 </template>

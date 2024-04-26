@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <v-app>
+  <v-app class="overflow-hidden">
     <arcana-navbar />
 
     <v-main>

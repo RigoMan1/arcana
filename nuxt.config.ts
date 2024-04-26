@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/eslint-module',
     '@nuxt/content',
+    'nuxt-icon',
     './modules/sui/module.ts',
   ],
   tailwindcss: {

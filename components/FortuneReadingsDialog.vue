@@ -10,7 +10,7 @@ const dialog = defineModel<boolean>();
     v-model="dialog"
     activator="#toggle-overlay"
     transition="dialog-transition"
-    width="80%"
+    width="90%"
     persistent
   >
     <!-- close button -->
@@ -36,7 +36,10 @@ const dialog = defineModel<boolean>();
     </button>
 
     <parchment-sheet>
-      <fortune-teller-message :message="readings[readings.length - 1]" />
+      <fortune-teller-message
+        class="h-[80vh] overflow-scroll"
+        :message="readings[readings.length - 1]"
+      />
     </parchment-sheet>
   </v-overlay>
 </template>

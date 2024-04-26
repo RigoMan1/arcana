@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import { useDraggableCard } from '@/composables/useDraggableCard';
 import { useDrag, useDraggableEl } from '@/composables/useDragAndDrop';
 
 const props = defineProps<{
@@ -10,19 +9,14 @@ const props = defineProps<{
 const cardRef = ref();
 useDrag(cardRef, props.card.name);
 
-// const { style, isDragging, resetCard } = useDraggableCard(cardRef);
 const { isDragging, style } = useDraggableEl(cardRef);
-
-// watch(isDragging, (newVal) => {
-//   if (!newVal) resetCard();
-// });
 </script>
 
 <template>
   <div
     ref="cardRef"
-    class="draggable-container"
-    :class="{ 'fixed top-0 left-0 min-w-[100px]': isDragging }"
+    class="draggable-container min-w-[3rem] w-[12vw]"
+    :class="{ 'fixed top-0 left-0 ': isDragging }"
     :style="style"
   >
     <tarot-card

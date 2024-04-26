@@ -71,6 +71,9 @@ async function handleSingleCardFortune(
 
 const showCards = ref(false);
 
+const wheelEl = ref() as Ref<any>;
+const tarotSpreadEl = ref() as Ref<any>;
+
 const { $state: $readingState } = useFortuneReading();
 </script>
 
@@ -84,6 +87,7 @@ const { $state: $readingState } = useFortuneReading();
     <div class="h-1/6 flex items-center justify-center">
       <card-wheel
         v-if="showCards"
+        ref="wheelEl"
         v-model="selectedCardIndex"
         class="w-full h-full"
         :tarot-deck="tarotDeck"
@@ -117,11 +121,15 @@ const { $state: $readingState } = useFortuneReading();
     </div>
 
     <!-- 2. tarot spread -->
+    <!-- <div class="flex justify-center items-center sm:pb-8 pb-4">
+      <span>Three Card Cluster</span>
+    </div> -->
     <div
       class="flex-1 items-center justify-center flex"
       style="z-index: 10"
     >
       <tarot-spread
+        ref="tarotSpreadEl"
         :tarot-deck="tarotDeck"
         spread="three-card-cluster"
         @remove-card="removeCard"
@@ -130,16 +138,67 @@ const { $state: $readingState } = useFortuneReading();
     </div>
 
     <!-- 3. controls -->
-    <div
-      v-if="!$fortuneReadingState.cardDrawn"
-      class="pb-4 flex items-center justify-center"
-    >
-      <arcana-text-area
-        v-if="!$readingState.fortuneInitiated"
-        class="self-center"
-        @message="handleClick"
-        @toggle-cards="showCards = !showCards"
-      />
+
+    <div class="p-4">
+      <div
+        v-show="showCards || $fortuneReadingState.cardDrawn"
+        class="flex items-center justify-between space-x-2 max-w-sm w-full mx-auto"
+      >
+        <arcana-button
+          size="small"
+          class="!px-2"
+          :disabled="$fortuneReadingState.cardDrawn"
+          @click="showCards = false"
+        >
+          <Icon
+            name="fluent:chat-bubbles-question-16-filled"
+            size="2em"
+          />
+        </arcana-button>
+
+        <arcana-button
+          v-if="tarotSpreadEl"
+          size="small"
+          :disabled="!tarotSpreadEl?.someCardsSelected"
+          @click="tarotSpreadEl?.handleButtonClick"
+        >
+          {{ tarotSpreadEl?.buttonLabel }}
+        </arcana-button>
+
+        <arcana-button
+          size="small"
+          class="!px-2"
+          :disabled="wheelEl?.disableSpin || $readingState.fortuneInitiated"
+          @click="wheelEl?.spinCarousel"
+        >
+          <Icon
+            name="fluent:arrow-rotate-clockwise-16-filled"
+            size="2em"
+          />
+        </arcana-button>
+      </div>
+
+      <div
+        v-show="!$fortuneReadingState.cardDrawn && !showCards"
+        class="flex items-center space-x-2 w-full max-w-sm mx-auto"
+      >
+        <arcana-button
+          size="small"
+          class="!px-2"
+          @click="showCards = !showCards"
+        >
+          <Icon
+            name="fluent:playing-cards-20-filled"
+            size="2em"
+          />
+        </arcana-button>
+        <arcana-text-area
+          v-if="!$readingState.fortuneInitiated"
+          class="self-center"
+          @message="handleClick"
+          @toggle-cards="showCards = true"
+        />
+      </div>
     </div>
   </div>
 </template>

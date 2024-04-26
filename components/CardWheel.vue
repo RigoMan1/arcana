@@ -61,19 +61,18 @@ const spinCarousel = () => {
 };
 
 const first40Cards = computed(() => props.tarotDeck.slice(0, totalItems));
+
+defineExpose({
+  spinCarousel,
+  disableSpin: computed(
+    () => selectedCardIndex.value !== null || isSpinning.value
+  ),
+});
 </script>
 
 <template>
   <div class="prize-wheel relative">
     <div class="carousel-container">
-      <arcana-button
-        class="absolute left-[40%] z-50 !text-sm !px-4 !h-12"
-        :disabled="selectedCardIndex !== null || isSpinning"
-        @click="spinCarousel"
-      >
-        Spin the Wheel
-      </arcana-button>
-
       <div
         ref="circle"
         class="circle"
@@ -101,7 +100,6 @@ const first40Cards = computed(() => props.tarotDeck.slice(0, totalItems));
           viewBox="0 0 393 393"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          class="wheel"
         >
           <mask
             id="path-1-inside-1_194_285"
@@ -127,7 +125,7 @@ const first40Cards = computed(() => props.tarotDeck.slice(0, totalItems));
         xmlns="http://www.w3.org/2000/svg"
         class="pointer"
       >
-      <path
+        <path
           d="M96 207L96 45.6827L1.80965e-05 -2.46167e-05L96 207Z"
           class="fill-secondary-300"
         />
@@ -139,7 +137,10 @@ const first40Cards = computed(() => props.tarotDeck.slice(0, totalItems));
     </div>
     <div class="flex justify-center absolute -bottom-1/4 w-full">
       <transition name="slide-down">
-        <div v-if="selectedCardIndex">
+        <div
+          v-if="selectedCardIndex"
+          style="z-index: 1000"
+        >
           <draggable-tarot-card
             class="active-card"
             :card="first40Cards[selectedCardIndex]"
@@ -177,7 +178,7 @@ const first40Cards = computed(() => props.tarotDeck.slice(0, totalItems));
 }
 .active-card {
   /* position: absolute; */
-  width: 100px;
+  /* width: 100px; */
   /* top: 20%;
   left: 44%; */
   z-index: 5000 !important;
