@@ -3,7 +3,6 @@ import { generateId } from '~/utils/helpers';
 import { positionPrompts } from '~/constants/systemPrompts';
 const props = defineProps<{
   tarotDeck: TarotCard[] | null[];
-  spread: string;
 }>();
 
 const uniqueZoneId = generateId();
@@ -29,9 +28,8 @@ const handleCardSelect = (
 };
 
 const labels = {
-  'universal-guidance-spread': ['energy', 'theme', 'challenge', 'opportunity'],
   'three-card-cluster': ['past', 'present', 'future'],
-  all: [
+  'celtic-cross': [
     'past',
     'present',
     'future',
@@ -43,10 +41,33 @@ const labels = {
     'influences',
     'advice',
   ],
+  'love-spread': ['you', 'past', 'relationship', 'future', 'partner'],
 } as Record<string, string[]>;
 
-// const currentLabels = computed(() => labels[props.spread]);
-const currentLabels = computed(() => labels['all']);
+const activeSpreadIndex = ref(0);
+const activeSpread = computed(() => ({
+  name: Object.keys(labels)[activeSpreadIndex.value],
+  labels: labels[Object.keys(labels)[activeSpreadIndex.value]],
+}));
+
+const canGoNext = computed(
+  () => activeSpreadIndex.value < Object.keys(labels).length - 1
+);
+const canGoPrev = computed(() => activeSpreadIndex.value > 0);
+
+function nextSpread() {
+  if (canGoNext.value) {
+    activeSpreadIndex.value++;
+  }
+}
+
+function prevSpread() {
+  if (canGoPrev.value) {
+    activeSpreadIndex.value--;
+  }
+}
+
+// const currentLabels = computed(() => labels[activeSpread.value.name]);
 
 const createSpread = (spreadLabels: string[]) => {
   const spread: Record<string, any | null> = {};
@@ -56,10 +77,20 @@ const createSpread = (spreadLabels: string[]) => {
   return spread;
 };
 
-const selectedCards = ref(createSpread(currentLabels.value));
+const selectedCards = ref(createSpread(activeSpread.value.labels));
+watch(
+  () => activeSpread.value,
+  () => {
+    selectedCards.value = createSpread(activeSpread.value.labels);
+  }
+);
 
 const someCardsSelected = computed(() => {
   return Object.values(selectedCards.value).some((card) => card !== null);
+});
+
+const allCardsSelected = computed(() => {
+  return Object.values(selectedCards.value).every((card) => card !== null);
 });
 
 // reveal one card at a time
@@ -71,8 +102,8 @@ const { $state, completeFortuneReading, initiateFortuneReading } =
 const findNextAvailableCardIndex = (startIndex: number): number => {
   let index = startIndex;
   while (
-    index < currentLabels.value.length &&
-    !selectedCards.value[currentLabels.value[index]]
+    index < activeSpread.value.labels.length &&
+    !selectedCards.value[activeSpread.value.labels[index]]
   ) {
     index++;
   }
@@ -82,14 +113,14 @@ const findNextAvailableCardIndex = (startIndex: number): number => {
 function nextCard() {
   const nextIndex = findNextAvailableCardIndex(currentCardIndex.value + 1);
 
-  if (nextIndex < currentLabels.value.length) {
+  if (nextIndex < activeSpread.value.labels.length) {
     currentCardIndex.value = nextIndex; // Move to the next card
   }
 }
 
 function checkNextCard() {
   const nextIndexCheck = findNextAvailableCardIndex(currentCardIndex.value + 1);
-  if (nextIndexCheck === currentLabels.value.length) {
+  if (nextIndexCheck === activeSpread.value.labels.length) {
     completeFortuneReading();
   }
 }
@@ -110,7 +141,7 @@ const handleButtonClick = () => {
     initiateFortuneReading();
 
     const firstIndex = findNextAvailableCardIndex(0);
-    if (firstIndex < currentLabels.value.length) {
+    if (firstIndex < activeSpread.value.labels.length) {
       currentCardIndex.value = firstIndex; // Start with the first available card
     } else {
       // If no cards are selected, do not start the reveal process
@@ -123,13 +154,14 @@ const handleButtonClick = () => {
   checkNextCard();
 
   const currentCard =
-    selectedCards.value[currentLabels.value[currentCardIndex.value]];
-  const currentSpreadLabel = currentLabels.value[currentCardIndex.value];
+    selectedCards.value[activeSpread.value.labels[currentCardIndex.value]];
+  const currentSpreadLabel = activeSpread.value.labels[currentCardIndex.value];
 
   emit(
     'card-selected',
     formatSelectedCard(currentSpreadLabel, currentCard),
-    positionPrompts[currentSpreadLabel]
+    positionPrompts[currentSpreadLabel],
+    activeSpread.value
   );
 };
 
@@ -138,7 +170,7 @@ const buttonLabel = computed(() => {
     if (!$state.fortuneInitiated) {
       return 'Reveal Fortune';
     } else if (
-      currentCardIndex.value < currentLabels.value.length - 1 &&
+      currentCardIndex.value < activeSpread.value.labels.length - 1 &&
       !$state.fortuneComplete
     ) {
       return 'Next Card';
@@ -151,16 +183,52 @@ const buttonLabel = computed(() => {
 
 defineExpose({
   someCardsSelected,
+  allCardsSelected,
   buttonLabel,
   handleButtonClick,
 });
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <div class="spread-grid gap-6 sm:gap-8">
+  <div class="w-full px-4">
+    <div
+      class="flex justify-between items-center space-x-4 mb-6 max-w-sm mx-auto"
+    >
+      <arcana-button
+        size="small"
+        class="!px-2"
+        :disabled="!canGoPrev || someCardsSelected"
+        @click="prevSpread"
+      >
+        <Icon
+          name="fluent:chevron-left-16-filled"
+          size="1.5em"
+        />
+      </arcana-button>
+
+      <span>
+        {{ activeSpread.name.replace(/-/g, ' ') }}
+      </span>
+
+      <arcana-button
+        size="small"
+        class="!px-2"
+        :disabled="!canGoNext || someCardsSelected"
+        @click="nextSpread"
+      >
+        <Icon
+          name="fluent:chevron-right-16-filled"
+          size="1.5em"
+        />
+      </arcana-button>
+    </div>
+
+    <div
+      class="spread-grid gap-6 sm:gap-8"
+      :class="activeSpread.name"
+    >
       <drop-zone
-        v-for="label in currentLabels"
+        v-for="label in activeSpread.labels"
         :key="label"
         :label="label"
         :zone-id="`zone-${label}-${uniqueZoneId}`"
@@ -168,7 +236,8 @@ defineExpose({
         :class="[
           label,
           {
-            'current-card': currentLabels.indexOf(label) === currentCardIndex,
+            'current-card':
+              activeSpread.labels.indexOf(label) === currentCardIndex,
           },
         ]"
         @drop="handleCardSelect"
@@ -178,7 +247,7 @@ defineExpose({
           :card="selectedCards[label]!"
           :flip="
             $state.fortuneInitiated &&
-            currentLabels.indexOf(label) <= currentCardIndex
+            activeSpread.labels.indexOf(label) <= currentCardIndex
           "
         />
       </drop-zone>
@@ -187,12 +256,33 @@ defineExpose({
 </template>
 
 <style>
-.spread-grid {
-  display: grid;
+.celtic-cross {
   grid-template-areas:
     'outcome     conscious     fears-hopes'
     'past        present       future'
     'influences  subconscious  advice';
+}
+
+.three-card-cluster {
+  grid-template-areas:
+    'c-1 c-2 c-3'
+    'past present future'
+    'c-4 c-5 c-6';
+}
+
+.love-spread {
+  grid-template-areas:
+    'a you b'
+    'past relationship future'
+    'c partner d';
+}
+
+.spread-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+
+  justify-items: center;
 }
 
 .spread-grid .challenge {
@@ -235,6 +325,18 @@ defineExpose({
 
 .spread-grid .advice {
   grid-area: advice;
+}
+
+.spread-grid .you {
+  grid-area: you;
+}
+
+.spread-grid .relationship {
+  grid-area: relationship;
+}
+
+.spread-grid .partner {
+  grid-area: partner;
 }
 
 /* todo: fix the pointer move the class to the outer container */

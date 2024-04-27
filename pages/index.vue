@@ -41,8 +41,6 @@ async function handleClick(message: string) {
   // calculate cost of message min 1
   const messageCost = Math.max(1, Math.ceil(message.length / 20));
 
-  console.log('messageCost', messageCost);
-
   useBasicEnergy(messageCost);
   const res = await handleSendMessage(fortuneTellerPrompt, message);
   if (res) mostRecentMessage.value = res;
@@ -52,11 +50,14 @@ const dialog = ref(false);
 const readings = ref([]) as Ref<IMessage[]>;
 async function handleSingleCardFortune(
   cardPrompt: string,
-  positionPrompt: string
+  positionPrompt: string,
+  spread: { name: string; labels: string[] }
 ) {
   showCards.value = false;
   const userMessage = `
-    The user has drawn this card, for a 3 card cluster spread:
+    The user has drawn this card, for
+    tarot-spread:${spread.name}
+    tarot-spread-card-count: ${spread.labels.length}
     ${cardPrompt}
   `;
   useBasicEnergy(5);
@@ -121,9 +122,7 @@ const { $state: $readingState } = useFortuneReading();
     </div>
 
     <!-- 2. tarot spread -->
-    <!-- <div class="flex justify-center items-center sm:pb-8 pb-4">
-      <span>Three Card Cluster</span>
-    </div> -->
+
     <div
       class="flex-1 items-center justify-center flex"
       style="z-index: 10"
@@ -131,7 +130,6 @@ const { $state: $readingState } = useFortuneReading();
       <tarot-spread
         ref="tarotSpreadEl"
         :tarot-deck="tarotDeck"
-        spread="three-card-cluster"
         @remove-card="removeCard"
         @card-selected="handleSingleCardFortune"
       />
@@ -159,7 +157,7 @@ const { $state: $readingState } = useFortuneReading();
         <arcana-button
           v-if="tarotSpreadEl"
           size="small"
-          :disabled="!tarotSpreadEl?.someCardsSelected"
+          :disabled="!tarotSpreadEl?.allCardsSelected"
           @click="tarotSpreadEl?.handleButtonClick"
         >
           {{ tarotSpreadEl?.buttonLabel }}
@@ -168,7 +166,11 @@ const { $state: $readingState } = useFortuneReading();
         <arcana-button
           size="small"
           class="!px-2"
-          :disabled="wheelEl?.disableSpin || $readingState.fortuneInitiated"
+          :disabled="
+            wheelEl?.disableSpin ||
+            $readingState.fortuneInitiated ||
+            tarotSpreadEl?.allCardsSelected
+          "
           @click="wheelEl?.spinCarousel"
         >
           <Icon
