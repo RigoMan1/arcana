@@ -1,18 +1,5 @@
 <script setup lang="ts">
 const emit = defineEmits(['message']);
-
-const message = ref('');
-
-function handleEnterKey(event: KeyboardEvent) {
-  if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault(); // Prevent the default action to avoid inserting a new line
-
-    emit('message', message.value);
-
-    message.value = '';
-  }
-}
-
 // Resize the textarea based on its content
 const inputEl = ref<HTMLTextAreaElement>();
 function autoGrow() {
@@ -23,6 +10,26 @@ function autoGrow() {
 onMounted(() => autoGrow());
 
 const throttledAutoGrow = useThrottleFn(autoGrow, 100);
+
+const message = ref('');
+
+function sendMessage() {
+  if (message.value) {
+    emit('message', message.value);
+
+    message.value = '';
+
+    inputEl.value!.style.height = 'inherit';
+  }
+}
+
+function handleEnterKey(event: KeyboardEvent) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault(); // Prevent the default action to avoid inserting a new line
+
+    sendMessage();
+  }
+}
 </script>
 
 <template>
@@ -45,7 +52,7 @@ const throttledAutoGrow = useThrottleFn(autoGrow, 100);
       :class="{ 'button--disabled': !message }"
       class="inline-flex justify-center p-2 text-secondary-600 rounded-full cursor-pointer
         hover:bg-secondary-100 dark:text-secondary-500 dark:hover:bg-primary-600"
-      @click="emit('message', message)"
+      @click="sendMessage"
     >
       <svg
         class="w-6 h-6 rotate-90"
