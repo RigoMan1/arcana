@@ -12,6 +12,7 @@ const dialog = defineModel<boolean>();
     transition="dialog-transition"
     width="90%"
     persistent
+    close-on-back
   >
     <!-- close button -->
     <button

@@ -157,7 +157,7 @@ const { $state: $readingState } = useFortuneReading();
         <arcana-button
           v-if="tarotSpreadEl"
           size="small"
-          :disabled="!tarotSpreadEl?.allCardsSelected"
+          
           @click="tarotSpreadEl?.handleButtonClick"
         >
           {{ tarotSpreadEl?.buttonLabel }}

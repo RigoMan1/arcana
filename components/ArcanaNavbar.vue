@@ -73,7 +73,7 @@ const { $state } = useEnergyStore();
 }
 
 .energy-bar {
-  @apply w-20 rounded-full flex items-center p-1 justify-center;
+  @apply w-16 rounded-full flex items-center p-0.5 justify-center;
   @apply border-2 !bg-primary-800/75 border-primary-800 text-white/30;
 }
 </style>

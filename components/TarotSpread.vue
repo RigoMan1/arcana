@@ -134,6 +134,9 @@ const handleButtonClick = () => {
   console.log('handleButtonClick');
   if ($state.fortuneComplete) {
     console.log('Fortune reading complete');
+    // refresh the page
+    window.location.reload();
+    // todo: reset the state
     return;
   }
 
@@ -242,7 +245,7 @@ defineExpose({
         ]"
         @drop="handleCardSelect"
       >
-        <draggable-tarot-card
+        <tarot-card
           v-if="selectedCards[label]"
           :card="selectedCards[label]!"
           :flip="
@@ -339,23 +342,10 @@ defineExpose({
   grid-area: partner;
 }
 
-/* todo: fix the pointer move the class to the outer container */
 .current-card {
   position: relative;
   border: 2px solid #d4cbf0;
   box-shadow: 0 0 8px #d4cbf0;
   z-index: 10;
-}
-
-.current-card::after {
-  content: '';
-  position: absolute;
-  bottom: -10px; /* Adjust based on your design */
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  width: 20px;
-  height: 20px;
-  background-color: #d4cbf0;
-  z-index: -1;
 }
 </style>
