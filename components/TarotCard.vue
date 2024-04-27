@@ -38,7 +38,7 @@ watch(
         'opacity-0': !showOverlay,
       }"
     >
-      <svg>
+      <svg v-if="showOverlay">
         <filter id="mysticalGlow">
           <feTurbulence
             type="fractalNoise"
