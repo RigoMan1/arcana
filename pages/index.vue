@@ -79,13 +79,13 @@ const { $state: $readingState } = useFortuneReading();
 </script>
 
 <template>
-  <fortune-readings-dialog
-    v-model="dialog"
-    :readings="readings"
-  />
-  <div class="container flex flex-col h-full space-y-2">
+  <div class="container flex flex-col h-full">
+    <fortune-readings-dialog
+      v-model="dialog"
+      :readings="readings"
+    />
     <!-- 1. fortune message  -->
-    <div class="h-1/6 flex items-center justify-center">
+    <div class="flex items-center justify-center h-1/6">
       <card-wheel
         v-if="showCards"
         ref="wheelEl"
@@ -124,7 +124,7 @@ const { $state: $readingState } = useFortuneReading();
     <!-- 2. tarot spread -->
 
     <div
-      class="flex-1 items-center justify-center flex"
+      class="flex-1"
       style="z-index: 10"
     >
       <tarot-spread
@@ -157,7 +157,7 @@ const { $state: $readingState } = useFortuneReading();
         <arcana-button
           v-if="tarotSpreadEl"
           size="small"
-          
+          :disabled="!tarotSpreadEl?.allCardsSelected"
           @click="tarotSpreadEl?.handleButtonClick"
         >
           {{ tarotSpreadEl?.buttonLabel }}

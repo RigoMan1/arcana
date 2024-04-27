@@ -193,9 +193,9 @@ defineExpose({
 </script>
 
 <template>
-  <div class="w-full px-4">
+  <div class="w-full px-4 flex flex-col justify-around h-full">
     <div
-      class="flex justify-between items-center space-x-4 mb-6 max-w-sm mx-auto"
+      class="flex justify-between items-center space-x-4 max-w-sm mx-auto w-full"
     >
       <arcana-button
         size="small"
@@ -235,7 +235,7 @@ defineExpose({
         :key="label"
         :label="label"
         :zone-id="`zone-${label}-${uniqueZoneId}`"
-        class="w-[15vw] min-w-[4rem]"
+        class="w-[60%] min-w-[3rem]"
         :class="[
           label,
           {
