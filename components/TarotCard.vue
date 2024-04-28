@@ -65,7 +65,7 @@ watch(
 
     <div class="card overflow-hidden">
       <div
-        class="card__inner rounded-lg border-4 border-zinc-200"
+        class="card__inner rounded-lg"
         :class="{ 'is-flipped': !flip }"
       >
         <div
@@ -84,7 +84,7 @@ watch(
           <div v-else>
             <h1 class="text-3xl font-bold">{{ card.name }}</h1>
 
-            <hr class="my-2 mx-4 opacity-10 border-white" />
+            <hr class="my-2 mx-4 opacity-10" />
 
             <p class="text-xl font-medium capitalize">
               {{ card.number || card.court }}
@@ -137,6 +137,10 @@ watch(
   height: 100%;
   position: absolute;
   backface-visibility: hidden;
+}
+
+.card__front {
+  @apply border-2 border-white rounded overflow-hidden;
 }
 
 .card__back {
