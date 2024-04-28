@@ -49,8 +49,22 @@ export default defineNuxtConfig({
           type: 'image/png',
         },
       ],
+      screenshots: [
+        {
+          src: 'screenshots/screenshot-1.png',
+          sizes: '470x835',
+          type: 'image/png',
+        },
+      ],
 
       theme_color: '#6366f1',
+    },
+    workbox: {
+      navigateFallback: '/',
+    },
+    devOptions: {
+      enabled: true,
+      type: 'module',
     },
   },
 });
