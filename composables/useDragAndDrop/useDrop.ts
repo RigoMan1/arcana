@@ -1,4 +1,4 @@
-import { useDndStore } from './dndStore'; // Adjust the path as necessary
+import { useDndStore } from './dndStore';
 
 export function useDrop(
   target: Ref<HTMLElement | null>,
@@ -36,7 +36,7 @@ export function useDrop(
     }
   }
 
-  const updatePosition = useThrottleFn(() => {
+  const updateZoneRect = useThrottleFn(() => {
     if (target.value) {
       registerDropContainer(
         containerId,
@@ -47,15 +47,15 @@ export function useDrop(
   }, 1000);
 
   onMounted(() => {
-    window.addEventListener('scroll', updatePosition);
-    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updateZoneRect);
+    window.addEventListener('resize', updateZoneRect);
 
-    updatePosition(); // Initial update
+    updateZoneRect(); // Initial update
   });
 
   onUnmounted(() => {
-    window.removeEventListener('scroll', updatePosition);
-    window.removeEventListener('resize', updatePosition);
+    window.removeEventListener('scroll', updateZoneRect);
+    window.removeEventListener('resize', updateZoneRect);
     unregisterDropContainer(containerId);
   });
 

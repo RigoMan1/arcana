@@ -31,20 +31,15 @@ export const useDndStore = defineStore('dnd', {
       this.activeDropContainerId = id;
     },
 
-    updateDropContainerRect(id: string, rect: DOMRect) {
-      this.dropContainerRects.set(id, {
-        ...this.dropContainerRects.get(id),
-        rect,
-      });
-    },
-
     registerDropContainer(id: string, data: string[], rect: DOMRect) {
       this.dropContainers[id] = data;
 
-      this.updateDropContainerRect(id, rect);
+      this.dropContainerRects.set(id, { rect });
     },
 
     unregisterDropContainer(id: string) {
+      this.dropContainerRects.delete(id);
+
       delete this.dropContainers[id];
     },
 
