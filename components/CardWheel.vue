@@ -90,7 +90,7 @@ defineExpose({
               'z-50 scale-150 -translate-y-4': selectedCardIndex === cardIndex,
             }"
           >
-            <span>{{ cardIndex }}</span>
+            <span>{{ cardIndex + 1 }}</span>
             <tarot-card :card="card" />
           </div>
         </template>
@@ -138,7 +138,7 @@ defineExpose({
     <div class="flex justify-center absolute -bottom-1/4 w-full">
       <transition name="slide-down">
         <div
-          v-if="selectedCardIndex"
+          v-if="selectedCardIndex !== null"
           style="z-index: 1000"
         >
           <draggable-tarot-card
