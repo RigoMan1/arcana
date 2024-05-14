@@ -89,3 +89,10 @@ interface ITarotPrompt {
   user: string;
   system: string;
 }
+
+interface IFortuneTeller {
+  name: string;
+  image: string;
+  description: string;
+  prompt: string;
+}

@@ -38,7 +38,7 @@ const dialog = defineModel<boolean>();
 
     <parchment-sheet>
       <fortune-teller-message
-        class="h-[80vh] overflow-scroll"
+        class="h-[80vh] overflow-auto"
         :message="readings[readings.length - 1]"
       />
     </parchment-sheet>

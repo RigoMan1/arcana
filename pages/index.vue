@@ -37,17 +37,26 @@ async function handleSendMessage(prompt: string, userMessage: string) {
 }
 
 const mostRecentMessage = ref() as Ref<IMessage | null>;
-async function handleClick(message: string) {
+async function handleTextMessage(message: string) {
   // calculate cost of message min 1
   const messageCost = Math.max(1, Math.ceil(message.length / 20));
 
   useBasicEnergy(messageCost);
-  const res = await handleSendMessage(fortuneTellerPrompt, message);
+  const res = await handleSendMessage(
+    `
+    ${fortuneReadingStore.activeFortuneTeller.description}
+    ${fortuneTellerPrompt}
+    `,
+    message
+  );
   if (res) mostRecentMessage.value = res;
 }
 
 const dialog = ref(false);
 const readings = ref([]) as Ref<IMessage[]>;
+const { $state: $readingState } = useFortuneReading();
+const fortuneReadingStore = useFortuneReading();
+
 async function handleSingleCardFortune(
   cardPrompt: string,
   positionPrompt: string,
@@ -62,7 +71,7 @@ async function handleSingleCardFortune(
   `;
   useBasicEnergy(5);
   const reading = await handleSendMessage(
-    cardReadingPrompt(positionPrompt),
+    cardReadingPrompt(positionPrompt, fortuneReadingStore.activeFortuneTeller),
     userMessage
   );
 
@@ -74,12 +83,21 @@ const showCards = ref(false);
 
 const wheelEl = ref() as Ref<any>;
 const tarotSpreadEl = ref() as Ref<any>;
-
-const { $state: $readingState } = useFortuneReading();
 </script>
 
 <template>
   <div class="container flex flex-col h-full">
+    <div class="flex items-center space-x-4 p-4">
+      <img
+        :src="fortuneReadingStore.activeFortuneTeller.image"
+        alt="fortune teller"
+        class="w-12 h-12 rounded-full"
+      />
+
+      <h2 class="text-xl mt-2">
+        {{ fortuneReadingStore.activeFortuneTeller.name }}
+      </h2>
+    </div>
     <fortune-readings-dialog
       v-model="dialog"
       :readings="readings"
@@ -197,7 +215,7 @@ const { $state: $readingState } = useFortuneReading();
         <arcana-text-area
           v-if="!$readingState.fortuneInitiated"
           class="self-center"
-          @message="handleClick"
+          @message="handleTextMessage"
           @toggle-cards="showCards = true"
         />
       </div>
