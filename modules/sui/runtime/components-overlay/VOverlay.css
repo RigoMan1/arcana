@@ -31,8 +31,6 @@ html.v-overlay-scroll-blocked {
 .v-overlay {
   border-radius: inherit;
   display: flex;
-  align-items: center;
-  justify-content: center;
   left: 0;
   pointer-events: none;
   position: fixed;
@@ -40,7 +38,6 @@ html.v-overlay-scroll-blocked {
   bottom: 0;
   right: 0;
 }
-
 
 .v-overlay__content {
   outline: none;

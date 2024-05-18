@@ -21,6 +21,7 @@ export default defineNuxtModule<ModuleOptions>({
       './runtime/components',
       './runtime/components-overlay',
       './runtime/components-layout',
+      './runtime/components-form',
     ];
 
     nuxt.options.css.push(resolver.resolve('./runtime/styles/main.css'));

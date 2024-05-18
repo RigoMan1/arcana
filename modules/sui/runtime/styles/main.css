@@ -12,3 +12,6 @@
 /* Components */
 @import '../components-overlay/VOverlay.css';
 @import '../components/VSlides//VSlides.css';
+
+/* Forms */
+@import '../components-form/VInput/VInput.css';
