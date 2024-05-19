@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     '@nuxt/content',
     'nuxt-icon',
     '@vite-pwa/nuxt',
+    '@vee-validate/nuxt',
     './modules/sui/module.ts',
   ],
   tailwindcss: {

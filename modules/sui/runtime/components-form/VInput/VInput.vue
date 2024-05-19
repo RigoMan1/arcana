@@ -85,7 +85,7 @@ const hasDetails = computed(
     ]"
   >
     <!-- label -->
-    <template v-if="$slots.label">
+    <template v-if="hasLabel">
       <div class="v-input__label">
         <label class="v-label">
           <slot
