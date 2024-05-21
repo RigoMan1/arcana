@@ -11,7 +11,14 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     '@vee-validate/nuxt',
     './modules/sui/module.ts',
+    '@nuxtjs/supabase',
   ],
+  supabase: {
+    redirectOptions: {
+      login: '/auth/login',
+      exclude: ['/auth/*'],
+    },
+  },
   tailwindcss: {
     exposeConfig: true,
     configPath: './tailwind.config.ts',

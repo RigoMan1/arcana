@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { useEnergyStore } from '@/stores/useEnergyStore';
 const { $state } = useEnergyStore();
+
+const user = useSupabaseUser();
+
+const supabase = useSupabaseClient();
+
+const logout = async () => {
+  await supabase.auth.signOut();
+  navigateTo('/auth/login');
+};
 </script>
 
 <template>
@@ -44,7 +53,14 @@ const { $state } = useEnergyStore();
       </div>
     </div>
 
-    <div class="flex space-x-2">
+    <div class="flex space-x-2 items-center">
+      <span>{{ user?.email.split('@')[0] }}</span>
+      <arcana-button
+        size="small"
+        @click="logout"
+      >
+        logout
+      </arcana-button>
       <!-- <nuxt-link to="/">
         <img
           class="w-10"

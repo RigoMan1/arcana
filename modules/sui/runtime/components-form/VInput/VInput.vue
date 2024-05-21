@@ -95,6 +95,11 @@ const hasDetails = computed(
             {{ props.label }}
           </slot>
         </label>
+
+        <slot
+          name="labelHint"
+          :v-bind="slotProps"
+        />
       </div>
     </template>
 

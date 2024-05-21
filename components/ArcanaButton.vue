@@ -3,6 +3,8 @@ defineProps<{
   text?: string;
   disabled?: boolean;
   size?: 'small' | 'medium' | 'large';
+  loading?: boolean;
+  loadingText?: string;
 }>();
 </script>
 
@@ -16,7 +18,8 @@ defineProps<{
     :tabindex="disabled ? -1 : 0"
   >
     <slot>
-      {{ text }}
+      <span v-if="loading">{{ loadingText || 'Loading...' }}</span>
+      <span v-else>{{ text }}</span>
     </slot>
   </button>
 </template>
