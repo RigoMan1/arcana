@@ -3,7 +3,7 @@
 <template>
   <div
     class="parchment-content relative flex items-center justify-center sm:px-20 sm:py-12
-      px-10 py-6"
+      px-10"
   >
     <div class="parchment absolute w-full h-full"></div>
 

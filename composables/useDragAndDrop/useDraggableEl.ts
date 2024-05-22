@@ -44,7 +44,6 @@ export function useDraggableEl(targetRef: Ref<HTMLElement | null>) {
 
   // 2️⃣
   function onDragMove(event: MouseEvent | TouchEvent) {
-    event.preventDefault();
     if (!isDragging.value || !targetRef.value) return;
 
     const { x: clientX, y: clientY } = getEventCoordinates(

@@ -71,7 +71,6 @@ const submitResetPassword = handleSubmit(async ({ email }) => {
         />
 
         <arcana-button
-          size="small"
           class="mt-8 w-full"
           text="Send Reset Link"
           :loading="loading"

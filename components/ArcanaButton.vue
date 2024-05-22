@@ -3,8 +3,10 @@ defineProps<{
   text?: string;
   disabled?: boolean;
   size?: 'small' | 'medium' | 'large';
+  variant?: 'text';
   loading?: boolean;
   loadingText?: string;
+  icon?: boolean;
 }>();
 </script>
 
@@ -12,7 +14,11 @@ defineProps<{
   <button
     class="arcana-button arcana-button--color-primary"
     :class="[
-      { 'arcana-button--state-disabled': disabled },
+      {
+        'arcana-button--state-disabled': disabled,
+        'arcana-button--variant-text': variant === 'text',
+        'arcana-button--icon': icon,
+      },
       `arcana-button--size-${size || 'medium'}`,
     ]"
     :tabindex="disabled ? -1 : 0"
@@ -38,18 +44,18 @@ defineProps<{
 
 /* sizes */
 .arcana-button--size-small {
-  @apply px-4 text-sm;
-  height: 2.75rem;
+  @apply px-3 text-xs;
+  height: 2rem;
 }
 
 .arcana-button--size-medium {
-  @apply px-7 text-lg;
-  height: 3.75rem;
+  @apply px-4 text-sm;
+  height: 3rem;
 }
 
 .arcana-button--size-large {
-  @apply px-10 text-xl;
-  height: 4.5rem;
+  @apply px-7 text-lg;
+  height: 3.75rem;
 }
 
 /* color */
@@ -59,6 +65,17 @@ defineProps<{
     theme('colors.secondary.400') 15.29%,
     theme('colors.secondary.600') 58.19%
   );
+}
+
+/* variants */
+.arcana-button--variant-text {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+.arcana-button--icon {
+  aspect-ratio: 1;
+  padding: 0;
 }
 
 /* states */

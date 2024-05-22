@@ -44,7 +44,7 @@ export function useDrag(target: Ref<HTMLElement | null>, data: any) {
   }
 
   function startDrag(event: MouseEvent | TouchEvent) {
-    event.preventDefault();
+    // event.preventDefault();
 
     setDragging(true);
     setDragData(data);
@@ -58,7 +58,7 @@ export function useDrag(target: Ref<HTMLElement | null>, data: any) {
 
   // ! this won't get called unless mouse pointer is over a draggable element
   function endDrag(event: MouseEvent | TouchEvent) {
-    event.preventDefault();
+    // event.preventDefault();
 
     setDragging(false); // this will trigger onDrop
 

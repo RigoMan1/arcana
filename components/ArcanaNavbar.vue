@@ -55,11 +55,17 @@ const logout = async () => {
 
     <div class="flex space-x-2 items-center">
       <span>{{ user?.email.split('@')[0] }}</span>
+
       <arcana-button
         size="small"
+        variant="text"
+        icon
         @click="logout"
       >
-        logout
+        <Icon
+          name="fluent:sign-out-20-filled"
+          size="2em"
+        />
       </arcana-button>
       <!-- <nuxt-link to="/">
         <img
@@ -69,12 +75,11 @@ const logout = async () => {
         />
       </nuxt-link> -->
       <!-- <arcana-button
-        size="small"
         disabled
       >
         1
       </arcana-button> -->
-      <!-- <arcana-button size="small"> 2 </arcana-button> -->
+      <!-- <arcana-button> 2 </arcana-button> -->
     </div>
   </v-app-bar>
 </template>

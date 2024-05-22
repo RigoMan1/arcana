@@ -161,7 +161,6 @@ const tarotSpreadEl = ref() as Ref<any>;
         class="flex items-center justify-between space-x-2 max-w-sm w-full mx-auto"
       >
         <arcana-button
-          size="small"
           class="!px-2"
           :disabled="$fortuneReadingState.cardDrawn"
           @click="showCards = false"
@@ -174,15 +173,13 @@ const tarotSpreadEl = ref() as Ref<any>;
 
         <arcana-button
           v-if="tarotSpreadEl"
-          size="small"
-          :disabled="!tarotSpreadEl?.allCardsSelected"
+          :disabled="!tarotSpreadEl?.allCardsSelected || $state.isTyping"
           @click="tarotSpreadEl?.handleButtonClick"
         >
           {{ tarotSpreadEl?.buttonLabel }}
         </arcana-button>
 
         <arcana-button
-          size="small"
           class="!px-2"
           :disabled="
             wheelEl?.disableSpin ||
@@ -203,7 +200,6 @@ const tarotSpreadEl = ref() as Ref<any>;
         class="flex items-center space-x-2 w-full max-w-sm mx-auto"
       >
         <arcana-button
-          size="small"
           class="!px-2"
           @click="showCards = !showCards"
         >

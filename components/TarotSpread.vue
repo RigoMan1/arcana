@@ -133,10 +133,8 @@ const formatSelectedCard = (position: string, card: TarotCard) =>
 const handleButtonClick = () => {
   console.log('handleButtonClick');
   if ($state.fortuneComplete) {
-    console.log('Fortune reading complete');
-    // refresh the page
-    window.location.reload();
-    // todo: reset the state
+    window.location.href = '/reader-selection';
+
     return;
   }
 
@@ -198,7 +196,6 @@ defineExpose({
       class="flex justify-between items-center space-x-4 max-w-sm mx-auto w-full"
     >
       <arcana-button
-        size="small"
         class="!px-2"
         :disabled="!canGoPrev || someCardsSelected"
         @click="prevSpread"
@@ -214,7 +211,6 @@ defineExpose({
       </span>
 
       <arcana-button
-        size="small"
         class="!px-2"
         :disabled="!canGoNext || someCardsSelected"
         @click="nextSpread"

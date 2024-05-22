@@ -34,7 +34,7 @@ const { $state } = useFortuneReading();
           </arcana-button>
 
           <nuxt-link to="/">
-            <arcana-button text="Get Reading" />
+            <arcana-button text="Continue" />
           </nuxt-link>
 
           <arcana-button

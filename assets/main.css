@@ -16,6 +16,7 @@ html,
 body {
   height: 100%;
   color-scheme: dark;
+  overscroll-behavior: none;
 }
 
 body {

@@ -78,7 +78,6 @@ const submit = submitForm(props.onSubmit);
         </template>
       </VeeTextField>
       <arcana-button
-        size="small"
         class="mt-8 w-full"
         :text="buttonText"
         :loading="loading"
