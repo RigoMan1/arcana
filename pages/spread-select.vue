@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useTarotSpread } from '@/stores/useSpreadSelect';
+import { useTarotSpread } from '~/stores/useTarotSpread';
 import { spreads } from '@/constants/tarot-spreads';
 
 const { $state } = useTarotSpread();
@@ -61,14 +61,14 @@ const activeSpreadData = computed(() => {
             <div
               v-for="label in activeSpread.labels"
               :key="label"
-              class="aspect-[11/19] rounded border border-secondary-300 bg-secondary-900 max-w-[32px]"
+              class="aspect-[11/19] rounded border border-secondary-300 bg-secondary-900 w-[32px]"
               :class="[label]"
             >
-              <img
+              <!-- <img
                 src="/images/tarot-back.png"
                 alt="Tarot Card Back Design"
                 class="h-full w-full object-cover"
-              />
+              /> -->
             </div>
           </div>
 

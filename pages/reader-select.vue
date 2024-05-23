@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useFortuneReading } from '@/stores/useFortuneReading';
+import { useFortuneTeller } from '~/stores/useFortuneTeller';
 import { fortuneTellers } from '@/constants/fortune-tellers';
 
-const { $state } = useFortuneReading();
+const { $state } = useFortuneTeller();
 </script>
 
 <template>

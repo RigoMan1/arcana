@@ -5,7 +5,7 @@ interface TarotSpreadState {
   activeSpreadIndex: number;
 }
 
-export const useTarotSpread = defineStore('tarot-spread-store', {
+export const useTarotSpread = defineStore('spread-select-store', {
   state: (): TarotSpreadState => ({
     activeSpreadIndex: 0,
   }),
