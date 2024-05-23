@@ -1,8 +1,5 @@
 import { useDndStore } from './dndStore'; // Adjust the path as necessary
-import {
-  getEventCoordinates,
-  type Coordinates,
-} from '../../utils/dnd-utils';
+import { getEventCoordinates, type Coordinates } from '../../utils/dnd-utils';
 
 export function useDrag(target: Ref<HTMLElement | null>, data: any) {
   const {
@@ -43,9 +40,7 @@ export function useDrag(target: Ref<HTMLElement | null>, data: any) {
     setActiveDropContainerId(overContainerId);
   }
 
-  function startDrag(event: MouseEvent | TouchEvent) {
-    // event.preventDefault();
-
+  function startDrag() {
     setDragging(true);
     setDragData(data);
 
@@ -57,9 +52,7 @@ export function useDrag(target: Ref<HTMLElement | null>, data: any) {
   }
 
   // ! this won't get called unless mouse pointer is over a draggable element
-  function endDrag(event: MouseEvent | TouchEvent) {
-    // event.preventDefault();
-
+  function endDrag() {
     setDragging(false); // this will trigger onDrop
 
     document.removeEventListener('touchmove', checkOverlap);

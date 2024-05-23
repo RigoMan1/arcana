@@ -1,0 +1,89 @@
+.celtic-cross {
+  grid-template-areas:
+    'outcome     conscious     fears-hopes'
+    'past        present       future'
+    'influences  subconscious  advice';
+}
+
+.three-card-cluster {
+  grid-template-areas:
+    'c-1 c-2 c-3'
+    'past present future'
+    'c-4 c-5 c-6';
+}
+
+.love-spread {
+  grid-template-areas:
+    'a you b'
+    'past relationship future'
+    'c partner d';
+}
+
+.spread-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+
+  justify-items: center;
+}
+
+.spread-grid .challenge {
+  grid-area: 2 / 2 / 3 / 3;
+  transform: rotate(-90deg) translate(-1rem, 0rem);
+  z-index: 1;
+}
+
+.spread-grid .conscious {
+  grid-area: conscious;
+}
+
+.spread-grid .subconscious {
+  grid-area: subconscious;
+}
+
+.spread-grid .past {
+  grid-area: past;
+}
+
+.spread-grid .present {
+  grid-area: present;
+}
+
+.spread-grid .future {
+  grid-area: future;
+}
+
+.spread-grid .outcome {
+  grid-area: outcome;
+}
+
+.spread-grid .fears-hopes {
+  grid-area: fears-hopes;
+}
+
+.spread-grid .influences {
+  grid-area: influences;
+}
+
+.spread-grid .advice {
+  grid-area: advice;
+}
+
+.spread-grid .you {
+  grid-area: you;
+}
+
+.spread-grid .relationship {
+  grid-area: relationship;
+}
+
+.spread-grid .partner {
+  grid-area: partner;
+}
+
+.current-card {
+  position: relative;
+  border: 2px solid #d4cbf0;
+  box-shadow: 0 0 8px #d4cbf0;
+  z-index: 10;
+}

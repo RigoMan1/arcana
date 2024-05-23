@@ -9,18 +9,22 @@ defineProps<{
 </script>
 
 <template>
-  <div
-    class="flex items-center justify-center flex-col p-8 border rounded-lg text-center
-      border-primary-500"
-  >
+  <div>
     <img
       :src="fortuneTeller.image"
       alt="fortune teller"
-      class="w-32 h-32 rounded-full"
+      class="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
     />
 
-    <h2 class="text-xl mt-2">{{ fortuneTeller.name }}</h2>
+    <div
+      class="flex items-center justify-center flex-col p-4 border rounded-lg text-center
+        border-primary-500"
+    >
+      <h2 class="text-center mb-4">{{ fortuneTeller.name }}</h2>
 
-    <p class="mt-4">{{ fortuneTeller.description }}</p>
+      <hr class="border-primary-700 w-full" />
+
+      <p class="mt-6">{{ fortuneTeller.description }}</p>
+    </div>
   </div>
 </template>

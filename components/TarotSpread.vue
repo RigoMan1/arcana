@@ -27,47 +27,7 @@ const handleCardSelect = (
   emit('remove-card', cardIndex);
 };
 
-const labels = {
-  'three-card-cluster': ['past', 'present', 'future'],
-  'celtic-cross': [
-    'past',
-    'present',
-    'future',
-    'challenge',
-    'conscious',
-    'subconscious',
-    'outcome',
-    'fears-hopes',
-    'influences',
-    'advice',
-  ],
-  'love-spread': ['you', 'past', 'relationship', 'future', 'partner'],
-} as Record<string, string[]>;
-
-const activeSpreadIndex = ref(0);
-const activeSpread = computed(() => ({
-  name: Object.keys(labels)[activeSpreadIndex.value],
-  labels: labels[Object.keys(labels)[activeSpreadIndex.value]],
-}));
-
-const canGoNext = computed(
-  () => activeSpreadIndex.value < Object.keys(labels).length - 1
-);
-const canGoPrev = computed(() => activeSpreadIndex.value > 0);
-
-function nextSpread() {
-  if (canGoNext.value) {
-    activeSpreadIndex.value++;
-  }
-}
-
-function prevSpread() {
-  if (canGoPrev.value) {
-    activeSpreadIndex.value--;
-  }
-}
-
-// const currentLabels = computed(() => labels[activeSpread.value.name]);
+const { activeSpread } = storeToRefs(useTarotSpread());
 
 const createSpread = (spreadLabels: string[]) => {
   const spread: Record<string, any | null> = {};
@@ -133,7 +93,7 @@ const formatSelectedCard = (position: string, card: TarotCard) =>
 const handleButtonClick = () => {
   console.log('handleButtonClick');
   if ($state.fortuneComplete) {
-    window.location.href = '/reader-selection';
+    window.location.href = '/reader-select';
 
     return;
   }
@@ -193,36 +153,6 @@ defineExpose({
 <template>
   <div class="w-full px-4 flex flex-col justify-around h-full">
     <div
-      class="flex justify-between items-center space-x-4 max-w-sm mx-auto w-full"
-    >
-      <arcana-button
-        class="!px-2"
-        :disabled="!canGoPrev || someCardsSelected"
-        @click="prevSpread"
-      >
-        <Icon
-          name="fluent:chevron-left-16-filled"
-          size="1.5em"
-        />
-      </arcana-button>
-
-      <span>
-        {{ activeSpread.name.replace(/-/g, ' ') }}
-      </span>
-
-      <arcana-button
-        class="!px-2"
-        :disabled="!canGoNext || someCardsSelected"
-        @click="nextSpread"
-      >
-        <Icon
-          name="fluent:chevron-right-16-filled"
-          size="1.5em"
-        />
-      </arcana-button>
-    </div>
-
-    <div
       class="spread-grid gap-6 sm:gap-8"
       :class="activeSpread.name"
     >
@@ -253,95 +183,3 @@ defineExpose({
     </div>
   </div>
 </template>
-
-<style>
-.celtic-cross {
-  grid-template-areas:
-    'outcome     conscious     fears-hopes'
-    'past        present       future'
-    'influences  subconscious  advice';
-}
-
-.three-card-cluster {
-  grid-template-areas:
-    'c-1 c-2 c-3'
-    'past present future'
-    'c-4 c-5 c-6';
-}
-
-.love-spread {
-  grid-template-areas:
-    'a you b'
-    'past relationship future'
-    'c partner d';
-}
-
-.spread-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-
-  justify-items: center;
-}
-
-.spread-grid .challenge {
-  grid-area: 2 / 2 / 3 / 3;
-  transform: rotate(-90deg) translate(-1rem, 0rem);
-  z-index: 1;
-}
-
-.spread-grid .conscious {
-  grid-area: conscious;
-}
-
-.spread-grid .subconscious {
-  grid-area: subconscious;
-}
-
-.spread-grid .past {
-  grid-area: past;
-}
-
-.spread-grid .present {
-  grid-area: present;
-}
-
-.spread-grid .future {
-  grid-area: future;
-}
-
-.spread-grid .outcome {
-  grid-area: outcome;
-}
-
-.spread-grid .fears-hopes {
-  grid-area: fears-hopes;
-}
-
-.spread-grid .influences {
-  grid-area: influences;
-}
-
-.spread-grid .advice {
-  grid-area: advice;
-}
-
-.spread-grid .you {
-  grid-area: you;
-}
-
-.spread-grid .relationship {
-  grid-area: relationship;
-}
-
-.spread-grid .partner {
-  grid-area: partner;
-}
-
-.current-card {
-  position: relative;
-  border: 2px solid #d4cbf0;
-  box-shadow: 0 0 8px #d4cbf0;
-  z-index: 10;
-}
-</style>

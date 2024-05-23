@@ -6,7 +6,9 @@ const { $state } = useFortuneReading();
 </script>
 
 <template>
-  <div class="container mt-20">
+  <div
+    class="w-full px-4 flex flex-col h-full items-center justify-around py-4"
+  >
     <h1 class="text-center">Choose your reader</h1>
 
     <v-slides v-model="$state.activeFortuneTellerIndex">
@@ -17,11 +19,11 @@ const { $state } = useFortuneReading();
       >
         <fortune-teller-card
           :fortune-teller="fortuneTeller"
-          class="w-full h-[40vh]"
+          class="w-full overflow-auto"
         />
       </v-slide>
       <template #external-content="{ prev, next, canMoveBack, canMoveForward }">
-        <div class="flex justify-around items-center">
+        <div class="flex justify-around items-center w-full">
           <arcana-button
             :disabled="!canMoveBack"
             class="!px-4"
@@ -33,7 +35,7 @@ const { $state } = useFortuneReading();
             />
           </arcana-button>
 
-          <nuxt-link to="/">
+          <nuxt-link to="/spread-select">
             <arcana-button text="Continue" />
           </nuxt-link>
 

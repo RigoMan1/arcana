@@ -14,7 +14,7 @@ const login = async ({
 }) => {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw error;
-  navigateTo('/reader-selection');
+  navigateTo('/reader-select');
 };
 </script>
 

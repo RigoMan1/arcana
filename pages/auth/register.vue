@@ -14,7 +14,7 @@ const register = async ({
 }) => {
   const { error } = await supabase.auth.signUp({ email, password });
   if (error) throw error;
-  navigateTo('/reader-selection');
+  navigateTo('/reader-select');
 };
 </script>
 

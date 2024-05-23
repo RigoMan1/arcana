@@ -1,5 +1,6 @@
 @import url('./typography.css');
 @import url('./scrollbar.css');
+@import url('./tarot-spreads.css');
 
 :root {
   --v-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);

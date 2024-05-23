@@ -96,3 +96,11 @@ interface IFortuneTeller {
   description: string;
   prompt: string;
 }
+
+interface ITarotSpreadObject {
+  id: string;
+  name: string;
+  description: string;
+  focusAreas: string[];
+  estimatedTime: string;
+}
