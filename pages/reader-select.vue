@@ -15,17 +15,22 @@ const { $state } = useFortuneTeller();
       <v-slide
         v-for="fortuneTeller in fortuneTellers"
         :key="fortuneTeller.name"
-        class="min-h-[50vh] flex items-center justify-center"
+        class="min-h-[50vh] flex items-center justify-center mb-20"
       >
         <fortune-teller-card
           :fortune-teller="fortuneTeller"
           class="w-full overflow-auto"
         />
       </v-slide>
+      <!-- controls -->
       <template #external-content="{ prev, next, canMoveBack, canMoveForward }">
-        <div class="flex justify-around items-center w-full">
+        <!-- prev/next -->
+        <div
+          class="flex justify-around items-center w-full fixed bottom-1/2 px-2"
+        >
           <arcana-button
             :disabled="!canMoveBack"
+            variant="text"
             class="!px-4"
             @click="prev"
           >
@@ -35,13 +40,11 @@ const { $state } = useFortuneTeller();
             />
           </arcana-button>
 
-          <nuxt-link to="/spread-select">
-            <arcana-button text="Continue" />
-          </nuxt-link>
+          <div class="flex-1" />
 
           <arcana-button
-            class="!px-4"
             :disabled="!canMoveForward"
+            variant="text"
             @click="next"
           >
             <Icon
@@ -49,6 +52,18 @@ const { $state } = useFortuneTeller();
               size="1.5em"
             />
           </arcana-button>
+        </div>
+        <!-- select button-->
+        <div class="flex justify-around items-center w-full fixed bottom-4">
+          <nuxt-link
+            class="w-full px-20"
+            to="/spread-select"
+          >
+            <arcana-button
+              class="w-full"
+              text="Select"
+            />
+          </nuxt-link>
         </div>
       </template>
     </v-slides>

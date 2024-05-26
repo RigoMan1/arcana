@@ -90,17 +90,32 @@ interface ITarotPrompt {
   system: string;
 }
 
-interface IFortuneTeller {
-  name: string;
-  image: string;
-  description: string;
-  prompt: string;
-}
-
 interface ITarotSpreadObject {
   id: string;
   name: string;
   description: string;
   focusAreas: string[];
   estimatedTime: string;
+}
+
+interface IFortuneTeller {
+  name: string;
+  image: string;
+  description: string;
+  prompt: string;
+  traits: IFortuneTellerTrait[];
+  ability: IFortuneTellerAbility;
+}
+
+interface IFortuneTellerTrait {
+  name: string;
+  description: string;
+  impact: string;
+  image: string;
+}
+
+interface IFortuneTellerAbility {
+  name: string;
+  description: string;
+  image: string;
 }

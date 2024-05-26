@@ -11,41 +11,10 @@ const activeSpreadData = computed(() => {
 </script>
 
 <template>
-  <div
-    class="w-full px-4 flex flex-col h-full items-center justify-around py-4"
-  >
+  <div class="w-full flex flex-col h-full items-center justify-around p-4">
     <h1 class="text-center">Choose your spread</h1>
 
     <v-slides v-model="$state.activeSpreadIndex">
-      <!-- controls -->
-      <template #external-content="{ prev, next, canMoveBack, canMoveForward }">
-        <div class="flex items-center justify-around w-full">
-          <arcana-button
-            :disabled="!canMoveBack"
-            @click="prev"
-          >
-            <Icon
-              name="fluent:chevron-left-16-filled"
-              size="1.5em"
-            />
-          </arcana-button>
-
-          <nuxt-link to="/">
-            <arcana-button text="Continue" />
-          </nuxt-link>
-
-          <arcana-button
-            :disabled="!canMoveForward"
-            @click="next"
-          >
-            <Icon
-              name="fluent:chevron-right-16-filled"
-              size="1.5em"
-            />
-          </arcana-button>
-        </div>
-      </template>
-
       <v-slide
         v-for="spread in spreads"
         :key="spread.name"
@@ -61,19 +30,13 @@ const activeSpreadData = computed(() => {
             <div
               v-for="label in activeSpread.labels"
               :key="label"
-              class="aspect-[11/19] rounded border border-secondary-300 bg-secondary-900 w-[32px]"
+              class="aspect-[11/19] rounded bg-secondary-500 w-[32px] border border-secondary-300"
               :class="[label]"
-            >
-              <!-- <img
-                src="/images/tarot-back.png"
-                alt="Tarot Card Back Design"
-                class="h-full w-full object-cover"
-              /> -->
-            </div>
+            ></div>
           </div>
 
           <!-- info -->
-          <div class="border rounded-xl border-primary-700 p-4">
+          <div class="rounded-xl p-4 bg-secondary-300 bg-opacity-5">
             <h2 class="text-center mb-4">{{ activeSpreadData?.name }}</h2>
 
             <hr class="my-4 border-primary-700" />
@@ -112,8 +75,50 @@ const activeSpreadData = computed(() => {
           </div>
         </div>
       </v-slide>
+      <!-- controls -->
+      <template #external-content="{ prev, next, canMoveBack, canMoveForward }">
+        <!-- prev/next -->
+        <div
+          class="flex justify-around items-center w-full fixed bottom-1/2 px-2"
+        >
+          <arcana-button
+            :disabled="!canMoveBack"
+            variant="text"
+            class="!px-4"
+            @click="prev"
+          >
+            <Icon
+              name="fluent:chevron-left-16-filled"
+              size="1.5em"
+            />
+          </arcana-button>
+
+          <div class="flex-1" />
+
+          <arcana-button
+            :disabled="!canMoveForward"
+            variant="text"
+            @click="next"
+          >
+            <Icon
+              name="fluent:chevron-right-16-filled"
+              size="1.5em"
+            />
+          </arcana-button>
+        </div>
+        <!-- select button-->
+        <div class="flex justify-around items-center w-full fixed bottom-4">
+          <nuxt-link
+            class="w-full px-20"
+            to="/"
+          >
+            <arcana-button
+              class="w-full"
+              text="Select"
+            />
+          </nuxt-link>
+        </div>
+      </template>
     </v-slides>
   </div>
 </template>
-
-<style></style>

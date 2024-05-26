@@ -67,17 +67,6 @@ defineProps<{
   );
 }
 
-/* variants */
-.arcana-button--variant-text {
-  background: transparent !important;
-  border-color: transparent !important;
-}
-
-.arcana-button--icon {
-  aspect-ratio: 1;
-  padding: 0;
-}
-
 /* states */
 .arcana-button--state-disabled {
   @apply !bg-primary-800 border-primary-700  text-white/30;
@@ -91,5 +80,16 @@ defineProps<{
 
 .arcana-button:active {
   transform: scale(0.98); /* Slightly shrink when clicked */
+}
+
+/* variants */
+.arcana-button--variant-text {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+.arcana-button--icon {
+  aspect-ratio: 1;
+  padding: 0;
 }
 </style>
