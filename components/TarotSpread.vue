@@ -7,7 +7,12 @@ const props = defineProps<{
 
 const uniqueZoneId = generateId();
 
-const emit = defineEmits(['remove-card', 'reveal-fortune', 'card-selected']);
+const emit = defineEmits([
+  'remove-card',
+  'reveal-fortune',
+  'card-selected',
+  'all-revealed',
+]);
 
 const handleCardSelect = (
   cardName: string,
@@ -37,7 +42,33 @@ const createSpread = (spreadLabels: string[]) => {
   return spread;
 };
 
-const selectedCards = ref(createSpread(activeSpread.value.labels));
+// const selectedCards = ref(createSpread(activeSpread.value.labels));
+const selectedCards = ref({
+  past: {
+    name: 'The High Priestess',
+    arcana: 'major',
+    number: 2,
+    suit: null,
+    court: null,
+    image: 'major-02-the-high-priestess.jpg',
+  },
+  present: {
+    name: 'Two of Pentacles',
+    arcana: 'minor',
+    number: 2,
+    suit: 'pentacle',
+    court: null,
+    image: 'pents-02.jpg',
+  },
+  future: {
+    name: 'Eight of Wands',
+    arcana: 'minor',
+    number: 8,
+    suit: 'wand',
+    court: null,
+    image: 'wands-08.jpg',
+  },
+});
 watch(
   () => activeSpread.value,
   () => {
@@ -85,46 +116,83 @@ function checkNextCard() {
   }
 }
 
-const formatSelectedCard = (position: string, card: TarotCard) =>
-  `
-  spread-label: ${position}
-  card-name: ${card.name}`;
+// const handleButtonClick = () => {
+//   if ($state.fortuneComplete) {
+//     window.location.href = '/reader-select';
 
-const handleButtonClick = () => {
-  console.log('handleButtonClick');
+//     return;
+//   }
+
+//   if (!$state.fortuneInitiated) {
+//     initiateFortuneReading();
+
+//     const firstIndex = findNextAvailableCardIndex(0);
+//     if (firstIndex < activeSpread.value.labels.length) {
+//       currentCardIndex.value = firstIndex; // Start with the first available card
+//     } else {
+//       // If no cards are selected, do not start the reveal process
+//       return;
+//     }
+//   } else {
+//     nextCard();
+//   }
+
+//   checkNextCard();
+
+//   const currentCard =
+//     selectedCards.value[activeSpread.value.labels[currentCardIndex.value]];
+//   const currentSpreadLabel = activeSpread.value.labels[currentCardIndex.value];
+
+// };
+
+// same logic as above except we will be revealing all cards at once
+
+function handleButtonClick() {
+  const formatCard = (position: string, card: TarotCard) =>
+    `
+  spread-label: ${position}
+  card-name: ${card.name}
+  card-image: ${card.image}
+  `;
+
   if ($state.fortuneComplete) {
     window.location.href = '/reader-select';
-
     return;
   }
 
   if (!$state.fortuneInitiated) {
     initiateFortuneReading();
-
-    const firstIndex = findNextAvailableCardIndex(0);
-    if (firstIndex < activeSpread.value.labels.length) {
-      currentCardIndex.value = firstIndex; // Start with the first available card
-    } else {
-      // If no cards are selected, do not start the reveal process
-      return;
-    }
+    // handles all cards being revealed at once
+    currentCardIndex.value = activeSpread.value.labels.length - 1;
   } else {
-    nextCard();
+    // handles all cards being revealed at once
+    currentCardIndex.value = activeSpread.value.labels.length - 1;
   }
 
   checkNextCard();
 
-  const currentCard =
-    selectedCards.value[activeSpread.value.labels[currentCardIndex.value]];
-  const currentSpreadLabel = activeSpread.value.labels[currentCardIndex.value];
+  const allCardsData = activeSpread.value.labels.map((label) => {
+    return formatCard(label, selectedCards.value[label]!);
+  });
+
+  emit('all-revealed', {
+    spread: activeSpread.value.name,
+    drawnCards: allCardsData,
+  });
+}
+
+function getInDepthReading(label: string, card: TarotCard) {
+  const formattedCard = `
+  spread-label: ${label}
+  card-name: ${card.name}`;
 
   emit(
     'card-selected',
-    formatSelectedCard(currentSpreadLabel, currentCard),
-    positionPrompts[currentSpreadLabel],
+    formattedCard,
+    positionPrompts[label],
     activeSpread.value
   );
-};
+}
 
 const buttonLabel = computed(() => {
   if (someCardsSelected.value) {
@@ -179,6 +247,19 @@ defineExpose({
             activeSpread.labels.indexOf(label) <= currentCardIndex
           "
         />
+
+        <arcana-button
+          v-if="$state.fortuneInitiated"
+          class="absolute -bottom-6 right-1/2 !translate-x-1/2"
+          size="small"
+          icon
+          @click="getInDepthReading(label, selectedCards[label]!)"
+        >
+          <icon
+            class="text-xl"
+            name="fluent:eye-tracking-24-regular"
+          />
+        </arcana-button>
       </drop-zone>
     </div>
   </div>

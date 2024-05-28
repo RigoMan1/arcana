@@ -13,6 +13,7 @@ const dialog = defineModel<boolean>();
     width="90%"
     persistent
     close-on-back
+    class="flex items-center justify-center"
   >
     <!-- close button -->
     <button

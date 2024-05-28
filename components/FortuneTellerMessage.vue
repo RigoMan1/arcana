@@ -33,6 +33,10 @@ const parsedContent =
   font-size: 1rem;
 }
 
+.markdown.prose h1 {
+  @apply text-2xl;
+}
+
 .markdown.prose h2,
 .markdown.prose h3 {
   @apply mt-6 mb-4;

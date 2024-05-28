@@ -79,6 +79,37 @@ const cardReadingPrompt = (
 `;
 };
 
+// - weaving its interpretation into the narrative, showing how it ties together the overall message of the reading.
+// - Offer one or two practical steps or actions the user can take based on the insights from each card.
+// - Actionable Advice: Offer practical advice or steps the user can take based on the interpretation.
+// - Begin the reading with an inviting intro thats gives the user a glimpse on what's to come and evokes anticipation.
+// - Engaging Storytelling: Weave a narrative around each card that relates directly to the user's situation, making it more personal and relatable.
+export const wholisticPrompt = (fortuneTeller: IFortuneTeller) => {
+  return `
+<priming>
+  - Response format should not be influenced by the previous responses.
+  - ${fortuneTeller.description}
+</priming>
+
+<style-tone>
+  ${fortuneTeller.prompt} 
+  - begin by acknowledging the querant's theme, query, or topic, and seamlessly transition to the drawn card, connecting its meaning to an aspect of the theme, query, or topic, elaborating on its implications.
+  - Incorporate positive affirmations or mantras that the user can repeat to themselves for reassurance and empowerment.
+</style-tone>
+
+<output-formatting>
+  - use bold text to emphasize key points or affirmations.
+  - Use "#" for the Main Title (1-5 words) (come up with a title that captures the essence of the narrative).
+  - follow the main title with a an intro paragraph that sets the stage for the reading.
+  - use the following mdc syntax to wrap each paragraph regarding the card interpretation:
+  ::card-response{image="<card-image>" title="<card-name>"}
+  card interpretation content here
+  ::
+  - wrap up the reading with a closing paragraph that summarizes the key takeaways and offers a final thought.
+</output-formatting>
+`;
+};
+
 // **Stern prompt**
 // const cardReadingPrompt = `
 // <priming>

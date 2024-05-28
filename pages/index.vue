@@ -22,6 +22,7 @@ import { useChatgptStore } from '~/stores/useChatgptStore';
 import {
   fortuneTellerPrompt,
   cardReadingPrompt,
+  wholisticPrompt,
 } from '@/constants/systemPrompts';
 
 const { useBasicEnergy } = useEnergyStore();
@@ -58,21 +59,40 @@ const dialog = ref(false);
 const readings = ref([]) as Ref<IMessage[]>;
 const { $state: $readingState } = useFortuneReading();
 
-async function handleSingleCardFortune(
+async function handleSingleCardReading(
   cardPrompt: string,
   positionPrompt: string,
   spread: { name: string; labels: string[] }
 ) {
   showCards.value = false;
+
   const userMessage = `
-    The user has drawn this card, for
-    tarot-spread:${spread.name}
-    tarot-spread-card-count: ${spread.labels.length}
+    Can you provide more in-depth insights for
     ${cardPrompt}
+    tarot-spread:${spread.name}
   `;
   useBasicEnergy(5);
   const reading = await handleSendMessage(
     cardReadingPrompt(positionPrompt, readerSelectStore.activeFortuneTeller),
+    userMessage
+  );
+
+  reading && readings.value.push(reading);
+  dialog.value = true;
+}
+
+async function handleWholisticReading({ spread, drawnCards }: any) {
+  console.log('wholistic reading');
+  showCards.value = false;
+  const userMessage = `
+    The user has drawn all cards for
+    tarot-spread:${spread}
+    draw-cards-data: ${drawnCards}
+  `;
+
+  useBasicEnergy(5);
+  const reading = await handleSendMessage(
+    wholisticPrompt(readerSelectStore.activeFortuneTeller),
     userMessage
   );
 
@@ -150,7 +170,8 @@ const tarotSpreadEl = ref() as Ref<any>;
         ref="tarotSpreadEl"
         :tarot-deck="tarotDeck"
         @remove-card="removeCard"
-        @card-selected="handleSingleCardFortune"
+        @card-selected="handleSingleCardReading"
+        @all-revealed="handleWholisticReading"
       />
     </div>
 
