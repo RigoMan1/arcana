@@ -80,10 +80,3 @@
 .spread-grid .partner {
   grid-area: partner;
 }
-
-.current-card {
-  position: relative;
-  border: 2px solid #d4cbf0;
-  box-shadow: 0 0 8px #d4cbf0;
-  z-index: 10;
-}

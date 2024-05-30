@@ -96,6 +96,11 @@ interface ITarotSpreadObject {
   description: string;
   focusAreas: string[];
   estimatedTime: string;
+  labels: string[];
+  components: {
+    name: string;
+    labels: string[];
+  }[];
 }
 
 interface IFortuneTeller {

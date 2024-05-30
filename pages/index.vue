@@ -171,7 +171,7 @@ const tarotSpreadEl = ref() as Ref<any>;
         :tarot-deck="tarotDeck"
         @remove-card="removeCard"
         @card-selected="handleSingleCardReading"
-        @all-revealed="handleWholisticReading"
+        @reveal-spread-component="handleWholisticReading"
       />
     </div>
 

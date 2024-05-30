@@ -4,10 +4,6 @@ import { spreads } from '@/constants/tarot-spreads';
 
 const { $state } = useTarotSpread();
 const { activeSpread } = storeToRefs(useTarotSpread());
-
-const activeSpreadData = computed(() => {
-  return spreads.find((spread) => spread.id === activeSpread.value.name);
-});
 </script>
 
 <template>
@@ -25,7 +21,7 @@ const activeSpreadData = computed(() => {
           <!-- preview -->
           <div
             class="spread-grid mx-auto gap-2"
-            :class="activeSpread.name"
+            :class="activeSpread.id"
           >
             <div
               v-for="label in activeSpread.labels"
@@ -37,7 +33,7 @@ const activeSpreadData = computed(() => {
 
           <!-- info -->
           <div class="rounded-xl p-4 bg-secondary-300 bg-opacity-5">
-            <h2 class="text-center mb-4">{{ activeSpreadData?.name }}</h2>
+            <h2 class="text-center mb-4">{{ activeSpread?.name }}</h2>
 
             <hr class="my-4 border-primary-700" />
 
@@ -48,7 +44,7 @@ const activeSpreadData = computed(() => {
                 <h6 class="text-xs">Focus Areas</h6>
 
                 <p
-                  v-for="area in activeSpreadData?.focusAreas"
+                  v-for="area in activeSpread?.focusAreas"
                   :key="area"
                   class="text-xs inline truncate"
                 >
@@ -60,7 +56,7 @@ const activeSpreadData = computed(() => {
                 <h6 class="text-xs">Est. Time</h6>
 
                 <p class="text-xs truncate">
-                  {{ activeSpreadData?.estimatedTime }}
+                  {{ activeSpread?.estimatedTime }}
                 </p>
               </div>
             </div>
@@ -69,7 +65,7 @@ const activeSpreadData = computed(() => {
 
             <div class="overflow-y-scroll max-h-[10vh] mt-4 p-2">
               <p class="text-center text-sm max-w-xl">
-                {{ activeSpreadData?.description }}
+                {{ activeSpread?.description }}
               </p>
             </div>
           </div>

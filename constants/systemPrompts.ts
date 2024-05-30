@@ -199,6 +199,30 @@ const positionPrompts = {
   - Offer a concise piece of wisdom or a proverb that resonates with the situation, followed by practical steps for implementation.
   - Include a "call to action" that motivates the querent to take specific, achievable steps toward resolution.
   `,
+  you: `
+  - Reflect on your current emotional state and how it shapes your interactions with your partner.
+- Consider the qualities you bring into the relationship, both strengths and areas for growth.
+- Focus on self-love: What are you doing to nurture and support yourself in this relationship?
+- Envision yourself as a character in a love story: What role are you playing, and how do you wish to evolve in this role?
+- Identify any personal boundaries or values that are essential for you in a relationship. Are they being respected and honored?
+
+  `,
+  relationship: `
+  - Imagine your relationship as a living entity: What does it need to thrive and grow?
+- Explore the current dynamics between you and your partner. What are the dominant themes or patterns?
+- Reflect on moments of connection and disconnection. What can you learn from these experiences?
+- Consider the relationship's foundation: How strong is it, and what can you do to reinforce it?
+- Visualize the ideal state of your relationship. What steps can you take to move closer to this vision?
+
+  `,
+  partner: `
+  - Delve into your partner's current emotional and mental state. How might this be influencing their behavior and interactions with you?
+- Reflect on the strengths and challenges your partner brings to the relationship.
+- Imagine seeing the world through your partner's eyes for a moment. What insights or perspectives might you gain?
+- Consider the support and love your partner needs. How can you better provide this within the relationship?
+- Envision your partner's personal growth journey. How can you support each other in your individual paths?
+
+  `,
 } as Record<string, string>;
 
 export { fortuneTellerPrompt, cardReadingPrompt, positionPrompts };
