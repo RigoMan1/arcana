@@ -15,7 +15,8 @@ export const MODEL_GPT_4_1106_VISION_PREVIEW = 'gpt-4-1106-vision-preview';
 export const MODEL_GPT_4_VISION_PREVIEW = 'gpt-4-vision-preview';
 export const MODEL_GPT_4_1106_PREVIEW = 'gpt-4-1106-preview';
 export const MODEL_GPT_4_TURBO_PREVIEW = 'gpt-4-turbo-preview';
-export const MODEL_GPT_4_0125_PREVIEW = 'gpt-4-0125-preview'; // newest
+export const MODEL_GPT_4_0125_PREVIEW = 'gpt-4-0125-preview';
+export const MODEL_GPT_4_OMNI = 'gpt-4o'; // newest
 
 export type IModel =
   | typeof MODEL_TEXT_DAVINCI_002
@@ -34,4 +35,5 @@ export type IModel =
   | typeof MODEL_GPT_4_VISION_PREVIEW
   | typeof MODEL_GPT_4_1106_PREVIEW
   | typeof MODEL_GPT_4_TURBO_PREVIEW
-  | typeof MODEL_GPT_4_0125_PREVIEW;
+  | typeof MODEL_GPT_4_0125_PREVIEW
+  | typeof MODEL_GPT_4_OMNI;
