@@ -3,6 +3,7 @@ import { shuffleCards } from '@/utils/helpers';
 import TarotCards from '~/constants/tarot-card-data';
 
 const { $state: $fortuneReadingState } = useFortuneReading();
+const { activeSpread } = storeToRefs(useTarotSpread());
 
 const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
 
@@ -31,8 +32,13 @@ const { sendMessage, $state } = useChatgptStore();
 async function handleSendMessage(prompt: string, userMessage: string) {
   mostRecentMessage.value = null; // Clear the most recent message
 
+  const readingContext = `
+    tarot-spread:${activeSpread.value.name}
+    card-count:${activeSpread.value.labels.length}
+    `;
+
   return await sendMessage({
-    system: prompt,
+    system: prompt + readingContext,
     user: userMessage,
   });
 }
@@ -41,14 +47,12 @@ const readerSelectStore = useFortuneTeller();
 
 const mostRecentMessage = ref() as Ref<IMessage | null>;
 async function handleTextMessage(message: string) {
-  // calculate cost of message min 1
   const messageCost = Math.max(1, Math.ceil(message.length / 20));
-
   useBasicEnergy(messageCost);
   const res = await handleSendMessage(
     `
     ${readerSelectStore.activeFortuneTeller.description}
-    ${fortuneTellerPrompt}
+    ${fortuneTellerPrompt(readerSelectStore.activeFortuneTeller)}
     `,
     message
   );
@@ -61,16 +65,15 @@ const { $state: $readingState } = useFortuneReading();
 
 async function handleSingleCardReading(
   cardPrompt: string,
-  positionPrompt: string,
-  spread: { name: string; labels: string[] }
+  positionPrompt: string
 ) {
   showCards.value = false;
 
   const userMessage = `
     Can you provide more in-depth insights for
     ${cardPrompt}
-    tarot-spread:${spread.name}
   `;
+
   useBasicEnergy(5);
   const reading = await handleSendMessage(
     cardReadingPrompt(positionPrompt, readerSelectStore.activeFortuneTeller),
@@ -81,12 +84,10 @@ async function handleSingleCardReading(
   dialog.value = true;
 }
 
-async function handleWholisticReading({ spread, drawnCards }: any) {
-  console.log('wholistic reading');
+async function handleWholisticReading({ drawnCards }: any) {
   showCards.value = false;
   const userMessage = `
     The user has drawn all cards for
-    tarot-spread:${spread}
     draw-cards-data: ${drawnCards}
   `;
 
@@ -104,6 +105,10 @@ const showCards = ref(false);
 
 const wheelEl = ref() as Ref<any>;
 const tarotSpreadEl = ref() as Ref<any>;
+
+onMounted(() => {
+  handleTextMessage(`Hi`);
+});
 </script>
 
 <template>

@@ -115,8 +115,8 @@ interface IFortuneTeller {
 interface IFortuneTellerTrait {
   name: string;
   description: string;
-  impact: string;
   image: string;
+  prompt: string;
 }
 
 interface IFortuneTellerAbility {

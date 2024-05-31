@@ -1,5 +1,3 @@
-import { ref } from 'vue';
-
 export function useItemProcessor(items: any, callback: any) {
   const currentIndex = ref(0);
   const processing = ref(false);
