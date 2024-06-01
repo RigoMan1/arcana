@@ -10,11 +10,17 @@ const logout = async () => {
   await supabase.auth.signOut();
   navigateTo('/auth/login');
 };
+
+const energyShop = ref(false);
 </script>
 
 <template>
   <v-app-bar class="flex items-center justify-between py-4 px-8 bg-primary-900">
-    <div class="space-x-4 flex">
+    <energy-shop-dialog v-model="energyShop" />
+    <div
+      class="space-x-4 flex"
+      @click="energyShop = true"
+    >
       <!-- basic energy -->
       <div
         class="energy-bar"
