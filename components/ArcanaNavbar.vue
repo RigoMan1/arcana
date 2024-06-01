@@ -2,28 +2,40 @@
 import { useEnergyStore } from '@/stores/useEnergyStore';
 const { $state } = useEnergyStore();
 
-const user = useSupabaseUser();
-
-const supabase = useSupabaseClient();
-
-const logout = async () => {
-  await supabase.auth.signOut();
-  navigateTo('/auth/login');
-};
-
 const energyShop = ref(false);
+
+const readerSelectStore = useFortuneTeller();
+
+const route = useRoute();
+const path = computed(() => route.path);
 </script>
 
 <template>
-  <v-app-bar class="flex items-center justify-between py-4 px-8 bg-primary-900">
+  <v-app-bar class="flex items-center justify-between p-4">
     <energy-shop-dialog v-model="energyShop" />
+    <!--  fortune teller avatar -->
+    <nuxt-link
+      v-if="path !== '/reader-select'"
+      to="/reader-select"
+    >
+      <img
+        :src="readerSelectStore.activeFortuneTeller.image"
+        alt="fortune teller"
+        class="w-12 h-12 rounded-full"
+      />
+    </nuxt-link>
     <div
-      class="space-x-4 flex"
+      v-else
+      class="w-12 h-12 rounded-full"
+    />
+
+    <div
+      class="space-x-4 flex energy-bar"
       @click="energyShop = true"
     >
       <!-- basic energy -->
       <div
-        class="energy-bar"
+        class="flex items-center"
         :class="{
           'filter grayscale':
             $state.basicEnergy === 0 && $state.cosmicEnergy === 0,
@@ -41,52 +53,20 @@ const energyShop = ref(false);
         </span>
       </div>
 
-      <!-- cosmic energy -->
-      <div
-        :class="{ 'filter grayscale': $state.cosmicEnergy === 0 }"
-        class="energy-bar"
-      >
-        <img
-          class="w-4 shadow-purple-400 rounded-full"
-          :class="{ glow: $state.cosmicEnergy > 0 }"
-          src="/images/energy-cosmic.png"
-          alt=""
-        />
-
-        <span class="text-white ml-3">
-          {{ $state.cosmicEnergy }}
-        </span>
-      </div>
-    </div>
-
-    <div class="flex space-x-2 items-center">
-      <span>{{ user?.email.split('@')[0] }}</span>
-
+      <!-- buy energy icon -->
       <arcana-button
         size="small"
-        variant="text"
         icon
-        @click="logout"
+        class="items-center !rounded-full !h-8"
       >
         <Icon
-          name="fluent:sign-out-20-filled"
-          size="2em"
+          name="fluent:add-20-filled"
+          size="1rem"
         />
       </arcana-button>
-      <!-- <nuxt-link to="/">
-        <img
-          class="w-10"
-          src="/images/logo.png"
-          alt=""
-        />
-      </nuxt-link> -->
-      <!-- <arcana-button
-        disabled
-      >
-        1
-      </arcana-button> -->
-      <!-- <arcana-button> 2 </arcana-button> -->
     </div>
+
+    <arcana-menu />
   </v-app-bar>
 </template>
 
@@ -100,7 +80,7 @@ const energyShop = ref(false);
 }
 
 .energy-bar {
-  @apply w-16 rounded-full flex items-center p-0.5 justify-center;
+  @apply rounded-full flex items-center p-0.5 justify-center pl-2;
   @apply border-2 !bg-primary-800/75 border-primary-800 text-white/30;
 }
 </style>

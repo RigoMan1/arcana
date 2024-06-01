@@ -113,21 +113,11 @@ onMounted(() => {
 
 <template>
   <div class="container flex flex-col h-full">
-    <div class="flex items-center space-x-4 p-4">
-      <img
-        :src="readerSelectStore.activeFortuneTeller.image"
-        alt="fortune teller"
-        class="w-12 h-12 rounded-full"
-      />
-
-      <h2 class="text-xl mt-2">
-        {{ readerSelectStore.activeFortuneTeller.name }}
-      </h2>
-    </div>
     <fortune-readings-dialog
       v-model="dialog"
       :readings="readings"
     />
+
     <!-- 1. fortune message  -->
     <div class="flex items-center justify-center h-1/6">
       <card-wheel
@@ -160,7 +150,9 @@ onMounted(() => {
           v-if="$state.isTyping && !showCards"
           class="fortune-oracle"
         >
-          <span class="animate-pulse"> Seeking insights... 🧙‍♂️ </span>
+          <span class="animate-pulse">
+            {{ readerSelectStore.activeFortuneTeller.name }} is typing...
+          </span>
         </div>
       </transition>
     </div>

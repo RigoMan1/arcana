@@ -35,7 +35,7 @@ const tiers = ref([
     class="flex items-center justify-center"
   >
     <div
-      class="p-8 rounded-xl text-center relative bg-[#1E1E40] h-full flex flex-col"
+      class="p-8 rounded-xl text-center relative bg-accent h-full flex flex-col"
     >
       <button
         class="absolute top-4 right-4 text-white"
@@ -79,34 +79,3 @@ const tiers = ref([
     </div>
   </v-overlay>
 </template>
-
-<style>
-.arcana-card {
-  background: radial-gradient(
-    100% 100% at 50% 5%,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.03) 100%
-  );
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 1rem;
-  backdrop-filter: blur(4px);
-  transition: transform 0.2s ease-in-out;
-}
-
-.arcana-card-alt {
-  position: relative;
-  z-index: 2;
-  background: #2d2d59;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  backdrop-filter: blur(8px);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
-    0 1.5px 1.1px rgba(0, 0, 0, 0.034),
-    0 3.6px 2.5px rgba(0, 0, 0, 0.048),
-    0 6.8px 4.8px rgba(0, 0, 0, 0.06),
-    0 12.1px 8.5px rgba(0, 0, 0, 0.072),
-    0 22.6px 15.9px rgba(0, 0, 0, 0.086),
-    0 54px 38px rgba(0, 0, 0, 0.12);
-}
-</style>
