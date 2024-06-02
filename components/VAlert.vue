@@ -32,7 +32,7 @@ const { colorClasses } = useColor(props);
   </div>
 </template>
 
-<style>
+<style scoped>
 .v-alert--color-error {
   @apply bg-red-100 text-red-600;
 }

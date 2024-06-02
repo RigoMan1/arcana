@@ -1,13 +1,39 @@
 <script setup lang="ts">
 import { useTarotSpread } from '~/stores/useTarotSpread';
 import { spreads } from '@/constants/tarot-spreads';
+import { useEnergyStore } from '@/stores/useEnergyStore';
 
 const { $state } = useTarotSpread();
 const { activeSpread } = storeToRefs(useTarotSpread());
+
+const alert = ref(false);
+
+const WHOLISTIC_READING_ENERGY_COST = 50;
+const MIN_MESSAGE_COST = 10;
+
+const spreadCost = computed(() => {
+  return (
+    WHOLISTIC_READING_ENERGY_COST * activeSpread.value.components.length +
+    MIN_MESSAGE_COST
+  );
+});
+
+const energyStore = useEnergyStore();
+function handleClick() {
+  if (energyStore.basicEnergy < spreadCost.value) {
+    alert.value = true;
+  } else {
+    navigateTo('/');
+  }
+}
 </script>
 
 <template>
   <div class="w-full flex flex-col h-full items-center justify-around p-4">
+    <!-- <insufficient-energy-dialog v-model="alert" /> -->
+
+    <insufficient-energy-dialog v-model="alert" />
+
     <h1 class="text-center">Choose your spread</h1>
 
     <v-slides v-model="$state.activeSpreadIndex">
@@ -40,7 +66,7 @@ const { activeSpread } = storeToRefs(useTarotSpread());
             <div
               class="flex justify-between items-start space-x-4 max-w-sm mx-auto w-full"
             >
-              <div class="flex-1 items-center justify-center flex-col">
+              <div class="items-center justify-center flex-col">
                 <h6 class="text-xs">Focus Areas</h6>
 
                 <p
@@ -50,6 +76,12 @@ const { activeSpread } = storeToRefs(useTarotSpread());
                 >
                   {{ area }},
                 </p>
+              </div>
+
+              <div>
+                <h6 class="text-xs">Est. Cost</h6>
+
+                <p class="text-xs truncate text-blue-300">{{ spreadCost }} Energy</p>
               </div>
 
               <div>
@@ -106,7 +138,7 @@ const { activeSpread } = storeToRefs(useTarotSpread());
         <div class="flex justify-around items-center w-full fixed bottom-4">
           <nuxt-link
             class="w-full px-20"
-            to="/"
+            @click="handleClick"
           >
             <arcana-button
               class="w-full"

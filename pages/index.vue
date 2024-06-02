@@ -29,18 +29,28 @@ import {
 const { useBasicEnergy } = useEnergyStore();
 const { sendMessage, $state } = useChatgptStore();
 
-async function handleSendMessage(prompt: string, userMessage: string) {
+async function handleSendMessage(
+  prompt: string,
+  userMessage: string,
+  messageCost = 0
+) {
   mostRecentMessage.value = null; // Clear the most recent message
 
-  const readingContext = `
+  try {
+    useBasicEnergy(messageCost);
+
+    const readingContext = `
     tarot-spread:${activeSpread.value.name}
     card-count:${activeSpread.value.labels.length}
     `;
 
-  return await sendMessage({
-    system: prompt + readingContext,
-    user: userMessage,
-  });
+    return await sendMessage({
+      system: prompt + readingContext,
+      user: userMessage,
+    });
+  } catch (error) {
+    alert.value = true;
+  }
 }
 
 const readerSelectStore = useFortuneTeller();
@@ -48,19 +58,21 @@ const readerSelectStore = useFortuneTeller();
 const mostRecentMessage = ref() as Ref<IMessage | null>;
 async function handleTextMessage(message: string) {
   const messageCost = Math.max(1, Math.ceil(message.length / 20));
-  useBasicEnergy(messageCost);
   const res = await handleSendMessage(
     `
     ${readerSelectStore.activeFortuneTeller.description}
     ${fortuneTellerPrompt(readerSelectStore.activeFortuneTeller)}
     `,
-    message
+    message,
+    messageCost
   );
   if (res) mostRecentMessage.value = res;
 }
 
 const dialog = ref(false);
 const readings = ref([]) as Ref<IMessage[]>;
+const CARD_READING_ENERGY_COST = 20;
+const WHOLISTIC_READING_ENERGY_COST = 50;
 const { $state: $readingState } = useFortuneReading();
 
 async function handleSingleCardReading(
@@ -74,14 +86,16 @@ async function handleSingleCardReading(
     ${cardPrompt}
   `;
 
-  useBasicEnergy(5);
   const reading = await handleSendMessage(
     cardReadingPrompt(positionPrompt, readerSelectStore.activeFortuneTeller),
-    userMessage
+    userMessage,
+    CARD_READING_ENERGY_COST
   );
 
-  reading && readings.value.push(reading);
-  dialog.value = true;
+  if (reading) {
+    readings.value.push(reading);
+    dialog.value = true;
+  }
 }
 
 async function handleWholisticReading({ drawnCards }: any) {
@@ -91,14 +105,16 @@ async function handleWholisticReading({ drawnCards }: any) {
     draw-cards-data: ${drawnCards}
   `;
 
-  useBasicEnergy(5);
   const reading = await handleSendMessage(
     wholisticPrompt(readerSelectStore.activeFortuneTeller),
-    userMessage
+    userMessage,
+    WHOLISTIC_READING_ENERGY_COST
   );
 
-  reading && readings.value.push(reading);
-  dialog.value = true;
+  if (reading) {
+    readings.value.push(reading);
+    dialog.value = true;
+  }
 }
 
 const showCards = ref(false);
@@ -109,10 +125,14 @@ const tarotSpreadEl = ref() as Ref<any>;
 onMounted(() => {
   handleTextMessage(`Hi`);
 });
+
+const alert = ref(false);
 </script>
 
 <template>
   <div class="container flex flex-col h-full">
+    <insufficient-energy-dialog v-model="alert" />
+
     <fortune-readings-dialog
       v-model="dialog"
       :readings="readings"

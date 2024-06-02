@@ -1,5 +1,16 @@
 <script setup lang="ts">
+import { useEnergyStore } from '@/stores/useEnergyStore';
+
+const { addBasicEnergy } = useEnergyStore();
+
 const dialog = defineModel<boolean>();
+
+interface Tier {
+  name: string;
+  cost: number;
+  yield: number;
+  image: string;
+}
 
 const tiers = ref([
   {
@@ -20,7 +31,12 @@ const tiers = ref([
     yield: 1400,
     image: '/images/energy-divine.png',
   },
-]);
+]) as Ref<Tier[]>;
+
+function handlePurchase(tier: Tier) {
+  addBasicEnergy(tier.yield);
+  dialog.value = false;
+}
 </script>
 
 <template>
@@ -57,6 +73,7 @@ const tiers = ref([
           v-for="tier in tiers"
           :key="tier.name"
           class="arcana-card text-center flex items-center justify-around p-6 w-full"
+          @click="handlePurchase(tier)"
         >
           <div class="flex flex-col items-center">
             <img

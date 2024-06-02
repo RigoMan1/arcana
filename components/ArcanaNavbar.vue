@@ -37,8 +37,7 @@ const path = computed(() => route.path);
       <div
         class="flex items-center"
         :class="{
-          'filter grayscale':
-            $state.basicEnergy === 0 && $state.cosmicEnergy === 0,
+          'filter grayscale': $state.basicEnergy === 0,
         }"
       >
         <img
