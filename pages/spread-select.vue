@@ -29,77 +29,79 @@ function handleClick() {
 </script>
 
 <template>
-  <div class="w-full flex flex-col h-full items-center justify-around p-4">
+  <div class="flex flex-col h-full items-center justify-around p-4">
     <!-- <insufficient-energy-dialog v-model="alert" /> -->
 
     <insufficient-energy-dialog v-model="alert" />
 
     <h1 class="text-center">Choose your spread</h1>
 
-    <v-slides v-model="$state.activeSpreadIndex">
+    <v-slides
+      v-model="$state.activeSpreadIndex"
+      class="h-[90%]"
+    >
       <v-slide
         v-for="spread in spreads"
         :key="spread.name"
+        class="w-full flex flex-col h-full items-center justify-center space-y-8"
       >
+        <!-- preview -->
         <div
-          class="w-full flex flex-col h-full items-center justify-between space-y-4"
+          class="spread-grid mx-auto gap-2"
+          :class="activeSpread.id"
         >
-          <!-- preview -->
           <div
-            class="spread-grid mx-auto gap-2"
-            :class="activeSpread.id"
+            v-for="label in activeSpread.labels"
+            :key="label"
+            class="aspect-[11/19] rounded bg-secondary-500 w-[32px] border border-secondary-300"
+            :class="[label]"
+          ></div>
+        </div>
+
+        <!-- info -->
+        <div class="rounded-xl p-4 bg-secondary-300 bg-opacity-5 w-full h-1/2">
+          <h2 class="text-center mb-4">{{ activeSpread?.name }}</h2>
+
+          <hr class="my-4 border-primary-700" />
+
+          <div
+            class="flex justify-between items-start space-x-4 max-w-sm mx-auto w-full"
           >
-            <div
-              v-for="label in activeSpread.labels"
-              :key="label"
-              class="aspect-[11/19] rounded bg-secondary-500 w-[32px] border border-secondary-300"
-              :class="[label]"
-            ></div>
-          </div>
-
-          <!-- info -->
-          <div class="rounded-xl p-4 bg-secondary-300 bg-opacity-5">
-            <h2 class="text-center mb-4">{{ activeSpread?.name }}</h2>
-
-            <hr class="my-4 border-primary-700" />
-
-            <div
-              class="flex justify-between items-start space-x-4 max-w-sm mx-auto w-full"
-            >
-              <div class="items-center justify-center flex-col">
+            <!-- <div class="items-center justify-center flex-col">
                 <h6 class="text-xs">Focus Areas</h6>
 
                 <p
                   v-for="area in activeSpread?.focusAreas"
                   :key="area"
-                  class="text-xs inline truncate"
+                  class="text-xs inline text-ellipsis"
                 >
                   {{ area }},
                 </p>
-              </div>
+              </div> -->
 
-              <div>
-                <h6 class="text-xs">Est. Cost</h6>
+            <div>
+              <h6 class="text-xs">Est. Cost</h6>
 
-                <p class="text-xs truncate text-blue-300">{{ spreadCost }} Energy</p>
-              </div>
-
-              <div>
-                <h6 class="text-xs">Est. Time</h6>
-
-                <p class="text-xs truncate">
-                  {{ activeSpread?.estimatedTime }}
-                </p>
-              </div>
-            </div>
-
-            <!-- <hr class="my-4 border-primary-700 opacity-0" /> -->
-
-            <div class="overflow-y-scroll max-h-[10vh] mt-4 p-2">
-              <p class="text-center text-sm max-w-xl">
-                {{ activeSpread?.description }}
+              <p class="text-xs truncate text-blue-300">
+                {{ spreadCost }} Energy
               </p>
             </div>
+
+            <div>
+              <h6 class="text-xs">Est. Time</h6>
+
+              <p class="text-xs truncate">
+                {{ activeSpread?.estimatedTime }}
+              </p>
+            </div>
+          </div>
+
+          <!-- <hr class="my-4 border-primary-700 opacity-0" /> -->
+
+          <div class="overflow-y-scroll max-h-[10vh] mt-4 p-2">
+            <p class="text-center text-sm max-w-xl">
+              {{ activeSpread?.description }}
+            </p>
           </div>
         </div>
       </v-slide>
