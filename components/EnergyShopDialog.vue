@@ -76,11 +76,20 @@ function handlePurchase(tier: Tier) {
           @click="handlePurchase(tier)"
         >
           <div class="flex flex-col items-center">
-            <img
-              class="w-12 shadow-blue-400 rounded-full"
-              :src="tier.image"
-              :alt="tier.name"
-            />
+            <div
+              class="orb"
+              :class="{
+                'glow-basic': tier.name === 'Basic',
+                'glow-cosmic': tier.name === 'Cosmic',
+                'glow-divine': tier.name === 'Divine',
+              }"
+            >
+              <img
+                class="w-12 shadow-blue-400 rounded-full orb"
+                :src="tier.image"
+                :alt="tier.name"
+              />
+            </div>
             <p class="mt-2 text-green-300 text-xs">+ {{ tier.yield }} Energy</p>
           </div>
 
@@ -96,3 +105,70 @@ function handlePurchase(tier: Tier) {
     </div>
   </v-overlay>
 </template>
+
+<style scoped>
+.orb {
+  --glow-blur: 20px;
+  --glow-animation-duration: 3s;
+  --glow-opacity-1: 0.45;
+  --glow-opacity-2: 0.85;
+
+  position: relative;
+}
+
+.orb > i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  animation: particlescontainer var(--particle-animation-duration) ease-in
+    infinite both;
+}
+
+.orb::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  transform: translate(-50%, -50%);
+  border-radius: 1000px;
+  filter: blur(var(--glow-blur));
+  animation: glow var(--glow-animation-duration) ease-in infinite both;
+}
+
+.glow-basic::after {
+  background: radial-gradient(
+    94.44% 94.44% at 49.54% 5.4%,
+    rgba(0, 255, 255, 0.8) 0%,
+    rgba(0, 150, 255, 0.62) 100%
+  );
+}
+
+.glow-cosmic::after {
+  background: radial-gradient(
+    97.58% 87.19% at 51.31% 11.73%,
+    rgba(255, 0, 255, 0.8) 0%,
+    rgba(255, 0, 150, 0.62) 100%
+  );
+}
+
+.glow-divine::after {
+  background: radial-gradient(
+    94.44% 94.44% at 49.54% 5.4%,
+    rgba(253, 251, 69, 0.8) 0%,
+    rgba(255, 150, 0, 0.62) 100%
+  );
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    opacity: var(--glow-opacity-1);
+  }
+  50% {
+    opacity: var(--glow-opacity-2);
+  }
+}
+</style>

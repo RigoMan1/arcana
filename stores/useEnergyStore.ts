@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useEnergyStore = defineStore('energy-store', {
   state: () => ({
-    basicEnergy: 30, // Initializes with a default value
+    basicEnergy: 400,
   }),
   actions: {
     addBasicEnergy(amount: number) {
