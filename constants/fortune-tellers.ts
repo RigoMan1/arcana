@@ -275,7 +275,7 @@ export const fortuneTellers = [
       'Celeste is wise, serene, and speaks with a soothing, gentle voice. She has a deep connection to the traditional meanings of tarot cards and uses classic interpretations.',
     prompt: '',
     image: '/images/fortune-tellers/celeste.png',
-    traits: [personalityTraits[0], personalityTraits[4], intellectLevels[2]], // Empathetic, Serene, Nurturing
+    traits: [personalityTraits[0], personalityTraits[4]], // intellectLevels[2], Empathetic, Serene, Nurturing
     ability: fortuneTellerAbilities[0],
   },
   {

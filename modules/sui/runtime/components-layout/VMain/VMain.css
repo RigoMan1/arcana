@@ -1,3 +1,7 @@
+:root {
+  --v-appbar-height: 64px;
+}
+
 .v-main {
   flex: 1 0 auto;
   max-width: 100%;
@@ -6,6 +10,7 @@
   padding-right: var(--v-layout-right);
   padding-top: var(--v-layout-top);
   padding-bottom: var(--v-layout-bottom);
+  height: calc(100vh - var(--v-appbar-height));
 }
 
 .v-main__scroller {

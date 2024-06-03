@@ -6,28 +6,26 @@ const { $state } = useFortuneTeller();
 </script>
 
 <template>
-  <div
-    class="w-full px-4 flex flex-col h-full items-center justify-around py-4"
-  >
-    <h1 class="text-center">Choose your reader</h1>
+  <div class="px-4 pb-2 flex flex-col h-full space-y-2">
+    <div>
+      <h1 class="text-center">Choose your reader</h1>
+    </div>
 
-    <v-slides v-model="$state.activeFortuneTellerIndex">
+    <v-slides
+      v-model="$state.activeFortuneTellerIndex"
+      class="h-full"
+    >
       <v-slide
         v-for="fortuneTeller in fortuneTellers"
         :key="fortuneTeller.name"
-        class="min-h-[50vh] flex items-center justify-center mb-20"
+        class="h-full"
       >
-        <fortune-teller-card
-          :fortune-teller="fortuneTeller"
-          class="w-full overflow-auto"
-        />
+        <fortune-teller-card :fortune-teller="fortuneTeller" />
       </v-slide>
       <!-- controls -->
       <template #external-content="{ prev, next, canMoveBack, canMoveForward }">
         <!-- prev/next -->
-        <div
-          class="flex justify-around items-center w-full fixed bottom-1/2 px-2"
-        >
+        <div class="flex w-full fixed bottom-[70%] px-2 left-0 right-0">
           <arcana-button
             :disabled="!canMoveBack"
             variant="text"
@@ -54,13 +52,10 @@ const { $state } = useFortuneTeller();
           </arcana-button>
         </div>
         <!-- select button-->
-        <div class="flex justify-around items-center w-full fixed bottom-4">
-          <nuxt-link
-            class="w-full px-20"
-            to="/spread-select"
-          >
+        <div class="flex justify-center">
+          <nuxt-link to="/spread-select">
             <arcana-button
-              class="w-full"
+              class="!px-12"
               text="Select"
             />
           </nuxt-link>

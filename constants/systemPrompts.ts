@@ -73,9 +73,12 @@ const cardReadingPrompt = (
 // - Incorporate positive affirmations or mantras that the user can repeat to themselves for reassurance and empowerment.
 export const wholisticPrompt = (fortuneTeller: IFortuneTeller) => {
   return `
+  <persona>
+  ${fortuneTeller.traits.map((t) => t.prompt).join('')}
+  </persona>
+
 <priming>
   - Response format should not be influenced by the previous responses.
-  ${fortuneTeller.traits.map((t) => t.prompt).join('')}
 </priming>
 
 <style-tone>
