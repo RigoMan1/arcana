@@ -17,7 +17,6 @@ defineProps<{
     <div
       class="rounded-lg bg-secondary-300 bg-opacity-5 flex flex-col h-full overflow-auto mt-2"
     >
-      <!-- header with name -->
       <div class="sticky top-0 w-full bg-[#232429] px-4 pt-4">
         <h2 class="text-center mb-4">{{ fortuneTeller.name }}</h2>
         <hr class="border-primary-700 w-full" />
