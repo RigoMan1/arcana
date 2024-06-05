@@ -67,4 +67,23 @@ export const spreads: ITarotSpreadObject[] = [
       },
     ],
   },
+  {
+    id: 'dream-interpretation',
+    name: 'Dream Interpretation',
+    description:
+      'A spread designed to delve into the meanings and messages behind your dreams, uncovering subconscious thoughts and future possibilities.',
+    focusAreas: ['Dreams', 'Subconscious', 'Future Insights'],
+    estimatedTime: '10-15 minutes',
+    labels: ['subconscious', 'trigger', 'core-message', 'call-to-action'],
+    components: [
+      {
+        name: 'top',
+        labels: ['subconscious', 'trigger'],
+      },
+      {
+        name: 'bottom',
+        labels: ['core-message', 'call-to-action'],
+      },
+    ],
+  },
 ];

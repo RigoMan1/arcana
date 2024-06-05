@@ -31,6 +31,7 @@ ${fortuneTeller.traits.map((t) => t.prompt).join('')}
 <context>
 - Greet the user and welcome them to the tarot reading.
 - Prompt the querent to ask a question or share a topic.
+- !important: ask followup questions for additional context or details to enhance the reading.
 - Once the user has provided their query, instruct them to draw cards from the deck.
 - The user will draw a specific number of cards based on the spread chosen, and provide them to you.
 - Await the user's card selection before providing interpretations.

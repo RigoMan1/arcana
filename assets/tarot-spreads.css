@@ -19,6 +19,13 @@
     'c partner d';
 }
 
+.dream-interpretation {
+  grid-template-areas:
+    'subconscious c-2 trigger'
+    'c-4 c-5 c-6'
+    'core-message c-8 call-to-action';
+}
+
 .spread-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -33,24 +40,13 @@
   z-index: 1;
 }
 
+/* celtic cross */
 .spread-grid .conscious {
   grid-area: conscious;
 }
 
 .spread-grid .subconscious {
   grid-area: subconscious;
-}
-
-.spread-grid .past {
-  grid-area: past;
-}
-
-.spread-grid .present {
-  grid-area: present;
-}
-
-.spread-grid .future {
-  grid-area: future;
 }
 
 .spread-grid .outcome {
@@ -69,6 +65,8 @@
   grid-area: advice;
 }
 
+/* love spread */
+
 .spread-grid .you {
   grid-area: you;
 }
@@ -79,4 +77,31 @@
 
 .spread-grid .partner {
   grid-area: partner;
+}
+
+/*  three card cluster */
+.spread-grid .past {
+  grid-area: past;
+}
+
+.spread-grid .present {
+  grid-area: present;
+}
+
+.spread-grid .future {
+  grid-area: future;
+}
+
+/* dream  interpretation */
+
+.spread-grid .trigger {
+  grid-area: trigger;
+}
+
+.spread-grid .core-message {
+  grid-area: core-message;
+}
+
+.spread-grid .call-to-action {
+  grid-area: call-to-action;
 }

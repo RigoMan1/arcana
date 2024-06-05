@@ -41,6 +41,7 @@ async function handleSendMessage(
 
     const readingContext = `
     tarot-spread:${activeSpread.value.name}
+    tarot-spread-description:${activeSpread.value.description}
     card-count:${activeSpread.value.labels.length}
 
     <app-instructions>
@@ -137,7 +138,11 @@ const wheelEl = ref() as Ref<any>;
 const tarotSpreadEl = ref() as Ref<any>;
 
 onMounted(() => {
-  handleTextMessage(`Hi`);
+  handleTextMessage(`
+  Greet the user.
+  - mind the tarot spread
+  - be very brief
+  `);
 });
 
 const alert = ref(false);
