@@ -8,6 +8,13 @@ const { activeSpread } = storeToRefs(useTarotSpread());
 const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
 
 onMounted(() => (tarotDeck.value = shuffleCards(TarotCards)));
+onMounted(() => {
+  handleTextMessage(`
+  Greet the user.
+  - mind the tarot spread
+  - be very brief
+  `);
+});
 
 // exposing index from prizewheel to reset the button
 const selectedCardIndex = ref(null) as Ref<TarotCard | null>;
@@ -25,6 +32,7 @@ import {
   cardReadingPrompt,
   wholisticPrompt,
 } from '@/constants/systemPrompts';
+import type { RouteLocationNormalized } from 'vue-router';
 
 const { useBasicEnergy } = useEnergyStore();
 const { sendMessage, $state } = useChatgptStore();
@@ -136,16 +144,6 @@ async function handleWholisticReading({ drawnCards }: any) {
 const wheelEl = ref() as Ref<any>;
 const tarotSpreadEl = ref() as Ref<any>;
 
-onMounted(() => {
-  handleTextMessage(`
-  Greet the user.
-  - mind the tarot spread
-  - be very brief
-  `);
-});
-
-const alert = ref(false);
-
 const mode = ref('chat');
 
 function toggleMode(newVal: 'chat' | 'read') {
@@ -154,11 +152,45 @@ function toggleMode(newVal: 'chat' | 'read') {
 
   mode.value = newVal;
 }
+
+// quit reading guard
+const quitReadingAlert = reactive({
+  showDialog: false,
+  targetRoute: null,
+}) as {
+  showDialog: boolean;
+  targetRoute: RouteLocationNormalized | null;
+};
+
+onBeforeRouteLeave((to, from, next) => {
+  if (!quitReadingAlert.showDialog) {
+    console.log('prevent navigation');
+    quitReadingAlert.showDialog = true;
+    quitReadingAlert.targetRoute = to;
+    next(false);
+  } else {
+    next();
+  }
+});
+
+const lowEnergyAlert = ref(false);
 </script>
 
 <template>
   <div class="container flex flex-col h-full">
-    <insufficient-energy-dialog v-model="alert" />
+    <insufficient-energy-dialog v-model="lowEnergyAlert" />
+
+    <alert-dialog
+      v-model="quitReadingAlert.showDialog"
+      color="error"
+      title="Quit Reading?"
+      text="Are you sure you want to quit the reading?"
+      icon="fluent:error-circle-24-filled"
+      secondary-action-text="Cancel"
+      primary-action-text="Quit Reading"
+      @click:secondary-action="quitReadingAlert.showDialog = false"
+      @click:primary-action="navigateTo(quitReadingAlert.targetRoute?.fullPath)"
+    />
 
     <fortune-readings-dialog
       v-model="dialog"
