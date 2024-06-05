@@ -46,7 +46,6 @@ function handlePurchase(tier: Tier) {
     transition="dialog-transition"
     width="90%"
     height="80%"
-    persistent
     close-on-back
     class="flex items-center justify-center"
   >

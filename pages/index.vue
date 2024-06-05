@@ -179,7 +179,6 @@ function toggleMode(newVal: 'chat' | 'read') {
         width="100%"
         persistent
         no-click-animation
-        close-on-back
         class="flex justify-center"
         :scrim="false"
       >
