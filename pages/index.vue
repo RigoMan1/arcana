@@ -67,6 +67,7 @@ const readerSelectStore = useFortuneTeller();
 
 const mostRecentMessage = ref() as Ref<IMessage | null>;
 const chatBubble = ref(false);
+const showCards = ref(false);
 async function handleTextMessage(message: string) {
   chatBubble.value = false;
   const messageCost = Math.max(1, Math.ceil(message.length / 20));
@@ -132,8 +133,6 @@ async function handleWholisticReading({ drawnCards }: any) {
   }
 }
 
-const showCards = ref(false);
-
 const wheelEl = ref() as Ref<any>;
 const tarotSpreadEl = ref() as Ref<any>;
 
@@ -169,7 +168,7 @@ function toggleMode(newVal: 'chat' | 'read') {
     <div class="flex items-center justify-center h-1/6">
       <transition name="scale-transition">
         <card-wheel
-          v-if="showCards"
+          v-if="mode === 'read' && showCards"
           ref="wheelEl"
           v-model="selectedCardIndex"
           class="w-full h-full origin-top"
@@ -177,56 +176,19 @@ function toggleMode(newVal: 'chat' | 'read') {
         />
       </transition>
 
-      <v-overlay
-        v-model="chatBubble"
-        activator="#toggle-overlay"
-        transition="dialog-transition"
-        width="100%"
-        persistent
-        no-click-animation
-        class="flex justify-center"
-        :scrim="false"
-      >
-        <div
-          v-if="!showCards"
-          style="z-index: 100"
-          class="absolute top-16 px-4 origin-top"
-        >
-          <svg
-            class="ml-2"
-            width="20"
-            height="10"
-            viewBox="0 0 20 10"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <polygon
-              points="0,10 10,0 20,10"
-              class="fill-secondary-700"
-            />
-          </svg>
-          <div class="h-full overflow-auto chat-bubble">
-            <transition name="scale">
-              <div v-if="mostRecentMessage">
-                <fortune-teller-message
-                  class="!text-indigo-100"
-                  :message="mostRecentMessage"
-                />
-              </div>
-            </transition>
-          </div>
-        </div>
-      </v-overlay>
+      <text-bubble
+        :message="mostRecentMessage"
+        :show="chatBubble"
+      />
 
-      <transition name="scale">
-        <div
-          v-if="$state.isTyping && !showCards"
-          class="fortune-oracle"
-        >
-          <span class="animate-pulse">
-            {{ readerSelectStore.activeFortuneTeller.name }} is typing...
-          </span>
-        </div>
-      </transition>
+      <div
+        v-if="$state.isTyping"
+        class="fortune-oracle"
+      >
+        <span class="animate-pulse">
+          {{ readerSelectStore.activeFortuneTeller.name }} is typing...
+        </span>
+      </div>
     </div>
 
     <!-- 2. tarot spread -->
@@ -285,7 +247,6 @@ function toggleMode(newVal: 'chat' | 'read') {
           v-if="mode === 'chat'"
           class="self-center"
           @message="handleTextMessage"
-          @toggle-cards="showCards = true"
         />
         <!-- right -->
         <arcana-button
@@ -307,40 +268,3 @@ function toggleMode(newVal: 'chat' | 'read') {
     </div>
   </div>
 </template>
-
-<style>
-/* anim */
-:root {
-  --scale-duration: 0.3s;
-}
-.scale-enter-active {
-  transition-duration: 0.3s !important;
-  transition-timing-function: var(--v-ease-out) !important;
-}
-.scale-leave-active {
-  transition-duration: 0.3s !important;
-  transition-timing-function: var(--v-ease-in) !important;
-  position: absolute;
-}
-.scale-move {
-  transition-duration: 0.5s !important;
-  transition-property: transform !important;
-  transition-timing-function: var(--v-ease-out) !important;
-}
-.scale-leave-to {
-  opacity: 0;
-}
-
-.scale-enter-from {
-  opacity: 0;
-  transform: scale(0.9);
-}
-.scale-enter-active,
-.scale-leave-active {
-  transition-property: transform, opacity !important;
-}
-
-.chat-bubble {
-  @apply relative rounded-lg bg-secondary-700 p-2 max-h-[40vh] overflow-auto;
-}
-</style>
