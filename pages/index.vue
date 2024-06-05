@@ -42,6 +42,15 @@ async function handleSendMessage(
     const readingContext = `
     tarot-spread:${activeSpread.value.name}
     card-count:${activeSpread.value.labels.length}
+
+    <app-instructions>
+      Q: how to draw cards?
+      A: 1. click on the icon at the bottom left corner
+         2. this will bring up a carousel of cards
+         3. spin the carousel to draw a random card
+         4. drag the card to a location on the the spread
+
+    </app-instructions>
     `;
 
     return await sendMessage({
@@ -56,7 +65,9 @@ async function handleSendMessage(
 const readerSelectStore = useFortuneTeller();
 
 const mostRecentMessage = ref() as Ref<IMessage | null>;
+const chatBubble = ref(false);
 async function handleTextMessage(message: string) {
+  chatBubble.value = false;
   const messageCost = Math.max(1, Math.ceil(message.length / 20));
   const res = await handleSendMessage(
     `
@@ -66,7 +77,10 @@ async function handleTextMessage(message: string) {
     message,
     messageCost
   );
-  if (res) mostRecentMessage.value = res;
+  if (res) {
+    mostRecentMessage.value = res;
+    chatBubble.value = true;
+  }
 }
 
 const dialog = ref(false);
@@ -127,6 +141,15 @@ onMounted(() => {
 });
 
 const alert = ref(false);
+
+const mode = ref('chat');
+
+function toggleMode(newVal: 'chat' | 'read') {
+  chatBubble.value = newVal === 'chat';
+  showCards.value = newVal === 'read';
+
+  mode.value = newVal;
+}
 </script>
 
 <template>
@@ -137,33 +160,58 @@ const alert = ref(false);
       v-model="dialog"
       :readings="readings"
     />
-
     <!-- 1. fortune message  -->
     <div class="flex items-center justify-center h-1/6">
-      <card-wheel
-        v-if="showCards"
-        ref="wheelEl"
-        v-model="selectedCardIndex"
-        class="w-full h-full"
-        :tarot-deck="tarotDeck"
-      />
+      <transition name="scale-transition">
+        <card-wheel
+          v-if="showCards"
+          ref="wheelEl"
+          v-model="selectedCardIndex"
+          class="w-full h-full origin-top"
+          :tarot-deck="tarotDeck"
+        />
+      </transition>
 
-      <div
-        v-if="!showCards"
-        class="px-4 overflow-y-auto max-w-4xl h-full flex items-center"
+      <v-overlay
+        v-model="chatBubble"
+        activator="#toggle-overlay"
+        transition="dialog-transition"
+        width="100%"
+        persistent
+        no-click-animation
+        close-on-back
+        class="flex justify-center"
+        :scrim="false"
       >
-        <transition name="scale">
-          <div
-            v-if="mostRecentMessage && !$state.isTyping"
-            class="fortune-oracle"
+        <div
+          v-if="!showCards"
+          style="z-index: 100"
+          class="absolute top-16 px-4 origin-top"
+        >
+          <svg
+            class="ml-2"
+            width="20"
+            height="10"
+            viewBox="0 0 20 10"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <fortune-teller-message
-              class="!text-indigo-100"
-              :message="mostRecentMessage"
+            <polygon
+              points="0,10 10,0 20,10"
+              class="fill-secondary-700"
             />
+          </svg>
+          <div class="h-full overflow-auto chat-bubble">
+            <transition name="scale">
+              <div v-if="mostRecentMessage">
+                <fortune-teller-message
+                  class="!text-indigo-100"
+                  :message="mostRecentMessage"
+                />
+              </div>
+            </transition>
           </div>
-        </transition>
-      </div>
+        </div>
+      </v-overlay>
 
       <transition name="scale">
         <div
@@ -196,29 +244,48 @@ const alert = ref(false);
 
     <div class="p-4">
       <div
-        v-show="showCards || $fortuneReadingState.cardDrawn"
-        class="flex items-center justify-between space-x-2 max-w-sm w-full mx-auto"
+        class="flex items-center space-x-2 w-full max-w-sm mx-auto justify-between"
       >
+        <!-- left -->
         <arcana-button
+          v-if="mode === 'read'"
           class="!px-2"
           :disabled="$fortuneReadingState.cardDrawn"
-          @click="showCards = false"
+          @click="toggleMode('chat')"
         >
           <Icon
             name="fluent:chat-bubbles-question-16-filled"
             size="2em"
           />
         </arcana-button>
-
         <arcana-button
-          v-if="tarotSpreadEl"
+          v-if="mode === 'chat'"
+          class="!px-2"
+          @click="toggleMode('read')"
+        >
+          <Icon
+            name="fluent:playing-cards-20-filled"
+            size="2em"
+          />
+        </arcana-button>
+        <!-- mid -->
+        <arcana-button
+          v-if="mode === 'read'"
           :disabled="!tarotSpreadEl?.allCardsSelected || $state.isTyping"
           @click="tarotSpreadEl?.handleButtonClick"
         >
           {{ tarotSpreadEl?.buttonLabel }}
         </arcana-button>
 
+        <arcana-text-area
+          v-if="mode === 'chat'"
+          class="self-center"
+          @message="handleTextMessage"
+          @toggle-cards="showCards = true"
+        />
+        <!-- right -->
         <arcana-button
+          v-if="mode === 'read'"
           class="!px-2"
           :disabled="
             wheelEl?.disableSpin ||
@@ -233,36 +300,11 @@ const alert = ref(false);
           />
         </arcana-button>
       </div>
-
-      <div
-        v-show="!$fortuneReadingState.cardDrawn && !showCards"
-        class="flex items-center space-x-2 w-full max-w-sm mx-auto"
-      >
-        <arcana-button
-          class="!px-2"
-          @click="showCards = !showCards"
-        >
-          <Icon
-            name="fluent:playing-cards-20-filled"
-            size="2em"
-          />
-        </arcana-button>
-        <arcana-text-area
-          v-if="!$readingState.fortuneInitiated"
-          class="self-center"
-          @message="handleTextMessage"
-          @toggle-cards="showCards = true"
-        />
-      </div>
     </div>
   </div>
 </template>
 
 <style>
-.chat-bubble {
-  @apply p-4 rounded-lg shadow-md text-lg mt-4 max-w-2xl;
-}
-
 /* anim */
 :root {
   --scale-duration: 0.3s;
@@ -292,5 +334,9 @@ const alert = ref(false);
 .scale-enter-active,
 .scale-leave-active {
   transition-property: transform, opacity !important;
+}
+
+.chat-bubble {
+  @apply relative rounded-lg bg-secondary-700 p-2 max-h-[40vh] overflow-auto;
 }
 </style>

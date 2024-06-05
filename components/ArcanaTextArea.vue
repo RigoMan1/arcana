@@ -70,6 +70,6 @@ function handleEnterKey(event: KeyboardEvent) {
 
 <style>
 .button--disabled {
-  @apply opacity-50 pointer-events-none text-primary-300;
+  @apply opacity-50 text-primary-300;
 }
 </style>
