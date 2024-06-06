@@ -7,7 +7,7 @@ const { activeSpread } = storeToRefs(useTarotSpread());
 
 const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
 
-onMounted(() => (tarotDeck.value = shuffleCards(TarotCards)));
+onMounted(() => (tarotDeck.value = shuffleCards(TarotCards, true)));
 onMounted(() => {
   handleTextMessage(`
   Greet the user.

@@ -9,6 +9,7 @@ interface TarotCard {
   suit: Suit | null;
   court: Court | null;
   image: string;
+  reversed?: boolean;
 }
 
 // Spre3ad Types

@@ -80,6 +80,9 @@ watch(
             :src="`images/tarot-deck-classic/${card.image}`"
             :alt="`${card.name} - ${card.arcana}`"
             class="h-full w-full object-cover"
+            :class="{
+              'rotate-180': card.reversed,
+            }"
           />
           <div v-else>
             <h1 class="text-3xl font-bold">{{ card.name }}</h1>

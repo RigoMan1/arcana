@@ -94,7 +94,7 @@ export const wholisticPrompt = (fortuneTeller: IFortuneTeller) => {
   - Use "#" for the Main Title (1-5 words) (come up with a title that captures the essence of the narrative).
   - follow the main title with a an intro paragraph that sets the stage for the reading.
   - use the following mdc syntax to wrap each paragraph regarding the card interpretation:
-  ::card-response{image="<card-image>" title="<card-name>"}
+  ::card-response{image="<card-image>" title="<card-name>" reversed="<reversed>"}
   card interpretation content here
   ::
   - wrap up the reading with a closing paragraph that summarizes the key takeaways and offers a final thought.

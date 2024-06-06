@@ -99,6 +99,7 @@ function handleButtonClick() {
   spread-label: ${position}
   card-name: ${card.name}
   card-image: ${card.image}
+  reversed: ${card.reversed}
   `;
 
   const allCardsData = currentSpreadComponent.value.labels.map((label) => {
