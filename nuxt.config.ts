@@ -14,10 +14,7 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase',
   ],
   supabase: {
-    redirectOptions: {
-      login: '/auth/login',
-      exclude: ['/auth/*'],
-    },
+    redirect: false,
   },
   tailwindcss: {
     exposeConfig: true,
