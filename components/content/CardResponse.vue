@@ -10,11 +10,8 @@ const reverse = props.reversed === 'true';
 
 <template>
   <div>
-    <div class="flex items-center space-x-4 justify-center">
-      <h2 class="text-xl font-bold">{{ title }}</h2>
-    </div>
-
-    <p>
+    <h3 class="text-lg font-bold text-left">{{ title }}</h3>
+    <div>
       <img
         :src="`images/tarot-deck-classic/${image}`"
         class="w-16 rounded border-2 border-white float-left mr-4 my-0"
@@ -22,6 +19,6 @@ const reverse = props.reversed === 'true';
         :class="{ 'transform rotate-180': reverse }"
       />
       <slot />
-    </p>
+    </div>
   </div>
 </template>
