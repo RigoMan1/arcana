@@ -30,16 +30,18 @@ const orbColor = computed(() => {
   <v-app-bar class="flex items-center justify-between p-4">
     <energy-shop-dialog v-model="energyShop" />
     <!--  fortune teller avatar -->
-    <nuxt-link
+    <div
       v-if="path !== '/reader-select'"
-      to="/reader-select"
+      id="ft-avatar"
     >
-      <img
-        :src="readerSelectStore.activeFortuneTeller.image"
-        alt="fortune teller"
-        class="w-12 h-12 rounded-full"
-      />
-    </nuxt-link>
+      <nuxt-link to="/reader-select">
+        <img
+          :src="readerSelectStore.activeFortuneTeller.image"
+          alt="fortune teller"
+          class="w-12 h-12 rounded-full"
+        />
+      </nuxt-link>
+    </div>
     <div
       v-else
       class="w-12 h-12 rounded-full"
