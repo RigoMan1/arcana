@@ -34,15 +34,17 @@ import {
 } from '@/constants/systemPrompts';
 import type { RouteLocationNormalized } from 'vue-router';
 
+const fortuneTeller = useFortuneTeller();
 const { useBasicEnergy } = useEnergyStore();
 const { sendMessage, $state } = useChatgptStore();
 
+const lowEnergyAlert = ref(false);
 async function handleSendMessage(
   prompt: string,
   userMessage: string,
   messageCost = 0
 ) {
-  mostRecentMessage.value = null; // Clear the most recent message
+  fortuneTeller.clearCurrentMessage();
 
   try {
     useBasicEnergy(messageCost);
@@ -67,29 +69,23 @@ async function handleSendMessage(
       user: userMessage,
     });
   } catch (error) {
-    alert.value = true;
+    lowEnergyAlert.value = true;
   }
 }
 
-const readerSelectStore = useFortuneTeller();
-
-const mostRecentMessage = ref() as Ref<IMessage | null>;
-const chatBubble = ref(false);
 const showCards = ref(false);
 async function handleTextMessage(message: string) {
-  chatBubble.value = false;
   const messageCost = Math.max(1, Math.ceil(message.length / 20));
   const res = await handleSendMessage(
     `
-    ${readerSelectStore.activeFortuneTeller.description}
-    ${fortuneTellerPrompt(readerSelectStore.activeFortuneTeller)}
+    ${fortuneTeller.activeFortuneTeller.description}
+    ${fortuneTellerPrompt(fortuneTeller.activeFortuneTeller)}
     `,
     message,
     messageCost
   );
   if (res) {
-    mostRecentMessage.value = res;
-    chatBubble.value = true;
+    fortuneTeller.setActiveMessage(res);
   }
 }
 
@@ -111,7 +107,7 @@ async function handleSingleCardReading(
   `;
 
   const reading = await handleSendMessage(
-    cardReadingPrompt(positionPrompt, readerSelectStore.activeFortuneTeller),
+    cardReadingPrompt(positionPrompt, fortuneTeller.activeFortuneTeller),
     userMessage,
     CARD_READING_ENERGY_COST
   );
@@ -130,7 +126,7 @@ async function handleWholisticReading({ drawnCards }: any) {
   `;
 
   const reading = await handleSendMessage(
-    wholisticPrompt(readerSelectStore.activeFortuneTeller),
+    wholisticPrompt(fortuneTeller.activeFortuneTeller),
     userMessage,
     WHOLISTIC_READING_ENERGY_COST
   );
@@ -147,8 +143,10 @@ const tarotSpreadEl = ref() as Ref<any>;
 const mode = ref('chat');
 
 function toggleMode(newVal: 'chat' | 'read') {
-  chatBubble.value = newVal === 'chat';
   showCards.value = newVal === 'read';
+
+  if (newVal === 'chat') fortuneTeller.showMessage();
+  else if (newVal === 'read') fortuneTeller.hideMessage();
 
   mode.value = newVal;
 }
@@ -172,8 +170,6 @@ onBeforeRouteLeave((to, from, next) => {
     next();
   }
 });
-
-const lowEnergyAlert = ref(false);
 </script>
 
 <template>
@@ -208,17 +204,12 @@ const lowEnergyAlert = ref(false);
         />
       </transition>
 
-      <text-bubble
-        :message="mostRecentMessage"
-        :show="chatBubble"
-      />
-
       <div
         v-if="$state.isTyping"
         class="fortune-oracle"
       >
         <span class="animate-pulse">
-          {{ readerSelectStore.activeFortuneTeller.name }} is typing...
+          {{ fortuneTeller.activeFortuneTeller.name }} is typing...
         </span>
       </div>
     </div>
