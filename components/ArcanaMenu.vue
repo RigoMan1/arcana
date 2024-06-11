@@ -49,8 +49,17 @@ const menuItems = [
         width="200"
       >
         <div class="arcana-card-alt">
-          <h6 class="text-lg font-medium capitalize">
-            {{ user?.email.split('@')[0] }}
+          <!-- your signed in as anon user id -->
+          <div v-if="user?.is_anonymous">
+            <p class="text-xs">Signed in as anonymous user</p>
+            <p class="text-xs opacity-75 mt-1">{{ user?.id }}</p>
+          </div>
+
+          <h6
+            v-else
+            class="text-lg font-medium capitalize"
+          >
+            {{ user?.email?.split('@')[0] }}
           </h6>
 
           <hr class="mt-2 mb-4 opacity-20 -mx-4" />

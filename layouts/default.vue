@@ -1,3 +1,14 @@
+<script setup lang="ts">
+import { useAnonymousUser } from '~/composables/useAnonymousUser';
+
+const uuid = ref<string>('');
+const { getOrCreateAnonymousUser } = useAnonymousUser();
+
+onMounted(async () => {
+  uuid.value = await getOrCreateAnonymousUser();
+});
+</script>
+
 <template>
   <nuxt-pwa-manifest />
 
