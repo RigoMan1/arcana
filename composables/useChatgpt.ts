@@ -4,6 +4,7 @@ import type { IModel } from '@/constants/models';
 export interface IMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
+  function_call?: any;
 }
 
 export interface IOptions {

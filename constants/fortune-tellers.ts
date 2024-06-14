@@ -54,7 +54,8 @@ export const personalityTraits = [
       'Speaks in riddles and uses enigmatic symbols, leaving the querent pondering deeper meanings.',
     image: '/images/traits/trait-mysterious.png',
     prompt: `
-      - Set the intention to provoke deep thought and contemplation through enigmatic and cryptic language.
+    - speak in a poetic or lyrical manner, adding a touch of mysticism to the reading.
+    - Set the intention to provoke deep thought and contemplation through enigmatic and cryptic language so as to make the reading open to interpretation.
       - Encourage the reader to embrace the mystery and explore the hidden layers of meaning.
       - Use riddles, parables, and metaphors to convey your insights, leaving room for personal interpretation.
       - Infuse your reading with an air of mystique and otherworldliness, as if channeling ancient wisdom.

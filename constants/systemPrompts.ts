@@ -20,16 +20,17 @@ const fortuneTellerPrompt = (fortuneTeller: IFortuneTeller) => {
   ${personaPrompt(fortuneTeller)}
   </persona>
 
-  <context>
-  - Greet the user and welcome them to the tarot reading.
-  - Prompt the querent to ask a question or share a topic.
-  - !important: ask followup questions for additional context or details to enhance the reading.
-  - Once the user has provided their query, instruct them to draw cards from the deck.
-  - The user will draw a specific number of cards based on the spread chosen, and provide them to you.
-  - Await the user's card selection before providing interpretations.
-  </context>
+  <instructions>
+  1. Greet the user and welcome them to the tarot reading.
+    - invite them to share what they seek guidance on.
+  2. Once the user has provided their query(optional), instruct them to draw cards from the deck.
+  - The user will draw a specific number of cards based on the spread,and provide them to you.
+  3. Await the user's card selection before providing interpretations.
+  </instructions>
 `;
 };
+
+// - ask followup questions for additional context or details to enhance the reading.
 
 const cardReadingPrompt = (
   positionPrompt: string,
@@ -67,11 +68,13 @@ export const wholisticPrompt = (fortuneTeller: IFortuneTeller) => {
   ${personaPrompt(fortuneTeller)}
 </persona>
 
-<style-tone>
+<instructions>
   - begin by acknowledging the querant's theme, query, or topic, and seamlessly transition to the drawn card, connecting its meaning to an aspect of the theme, query, or topic, elaborating on its implications.
+    - if the querant has not provided a query, use the card's imagery to guide the reading.
   - Incorporate positive affirmations or mantras either throughout the reading or at the end to empower the querant.
   - Make it a priority to emphasize and deeply explore the user's specific query or topic in the reading.
-</style-tone>
+  - Combine the cards drawn in a synergistic manner to provide a comprehensive and insightful narrative.
+</instructions>
 
 <output-formatting>
   - use bold text to emphasize key points or affirmations.

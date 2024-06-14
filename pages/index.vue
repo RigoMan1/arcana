@@ -8,12 +8,23 @@ const { activeSpread } = storeToRefs(useTarotSpread());
 const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
 
 onMounted(() => (tarotDeck.value = shuffleCards(TarotCards, true)));
+
+const user = useSupabaseUser();
+
 onMounted(() => {
-  handleTextMessage(`
+  if (user.value?.user_metadata?.name) {
+    handleTextMessage(`
   Greet the user.
   - mind the tarot spread
   - be very brief
   `);
+  } else {
+    handleTextMessage(`
+      - Greet the user
+      - Ask for their name
+      - if the user provides their name, greet them by name
+    `);
+  }
 });
 
 // exposing index from prizewheel to reset the button
@@ -49,10 +60,15 @@ async function handleSendMessage(
   try {
     useBasicEnergy(messageCost);
 
+    // TODO: user data
     const readingContext = `
     tarot-spread:${activeSpread.value.name}
     tarot-spread-description:${activeSpread.value.description}
     card-count:${activeSpread.value.labels.length}
+
+    <user-data>
+      name: ${user.value?.user_metadata?.name || 'n/a'}
+    </user-data>
 
     <app-instructions>
       Q: how to draw cards?
@@ -73,7 +89,19 @@ async function handleSendMessage(
   }
 }
 
+const supabase = useSupabaseClient();
 const showCards = ref(false);
+function updateUserName(name: string) {
+  console.log('updating name in the database with the name:', name);
+  supabase.auth.updateUser({
+    data: { name },
+  });
+
+  handleTextMessage(`
+    - Greet the user by their name, and proceed with the reading
+    - if the user denies providing their name, we will use "n/a" as the name
+  `);
+}
 async function handleTextMessage(message: string) {
   const messageCost = Math.max(1, Math.ceil(message.length / 20));
   const res = await handleSendMessage(
@@ -85,7 +113,13 @@ async function handleTextMessage(message: string) {
     messageCost
   );
   if (res) {
-    fortuneTeller.setActiveMessage(res);
+    if (res.function_call) {
+      // *handle user name update
+      const args = JSON.parse(res.function_call.arguments);
+      updateUserName(args.name);
+    } else {
+      fortuneTeller.setActiveMessage(res);
+    }
   }
 }
 

@@ -45,5 +45,6 @@ export const useChatgptStore = defineStore('chatgpt-store', () => {
   return {
     isTyping,
     sendMessage,
+    chatTree,
   };
 });
