@@ -1,7 +1,11 @@
 import OpenAI from 'openai';
 import { createError, defineEventHandler, readBody } from 'h3';
 import { defaultOptions } from '../../constants/options';
-import { MODEL_GPT_TURBO_3_5_0125, type IModel } from '../../constants/models';
+import {
+  MODEL_GPT_TURBO_3_5_0125,
+  MODEL_GPT_4_OMNI,
+  type IModel,
+} from '../../constants/models';
 import { modelMap } from '../../utils/model-map';
 import { useRuntimeConfig } from '#imports';
 
@@ -43,9 +47,7 @@ export default defineEventHandler(async (event) => {
   try {
     const chatCompletion = await openai.chat.completions.create({
       messages,
-      model: !model
-        ? modelMap[MODEL_GPT_TURBO_3_5_0125]
-        : modelMap[model as IModel],
+      model: !model ? modelMap[MODEL_GPT_4_OMNI] : modelMap[model as IModel],
       ...(options || defaultOptions),
       functions: [funcGetUsersName],
       function_call: 'auto',

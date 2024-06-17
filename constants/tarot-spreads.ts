@@ -1,7 +1,7 @@
 export const spreads: ITarotSpreadObject[] = [
   {
     id: 'three-card-cluster',
-    name: 'Tree Card Cluster',
+    name: 'Three Card Cluster',
     description:
       'A simple and quick spread to get insight into a specific question or situation. Ideal for quick insights into past, present, and future influences.',
     focusAreas: ['Love', 'Career', 'Personal Growth'],
