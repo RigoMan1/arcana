@@ -1,8 +1,14 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "app.vercel.arcana_flame.twa",
-        "sha256_cert_fingerprints": ["52:37:4F:23:B7:1F:02:7D:06:C1:33:DF:FF:91:97:FE:F2:2A:BE:90:04:56:6D:CE:F1:2B:24:D8:D3:B1:98:81"]
-      }
-    }]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.vercel.arcana_flame.twa",
+      "sha256_cert_fingerprints": [
+        "E4:EB:59:95:22:8B:B4:BD:69:41:4B:69:3D:DD:5B:E9:79:31:5D:B3:F1:AD:A6:5F:AD:4E:99:F2:18:E9:B3:89"
+      ]
+    }
+  }
+]

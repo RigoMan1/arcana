@@ -32,6 +32,13 @@ export default defineNuxtConfig({
       short_name: 'Arcana',
       start_url: '/reader-select',
       display: 'standalone',
+      display_override: [
+        'standalone',
+        'minimal-ui',
+        'fullscreen',
+        'window-controls-overlay',
+        'browser',
+      ],
       background_color: '#6366f1',
       categories: [
         'entertainment',
@@ -53,7 +60,7 @@ export default defineNuxtConfig({
           sizes: '512x512',
           type: 'image/png',
         },
-      ],
+      ], 
       screenshots: [
         {
           src: 'screenshots/screenshot-1.png',
@@ -62,14 +69,14 @@ export default defineNuxtConfig({
         },
       ],
       theme_color: '#6366f1',
-      id: 'com.arcana-flame.vercel.app',
+      id: 'net.arcana-tarot',
       orientation: 'portrait',
       dir: 'ltr',
       scope: '/',
       launch_handler: {
         client_mode: 'navigate-existing',
       },
-      iarc_rating_id: 'your-iarc-rating-id', // Replace with your actual IARC rating ID if available
+      iarc_rating_id: 'your-iarc-rating-id', // TODO: Replace with  actual IARC
     },
     workbox: {
       navigateFallback: '/',
