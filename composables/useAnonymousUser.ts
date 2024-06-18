@@ -79,6 +79,13 @@ export const useAnonymousUser = () => {
 
   const createAnonymousUser = async (): Promise<string | null> => {
     const { data, error } = await supabase.auth.signInAnonymously();
+
+    // initialize user profile and energy balance
+    (await $fetch('/api/user-init', {
+      method: 'POST',
+      body: { userId: data.user?.id },
+    })) as any;
+
     if (error) {
       console.error('Error creating anonymous user:', error);
       return null;

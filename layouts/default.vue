@@ -7,6 +7,12 @@ const { getOrCreateAnonymousUser } = useAnonymousUser();
 onMounted(async () => {
   uuid.value = await getOrCreateAnonymousUser();
 });
+
+const { initializeEnergy } = useEnergyStore();
+
+onMounted(async () => {
+  initializeEnergy();
+});
 </script>
 
 <template>

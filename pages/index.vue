@@ -60,7 +60,6 @@ async function handleSendMessage(
   try {
     useBasicEnergy(messageCost);
 
-    // TODO: user data
     const readingContext = `
     tarot-spread:${activeSpread.value.name}
     tarot-spread-description:${activeSpread.value.description}
@@ -196,11 +195,11 @@ const quitReadingAlert = reactive({
 
 onBeforeRouteLeave((to, from, next) => {
   if (!quitReadingAlert.showDialog) {
-    console.log('prevent navigation');
     quitReadingAlert.showDialog = true;
     quitReadingAlert.targetRoute = to;
     next(false);
   } else {
+    fortuneTeller.clearCurrentMessage();
     next();
   }
 });
