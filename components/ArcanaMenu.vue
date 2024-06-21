@@ -77,19 +77,23 @@ const menuItems = [
           </button> -->
 
           <div class="space-y-2">
-            <button
+            <template
               v-for="item in menuItems"
               :key="item.label"
-              class="w-full flex items-center p-2 text-lg hover:bg-secondary-500 hover:bg-opacity-25
-                rounded transition-colors duration-100 ease-in-out"
-              @click="item.action"
             >
-              <Icon
-                :name="item.icon"
-                size="1.5rem"
-              />
-              <span class="ml-4"> {{ item.label }} </span>
-            </button>
+              <button
+                v-if="!user?.is_anonymous || item.label !== 'Logout'"
+                class="w-full flex items-center p-2 text-lg hover:bg-secondary-500 hover:bg-opacity-25
+                  rounded transition-colors duration-100 ease-in-out"
+                @click="item.action"
+              >
+                <Icon
+                  :name="item.icon"
+                  size="1.5rem"
+                />
+                <span class="ml-4"> {{ item.label }} </span>
+              </button>
+            </template>
           </div>
         </div>
       </v-overlay>
