@@ -61,6 +61,13 @@ onMounted(async () => {
 
 async function handlePurchase(tier: Tier) {
   const sku = skus.value.find((s) => s.itemId === tier.sku_id);
+  console.log(
+    `
+    - finding sku for tier: ${tier.name}
+    - sku_id: ${tier.sku_id}
+    - skus: ${JSON.stringify(skus.value)}
+    - found: ${JSON.stringify(sku)}`
+  );
   if (sku) {
     const res = await purchase(sku.itemId);
     if (res) resolvePurchase(tier);
@@ -91,6 +98,9 @@ async function handlePurchase(tier: Tier) {
     close-on-back
     class="flex items-center justify-center"
   >
+    <div class="bg-zinc-900 p-1 rounded mb-1 text-sm">
+      isServiceAvailable: {{ isServiceAvailable }}
+    </div>
     <div
       class="p-8 rounded-xl text-center relative bg-accent h-full flex flex-col"
     >

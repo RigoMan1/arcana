@@ -47,16 +47,20 @@ export function usePlayBilling() {
     },
 
     async getSkus() {
+      console.log('isServiceAvailable 🛒', isServiceAvailable.value);
+      console.log('this.service 🛒', this.service);
       if (!isServiceAvailable.value || !this.service) {
         throw new Error('Play Billing service is not available');
       }
       const details = await this.service.getDetails(
         this.lookups.map((sku) => sku.itemId)
       );
+      console.log('details 🏷️', details);
       skus.value = details.map((detail: any) => ({
         ...detail,
         ...this.lookups.find((s) => s.itemId === detail.itemId),
       }));
+      console.log('skus 🏷️', skus.value);
     },
 
     async purchase(itemId: string): Promise<boolean> {
