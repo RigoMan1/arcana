@@ -17,6 +17,8 @@ withDefaults(
 
     primaryActionText?: string;
     primaryActionColor?: Color;
+
+    color?: 'error' | 'success';
   }>(),
   {
     iconColor: 'primary',
@@ -30,6 +32,8 @@ withDefaults(
 
     primaryActionText: '',
     primaryActionColor: 'primary',
+
+    color: 'error',
   }
 );
 
@@ -45,7 +49,10 @@ const emit = defineEmits(['click:secondary-action', 'click:primary-action']);
     close-on-back
     class="flex items-center justify-center text-center"
   >
-    <div class="px-8 !py-12 rounded-lg v-alert--color-error arcana-card-alt">
+    <div
+      class="px-8 !py-12 rounded-lg arcana-card-alt"
+      :class="`v-alert--color-${color}`"
+    >
       <Icon
         :name="icon"
         :color="iconColor"
@@ -58,15 +65,8 @@ const emit = defineEmits(['click:secondary-action', 'click:primary-action']);
         variant="body-2"
         class="mt-2"
       >
-        {{ text }}
+        <slot>{{ text }}</slot>
       </p>
-
-      <div
-        v-if="$slots.default"
-        class="mt-8"
-      >
-        <slot />
-      </div>
 
       <div class="mt-8 flex space-x-3 justify-center">
         <slot name="actions">
@@ -96,5 +96,9 @@ const emit = defineEmits(['click:secondary-action', 'click:primary-action']);
 <style>
 .v-alert--color-error {
   @apply text-red-200;
+}
+
+.v-alert--color-success {
+  @apply text-secondary-100;
 }
 </style>

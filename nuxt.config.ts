@@ -69,14 +69,14 @@ export default defineNuxtConfig({
         },
       ],
       theme_color: '#6366f1',
-      id: 'net.arcana-tarot',
+      id: 'com.arcana-flame.vercel.app',
       orientation: 'portrait',
       dir: 'ltr',
       scope: '/',
       launch_handler: {
         client_mode: 'navigate-existing',
       },
-      iarc_rating_id: 'your-iarc-rating-id', // TODO: Replace with  actual IARC
+      iarc_rating_id: 'your-iarc-rating-id', // Replace with your actual IARC rating ID if available
     },
     workbox: {
       navigateFallback: '/',

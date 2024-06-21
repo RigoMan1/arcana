@@ -44,6 +44,8 @@ export const useEnergyStore = defineStore('energy-store', {
           throw new Error(response.error);
         } else {
           this.basicEnergy += amount;
+
+          return true;
         }
       } catch (error) {
         console.error('Error updating energy:', error);

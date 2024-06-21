@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { useEnergyStore } from '@/stores/useEnergyStore';
-
-const { addBasicEnergy } = useEnergyStore();
+import { usePlayBilling } from '@/composables/usePlayBilling';
 
 const dialog = defineModel<boolean>();
 
@@ -12,13 +10,8 @@ interface Tier {
   image: string;
 }
 
-const tiers = ref([
-  {
-    name: 'Basic',
-    cost: 1.99,
-    yield: 400,
-    image: '/images/energy-basic.png',
-  },
+const tiers = ref<Tier[]>([
+  { name: 'Basic', cost: 1.99, yield: 400, image: '/images/energy-basic.png' },
   {
     name: 'Cosmic',
     cost: 3.99,
@@ -31,15 +24,57 @@ const tiers = ref([
     yield: 1400,
     image: '/images/energy-divine.png',
   },
-]) as Ref<Tier[]>;
+]);
 
-function handlePurchase(tier: Tier) {
-  addBasicEnergy(tier.yield);
+const successDialog = ref(false);
+const purchasedTier = ref<Tier | null>(null);
+function resolvePurchase(tier: Tier) {
   dialog.value = false;
+  successDialog.value = true;
+  purchasedTier.value = tier;
+}
+
+function closeSuccesDialog() {
+  successDialog.value = false;
+  setTimeout(() => {
+    purchasedTier.value = null;
+  }, 300);
+}
+
+const { isServiceAvailable, init, getSkus, skus, purchase } = usePlayBilling();
+
+onMounted(async () => {
+  await init();
+  if (isServiceAvailable.value) {
+    await getSkus();
+  }
+});
+
+async function handlePurchase(tier: Tier) {
+  const sku = skus.value.find(
+    (s) => s.title?.toLowerCase() === tier.name.toLowerCase()
+  );
+  if (sku) {
+    const res = await purchase(sku.itemId);
+    if (res) resolvePurchase(tier);
+  } else {
+    console.error('SKU not found for tier:', tier.name);
+  }
 }
 </script>
 
 <template>
+  <alert-dialog
+    v-model="successDialog"
+    color="success"
+    title="Energy Acquired"
+    icon="fluent:checkmark-starburst-24-filled"
+    primary-action-text="Continue"
+    @click:primary-action="closeSuccesDialog"
+  >
+    <span class="text-green-200">+ {{ purchasedTier?.yield }} Energy</span>
+  </alert-dialog>
+
   <v-overlay
     v-model="dialog"
     activator="#toggle-overlay"
