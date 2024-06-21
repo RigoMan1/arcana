@@ -62,6 +62,8 @@ export function usePlayBilling() {
     async purchase(itemId: string): Promise<boolean> {
       const sku = skus.value.find((s) => s.itemId === itemId);
 
+      console.log('skus 🏷️', skus.value);
+
       if (!sku) {
         throw new Error('SKU not found');
       }

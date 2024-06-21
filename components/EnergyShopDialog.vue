@@ -4,6 +4,7 @@ import { usePlayBilling } from '@/composables/usePlayBilling';
 const dialog = defineModel<boolean>();
 
 interface Tier {
+  sku_id?: string;
   name: string;
   cost: number;
   yield: number;
@@ -11,14 +12,22 @@ interface Tier {
 }
 
 const tiers = ref<Tier[]>([
-  { name: 'Basic', cost: 1.99, yield: 400, image: '/images/energy-basic.png' },
   {
+    sku_id: 'energy_basic',
+    name: 'Basic',
+    cost: 1.99,
+    yield: 400,
+    image: '/images/energy-basic.png',
+  },
+  {
+    sku_id: 'energy_cosmic',
     name: 'Cosmic',
     cost: 3.99,
     yield: 900,
     image: '/images/energy-cosmic.png',
   },
   {
+    sku_id: 'energy_divine',
     name: 'Divine',
     cost: 5.99,
     yield: 1400,
@@ -51,9 +60,7 @@ onMounted(async () => {
 });
 
 async function handlePurchase(tier: Tier) {
-  const sku = skus.value.find(
-    (s) => s.title?.toLowerCase() === tier.name.toLowerCase()
-  );
+  const sku = skus.value.find((s) => s.itemId === tier.sku_id);
   if (sku) {
     const res = await purchase(sku.itemId);
     if (res) resolvePurchase(tier);
