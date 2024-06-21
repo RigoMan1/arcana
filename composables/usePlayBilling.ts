@@ -34,15 +34,18 @@ export function usePlayBilling() {
 
     async init() {
       if (!('getDigitalGoodsService' in window)) {
+        console.error('Play Billing service is not available');
         this.service = null;
         return;
       }
       try {
         this.service = await window.getDigitalGoodsService(this.serviceURL);
         isServiceAvailable.value = this.service !== null;
+        console.log('service 🛒', this.service);
       } catch (error) {
         this.service = null;
         isServiceAvailable.value = false;
+        console.error('Play Billing service is not available', error);
       }
     },
 
