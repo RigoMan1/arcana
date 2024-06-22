@@ -62,12 +62,16 @@ const spinCarousel = () => {
 
 const first40Cards = computed(() => props.tarotDeck.slice(0, totalItems));
 
+const disableSpin = computed(
+  () => selectedCardIndex.value !== null || isSpinning.value
+);
+
 defineExpose({
   spinCarousel,
-  disableSpin: computed(
-    () => selectedCardIndex.value !== null || isSpinning.value
-  ),
+  disableSpin,
 });
+
+const { allCardsSelected } = storeToRefs(useTarotSpread());
 </script>
 
 <template>
@@ -148,6 +152,21 @@ defineExpose({
         </div>
       </transition>
     </div>
+
+    <transition name="fade-transition">
+      <p
+        v-show="!disableSpin && !allCardsSelected"
+        class="text-center text-sm animate-pulse opacity-75"
+      >
+        <span>Spin the wheel</span>
+        <Icon
+          name="fluent:arrow-rotate-clockwise-16-filled"
+          size="1rem"
+          class="mx-2"
+        />
+        <span>to draw a card</span>
+      </p>
+    </transition>
   </div>
 </template>
 

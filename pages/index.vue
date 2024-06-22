@@ -3,7 +3,7 @@ import { shuffleCards } from '@/utils/helpers';
 import TarotCards from '~/constants/tarot-card-data';
 
 const { $state: $fortuneReadingState } = useFortuneReading();
-const { activeSpread } = storeToRefs(useTarotSpread());
+const { activeSpread, allCardsSelected } = storeToRefs(useTarotSpread());
 
 const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
 
@@ -293,7 +293,7 @@ onBeforeRouteLeave((to, from, next) => {
         <!-- mid -->
         <arcana-button
           v-if="mode === 'read'"
-          :disabled="!tarotSpreadEl?.allCardsSelected || $state.isTyping"
+          :disabled="!allCardsSelected || $state.isTyping"
           @click="tarotSpreadEl?.handleButtonClick"
         >
           {{ tarotSpreadEl?.buttonLabel }}
@@ -311,7 +311,7 @@ onBeforeRouteLeave((to, from, next) => {
           :disabled="
             wheelEl?.disableSpin ||
             $readingState.fortuneInitiated ||
-            tarotSpreadEl?.allCardsSelected
+            allCardsSelected
           "
           @click="wheelEl?.spinCarousel"
         >

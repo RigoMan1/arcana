@@ -34,32 +34,11 @@ const handleCardDrop = (
   emit('remove-card', cardIndex);
 };
 
-const { activeSpread } = storeToRefs(useTarotSpread());
+const { activeSpread, selectedCards, someCardsSelected } =
+  storeToRefs(useTarotSpread());
 
-const createSpread = (spreadLabels: string[]) => {
-  const spread: Record<string, any | null> = {};
-  spreadLabels.forEach((label) => {
-    spread[label] = null;
-  });
-  return spread;
-};
-
-const selectedCards = ref(createSpread(activeSpread.value.labels));
-
-watch(
-  () => activeSpread.value,
-  () => {
-    selectedCards.value = createSpread(activeSpread.value.labels);
-  }
-);
-
-const someCardsSelected = computed(() => {
-  return Object.values(selectedCards.value).some((card) => card !== null);
-});
-
-const allCardsSelected = computed(() => {
-  return Object.values(selectedCards.value).every((card) => card !== null);
-});
+const { initSpread } = useTarotSpread();
+initSpread();
 
 const { $state, completeFortuneReading, initiateFortuneReading } =
   useFortuneReading();
@@ -149,8 +128,6 @@ const buttonLabel = computed(() => {
 });
 
 defineExpose({
-  someCardsSelected,
-  allCardsSelected,
   buttonLabel,
   handleButtonClick,
 });
