@@ -133,8 +133,6 @@ export function useDraggableCard(
   const targetRotation = ref<Vec2D>({ x: 0, y: 0 });
 
   const rotationSpeed = 0.1;
-  const positionAlpha = 0.1;
-  let easingFactor = 0.1; // New: Easing factor for more realism
 
   let animationFrameId: number | null = null;
 
@@ -251,8 +249,8 @@ export function useDraggableCard(
     targetPosition.value = { x, y };
 
     // target rotation
-    let diffX = targetPosition.value.x - position.value.x;
-    let diffY = targetPosition.value.y - position.value.y;
+    const diffX = targetPosition.value.x - position.value.x;
+    const diffY = targetPosition.value.y - position.value.y;
 
     const sensitivity = 3;
     let newTargetRx = diffY * sensitivity;

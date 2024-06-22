@@ -1,18 +1,10 @@
 <script setup lang="ts">
-const elementMap: Record<string, string> = {
-  cups: 'water',
-  pentacles: 'earth',
-  swords: 'air',
-  wands: 'fire',
-};
-
 const props = defineProps<{
   card: TarotCard;
   flip?: boolean;
 }>();
 
 const showOverlay = ref(false);
-// watch flip and show overlay for 1 second
 
 watch(
   () => props.flip,

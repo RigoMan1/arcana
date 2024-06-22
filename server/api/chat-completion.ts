@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 import { createError, defineEventHandler, readBody } from 'h3';
 import { defaultOptions } from '../../constants/options';
 import {
-  MODEL_GPT_TURBO_3_5_0125,
+  // MODEL_GPT_TURBO_3_5_0125,
   MODEL_GPT_4_OMNI,
   type IModel,
 } from '../../constants/models';
