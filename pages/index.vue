@@ -50,6 +50,10 @@ const { useBasicEnergy } = useEnergyStore();
 const { sendMessage, $state } = useChatgptStore();
 
 const lowEnergyAlert = ref(false);
+
+const userLanguage = ref<string>('es');
+onMounted(() => (userLanguage.value = navigator.language));
+
 async function handleSendMessage(
   prompt: string,
   userMessage: string,
@@ -67,6 +71,7 @@ async function handleSendMessage(
 
     <user-data>
       name: ${user.value?.user_metadata?.name || 'n/a'}
+      always respond in user prefered language: ${userLanguage.value}
     </user-data>
 
     <app-instructions>
