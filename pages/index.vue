@@ -58,7 +58,7 @@ async function handleSendMessage(
   fortuneTeller.clearCurrentMessage();
 
   try {
-    useBasicEnergy(messageCost);
+    await useBasicEnergy(messageCost);
 
     const readingContext = `
     tarot-spread:${activeSpread.value.name}

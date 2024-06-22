@@ -6,7 +6,7 @@ import { useEnergyStore } from '@/stores/useEnergyStore';
 const { $state } = useTarotSpread();
 const { activeSpread } = storeToRefs(useTarotSpread());
 
-const alert = ref(false);
+const lowEnergyAlert = ref(false);
 
 const WHOLISTIC_READING_ENERGY_COST = 50;
 const MIN_MESSAGE_COST = 10;
@@ -21,7 +21,7 @@ const spreadCost = computed(() => {
 const energyStore = useEnergyStore();
 function handleClick() {
   if (energyStore.basicEnergy < spreadCost.value) {
-    alert.value = true;
+    lowEnergyAlert.value = true;
   } else {
     navigateTo('/');
   }
@@ -30,6 +30,8 @@ function handleClick() {
 
 <template>
   <div class="px-4 pb-2 flex flex-col h-full space-y-2">
+    <insufficient-energy-dialog v-model="lowEnergyAlert" />
+
     <div>
       <h1 class="text-center">Choose your spread</h1>
     </div>
