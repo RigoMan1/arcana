@@ -53,18 +53,25 @@ export function usePlayBilling() {
       console.log('isServiceAvailable 🛒', isServiceAvailable.value);
       console.log('this.service 🛒', this.service);
       if (!isServiceAvailable.value || !this.service) {
-        throw new Error('Play Billing service is not available');
+          console.error('Play Billing service is not available');
+          throw new Error('Play Billing service is not available');
       }
-      const details = await this.service.getDetails(
-        this.lookups.map((sku) => sku.itemId)
-      );
-      console.log('details 🏷️', details);
-      skus.value = details.map((detail: any) => ({
-        ...detail,
-        ...this.lookups.find((s) => s.itemId === detail.itemId),
-      }));
-      console.log('skus 🏷️', skus.value);
-    },
+      try {
+          const skusRequest = this.lookups.map((sku) => sku.itemId);
+          console.log('Requesting SKUs:', skusRequest);
+          const details = await this.service.getDetails(skusRequest);
+          console.log('Received details:', details);
+          skus.value = details.map((detail: any) => ({
+              ...detail,
+              ...this.lookups.find((s) => s.itemId === detail.itemId),
+          }));
+          console.log('Updated SKUs:', skus.value);
+      } catch (error) {
+          console.error('Failed to fetch SKUs:', error);
+          throw error; // Rethrow after logging
+      }
+  }
+  
 
     async purchase(itemId: string): Promise<boolean> {
       const sku = skus.value.find((s) => s.itemId === itemId);
