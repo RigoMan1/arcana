@@ -1,24 +1,30 @@
 <script setup lang="ts">
 import { useAnonymousUser } from '~/composables/useAnonymousUser';
 
+const appLoaded = ref(false);
 const uuid = ref<string>('');
+
 const { getOrCreateAnonymousUser } = useAnonymousUser();
-
-onMounted(async () => {
-  uuid.value = await getOrCreateAnonymousUser();
-});
-
 const { initializeEnergy } = useEnergyStore();
 
 onMounted(async () => {
-  initializeEnergy();
+  try {
+    uuid.value = await getOrCreateAnonymousUser();
+    await initializeEnergy();
+    appLoaded.value = true;
+  } catch (error) {
+    console.error(error);
+  }
 });
 </script>
 
 <template>
   <nuxt-pwa-manifest />
 
-  <v-app class="overflow-hidden">
+  <v-app
+    v-if="appLoaded"
+    class="overflow-hidden"
+  >
     <arcana-navbar />
 
     <v-main>
