@@ -29,7 +29,7 @@ defineProps<{
           :key="trait.name"
           class="flex space-x-4 items-end p-2 w-full"
         >
-          <div class="object-cover bg-black p-2 w-[6rem]">
+          <div class="object-cover bg-black p-2 w-[6rem] rounded">
             <img
               :src="trait.image"
               alt="trait"
@@ -41,20 +41,24 @@ defineProps<{
           </div>
         </div>
 
-        <h3 class="mt-4">Ability</h3>
-        <div class="flex space-x-4 items-end p-2 w-full">
-          <div class="object-cover bg-black w-[6rem]">
-            <img
-              :src="fortuneTeller.ability.image"
-              alt="trait"
-            />
-          </div>
+        <template v-if="fortuneTeller.ability">
+          <h3 class="mt-4">Ability</h3>
+          <div class="flex space-x-4 items-end p-2 w-full">
+            <div class="object-cover bg-black w-[6rem]">
+              <img
+                :src="fortuneTeller.ability.image"
+                alt="trait"
+              />
+            </div>
 
-          <div>
-            <h3 class="mt-4 text-sm">{{ fortuneTeller.ability.name }}</h3>
-            <p class="mt-4 text-xs">{{ fortuneTeller.ability.description }}</p>
+            <div>
+              <h3 class="mt-4 text-sm">{{ fortuneTeller.ability.name }}</h3>
+              <p class="mt-4 text-xs">
+                {{ fortuneTeller.ability.description }}
+              </p>
+            </div>
           </div>
-        </div>
+        </template>
       </div>
     </div>
   </div>

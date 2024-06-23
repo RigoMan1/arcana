@@ -38,7 +38,6 @@ const cardReadingPrompt = (
 ) => {
   return `
 <priming>
-  - Response format should not be influenced by the previous responses.
   - ${fortuneTeller.description}
 </priming>
 
@@ -60,10 +59,6 @@ const cardReadingPrompt = (
 
 export const wholisticPrompt = (fortuneTeller: IFortuneTeller) => {
   return `
-<priming>
-  - Response format should not be influenced by the previous responses.
-</priming>
-
 <persona>
   ${personaPrompt(fortuneTeller)}
 </persona>
@@ -80,7 +75,8 @@ export const wholisticPrompt = (fortuneTeller: IFortuneTeller) => {
   - use bold text to emphasize key points or affirmations.
   - Use "#" for the Main Title (1-5 words) (come up with a title that captures the essence of the narrative).
   - follow the main title with a an intro paragraph that sets the stage for the reading.
-  - use the following mdc syntax to wrap each paragraph regarding the card interpretation:
+  - each card interpretation should be 2 paragraphs long
+  - use the following mdc syntax to wrap each card interpretation:
   ::card-response{image="<card-image>" title="<card-name>" reversed="<reversed>"}
   card interpretation content here
   ::
