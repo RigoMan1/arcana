@@ -98,14 +98,6 @@ async function handlePurchase(tier: Tier) {
     close-on-back
     class="flex items-center justify-center"
   >
-    <arcana-button>
-      <button @click="getSkus">Get Skus</button>
-    </arcana-button>
-
-    <div class="bg-zinc-900 p-1 rounded my-1">
-      isServiceAvailable: {{ isServiceAvailable }}
-    </div>
-
     <div
       class="p-8 rounded-xl text-center relative bg-accent h-full flex flex-col"
     >
