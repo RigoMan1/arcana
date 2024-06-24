@@ -15,3 +15,6 @@
 
 /* Forms */
 @import '../components-form/VInput/VInput.css';
+
+/* Directives */
+@import '../directives/ripple/VRipple.css';

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Ripple as vRipple } from '~/modules/sui/runtime/directives/ripple';
+
 defineProps<{
   text?: string;
   disabled?: boolean;
@@ -12,6 +14,7 @@ defineProps<{
 
 <template>
   <button
+    v-ripple
     class="arcana-button arcana-button--color-primary"
     :class="[
       {

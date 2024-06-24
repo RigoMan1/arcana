@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Ripple as vRipple } from '~/modules/sui/runtime/directives/ripple';
 import { usePlayBilling } from '@/composables/usePlayBilling';
 
 const dialog = defineModel<boolean>();
@@ -101,15 +102,18 @@ async function handlePurchase(tier: Tier) {
     <div
       class="p-8 rounded-xl text-center relative bg-accent h-full flex flex-col"
     >
-      <button
-        class="absolute top-4 right-4 text-white"
+      <arcana-button
+        class="absolute top-2 right-2 text-white"
+        variant="text"
+        size="medium"
+        icon
         @click="dialog = false"
       >
         <icon
           name="fluent:dismiss-20-filled"
           size="1.5rem"
         />
-      </button>
+      </arcana-button>
 
       <h2 class="text-2xl font-bold text-white">Energy Shop</h2>
       <p class="text-white mt-2">
@@ -120,6 +124,7 @@ async function handlePurchase(tier: Tier) {
         <div
           v-for="tier in tiers"
           :key="tier.name"
+          v-ripple
           class="arcana-card text-center flex items-center justify-around p-6 w-full"
           @click="handlePurchase(tier)"
         >
