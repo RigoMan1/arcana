@@ -1,50 +1,45 @@
 import { defineStore } from 'pinia';
 const { chatCompletion } = useChatgpt();
 
-export const useChatgptStore = defineStore('chatgpt-store', () => {
-  const chatTree = ref([]) as Ref<IMessage[]>;
+export const useChatgptStore = defineStore('chatgpt-store', {
+  state: () => ({
+    chatTree: [] as IMessage[],
+    isTyping: false,
+  }),
+  actions: {
+    setIsTyping(value: boolean) {
+      this.isTyping = value;
+    },
+    async sendMessage(prompt: ITarotPrompt) {
+      if (prompt.user.trim() === '') return; // Avoid sending empty messages
+      try {
+        this.setIsTyping(true);
 
-  const isTyping = ref(false);
+        const userMessage: IMessage = {
+          role: 'user',
+          content: prompt.user,
+        };
 
-  function setIsTyping(value: boolean) {
-    isTyping.value = value;
-  }
+        const systemMessage: IMessage = {
+          role: 'system',
+          content: prompt.system,
+        };
 
-  async function sendMessage(prompt: ITarotPrompt) {
-    if (prompt.user.trim() === '') return; // Avoid sending empty messages
-    try {
-      setIsTyping(true);
+        this.chatTree.push(userMessage);
 
-      const userMessage: IMessage = {
-        role: 'user',
-        content: prompt.user,
-      };
+        const responseMessage = (await chatCompletion([
+          systemMessage,
+          ...this.chatTree,
+        ])) as IMessage;
 
-      const systemMessage: IMessage = {
-        role: 'system',
-        content: prompt.system,
-      };
+        this.chatTree.push(responseMessage);
 
-      chatTree.value.push(userMessage);
-
-      const responseMessage = (await chatCompletion([
-        systemMessage,
-        ...chatTree.value,
-      ])) as IMessage;
-
-      chatTree.value.push(responseMessage);
-
-      setIsTyping(false);
-      return responseMessage;
-    } catch (error) {
-      setIsTyping(false);
-      alert(error);
-    }
-  }
-
-  return {
-    isTyping,
-    sendMessage,
-    chatTree,
-  };
+        this.setIsTyping(false);
+        return responseMessage;
+      } catch (error) {
+        this.setIsTyping(false);
+        alert(error);
+      }
+    },
+  },
 });

@@ -36,9 +36,8 @@ const handleCardDrop = (
 
 const { activeSpread, selectedCards, someCardsSelected } =
   storeToRefs(useTarotSpread());
-
-const { initSpread } = useTarotSpread();
-initSpread();
+const tarotSpread = useTarotSpread();
+tarotSpread.initSpread();
 
 const { $state, completeFortuneReading, initiateFortuneReading } =
   useFortuneReading();
@@ -130,6 +129,10 @@ const buttonLabel = computed(() => {
 defineExpose({
   buttonLabel,
   handleButtonClick,
+});
+
+onUnmounted(() => {
+  tarotSpread.$reset();
 });
 </script>
 

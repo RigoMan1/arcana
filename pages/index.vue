@@ -2,7 +2,7 @@
 import { shuffleCards } from '@/utils/helpers';
 import TarotCards from '~/constants/tarot-card-data';
 
-const { $state: $fortuneReadingState } = useFortuneReading();
+const fortuneReadingStore = useFortuneReading();
 const { activeSpread, allCardsSelected } = storeToRefs(useTarotSpread());
 
 const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
@@ -45,9 +45,9 @@ import {
 } from '@/constants/systemPrompts';
 import type { RouteLocationNormalized } from 'vue-router';
 
-const fortuneTeller = useFortuneTeller();
 const { useBasicEnergy } = useEnergyStore();
-const { sendMessage, $state } = useChatgptStore();
+const fortuneTeller = useFortuneTeller();
+const chatgpt = useChatgptStore();
 
 const lowEnergyAlert = ref(false);
 
@@ -84,7 +84,7 @@ async function handleSendMessage(
     </app-instructions>
     `;
 
-    return await sendMessage({
+    return await chatgpt.sendMessage({
       system: prompt + readingContext,
       user: userMessage,
     });
@@ -204,7 +204,9 @@ onBeforeRouteLeave((to, from, next) => {
     quitReadingAlert.targetRoute = to;
     next(false);
   } else {
-    fortuneTeller.clearCurrentMessage();
+    chatgpt.$reset();
+    fortuneTeller.$reset();
+    fortuneReadingStore.$reset();
     next();
   }
 });
@@ -243,7 +245,7 @@ onBeforeRouteLeave((to, from, next) => {
       </transition>
 
       <div
-        v-if="$state.isTyping"
+        v-if="chatgpt.isTyping"
         class="fortune-oracle"
       >
         <span class="animate-pulse">
@@ -277,7 +279,7 @@ onBeforeRouteLeave((to, from, next) => {
         <arcana-button
           v-if="mode === 'read'"
           class="!px-2"
-          :disabled="$fortuneReadingState.cardDrawn"
+          :disabled="fortuneReadingStore.cardDrawn"
           @click="toggleMode('chat')"
         >
           <Icon
@@ -298,7 +300,7 @@ onBeforeRouteLeave((to, from, next) => {
         <!-- mid -->
         <arcana-button
           v-if="mode === 'read'"
-          :disabled="!allCardsSelected || $state.isTyping"
+          :disabled="!allCardsSelected || chatgpt.isTyping"
           @click="tarotSpreadEl?.handleButtonClick"
         >
           {{ tarotSpreadEl?.buttonLabel }}
