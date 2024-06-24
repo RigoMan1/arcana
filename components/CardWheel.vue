@@ -6,12 +6,11 @@ const { $state: $fortuneReadingState } = useFortuneReading();
 
 const circle = ref() as Ref<HTMLDivElement | null>;
 
-// const selectedCardIndex = ref<number | null>(null);
 const selectedCardIndex = defineModel<number | null>();
 
 const cumulativeRotation = ref(0); // Track cumulative rotation across spins
 
-const totalItems = 40; // Assuming 40 items, adjust as needed
+const totalItems = props.tarotDeck.length;
 const removedIndexes = ref<number[]>([]); // Track removed indexes to avoid duplicates
 const isSpinning = ref(false);
 const spinCarousel = () => {
@@ -34,8 +33,12 @@ const spinCarousel = () => {
   // Update cumulative rotation
   cumulativeRotation.value += totalRotation;
 
+  // Generate a random duration between 500 and 1500 ms
+  const randomDuration = Math.floor(Math.random() * 750) + 1000;
+
   // Apply the rotation visually
-  circle.value.style.setProperty(
+  circle.value.style.transitionDuration = `${randomDuration}ms`;
+  circle.value?.style.setProperty(
     '--rotation',
     `${cumulativeRotation.value}deg`
   );
@@ -57,10 +60,8 @@ const spinCarousel = () => {
     selectedCardIndex.value = computedTargetIndex;
     removedIndexes.value.push(computedTargetIndex);
     isSpinning.value = false;
-  }, 2000); // Adjust timeout to match your CSS transition
+  }, randomDuration); // Adjust timeout to match your CSS transition
 };
-
-const first40Cards = computed(() => props.tarotDeck.slice(0, totalItems));
 
 const disableSpin = computed(
   () => selectedCardIndex.value !== null || isSpinning.value
@@ -83,7 +84,7 @@ const { allCardsSelected } = storeToRefs(useTarotSpread());
         :style="`--items: ${totalItems}`"
       >
         <template
-          v-for="(card, cardIndex) in first40Cards"
+          v-for="(card, cardIndex) in props.tarotDeck"
           :key="cardIndex"
         >
           <div
@@ -94,7 +95,7 @@ const { allCardsSelected } = storeToRefs(useTarotSpread());
               'z-50 scale-150 -translate-y-4': selectedCardIndex === cardIndex,
             }"
           >
-            <span>{{ cardIndex + 1 }}</span>
+            <span class="text-[10px]">{{ cardIndex + 1 }}</span>
             <tarot-card :card="card" />
           </div>
         </template>
@@ -147,7 +148,7 @@ const { allCardsSelected } = storeToRefs(useTarotSpread());
         >
           <draggable-tarot-card
             class="active-card"
-            :card="first40Cards[selectedCardIndex]"
+            :card="props.tarotDeck[selectedCardIndex]"
           />
         </div>
       </transition>
