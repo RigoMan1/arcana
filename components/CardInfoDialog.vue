@@ -2,8 +2,8 @@
 const chatgpt = useChatgptStore();
 
 const props = defineProps<{
-  label: string;
   card?: TarotCard;
+  positionData: ITarotSpreadObjectPosition;
   disableDeepReading?: boolean;
   isRevealed?: boolean;
 }>();
@@ -20,7 +20,7 @@ const elementsMap = new Map([
 ]);
 
 function getDeepReading() {
-  emit('get-deep-reading', props.label, props.card as TarotCard);
+  emit('get-deep-reading', props.positionData, props.card as TarotCard);
   dialog.value = false;
 }
 </script>
@@ -30,14 +30,15 @@ function getDeepReading() {
     v-model="dialog"
     transition="dialog-transition"
     width="90%"
+    max-height="90%"
     close-on-back
     class="flex items-center justify-center"
   >
     <div
-      class="p-8 rounded-xl text-center relative bg-[#232429] h-full flex flex-col"
+      class="rounded-xl text-center relative bg-[#232429] h-full flex flex-col overflow-auto"
     >
       <arcana-button
-        class="absolute top-2 right-2 text-white"
+        class="absolute top-2 right-2 text-white z-10"
         variant="text"
         size="medium"
         icon
@@ -49,15 +50,15 @@ function getDeepReading() {
         />
       </arcana-button>
 
-      <div class="sticky top-0 w-full">
-        <h2 class="text-center mb-4">{{ label }}</h2>
-        <hr class="border-primary-700 w-full" />
-      </div>
+      <div class="sticky top-0 w-full bg-[#232429] pt-4 px-4">
+        <h2 class="text-center mb-4">{{ positionData.name }}</h2>
 
-      <p class="text-sm mt-4">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut
-        ultricies nunc. Nullam nec nunc nec libero ultricies.
-      </p>
+        <p class="text-sm">
+          {{ positionData.description }}
+        </p>
+
+        <hr class="border-primary-700 w-full mt-4" />
+      </div>
 
       <div class="flex flex-col items-center justify-center mt-4">
         <div class="flex space-x-4">
@@ -125,12 +126,13 @@ function getDeepReading() {
 
         <!-- chosen card -->
         <template v-if="card">
-          <span class="mt-4 mb-2">
+          <span class="my-2">
             {{ card.name }}
           </span>
           <tarot-card
             :card="card"
             :flip="isRevealed"
+            :show-overlay="true"
             class="aspect-[11/19] w-1/3"
           />
         </template>
@@ -139,7 +141,7 @@ function getDeepReading() {
         <template v-else>
           <span class="mt-4 mb-2"> no card selected </span>
           <div
-            class="object-cover bg-zinc-900 p-2 rounded aspect-[11/19] mt-4 w-1/3 flex items-center
+            class="object-cover bg-zinc-900 p-2 rounded aspect-[11/19] mt-2 w-1/3 flex items-center
               justify-center"
           >
             <span v-show="!card">❔</span>
@@ -147,9 +149,11 @@ function getDeepReading() {
         </template>
 
         <arcana-button
-          class="mt-4"
+          class="mt-6 mb-4"
           size="small"
-          :disabled="!card || disableDeepReading || chatgpt.isTyping"
+          :disabled="
+            !card || disableDeepReading || chatgpt.isTyping || !isRevealed
+          "
           @click="getDeepReading()"
         >
           <span> get deep reading </span>

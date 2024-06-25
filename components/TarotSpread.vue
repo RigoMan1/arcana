@@ -42,13 +42,13 @@ const { $state, completeFortuneReading, initiateFortuneReading } =
 const revealedCardsSet = ref(new Set());
 
 function revealSpreadComponent() {
-  currentSpreadComponent.value.labels.forEach((label) => {
+  currentSpreadComponent.value.positions.forEach((label) => {
     revealedCardsSet.value.add(label);
   });
 }
 
 watch(revealedCardsSet.value, (newSet) => {
-  if (newSet.size === activeSpread.value.labels.length) {
+  if (newSet.size === activeSpread.value.positions.length) {
     completeFortuneReading();
   }
 });
@@ -77,7 +77,7 @@ function handleButtonClick() {
   reversed: ${card.reversed}
   `;
 
-  const allCardsData = currentSpreadComponent.value.labels.map((label) => {
+  const allCardsData = currentSpreadComponent.value.positions.map((label) => {
     return formatCard(label, selectedCards.value[label]!);
   });
 
@@ -112,9 +112,18 @@ function getInDepthReading(label: string, card: TarotCard) {
 }
 
 const spreadSlotInfoDialog = ref(false);
-const activeSlotData = ref({ label: '', card: null as TarotCard | null });
-function openSpreadSlotInfoDialog(label: string, card: TarotCard) {
-  activeSlotData.value = { label, card };
+const activeSlotData = ref({
+  position: {} as ITarotSpreadObjectPosition,
+  card: null as TarotCard | null,
+});
+function openSpreadSlotInfoDialog(
+  position: ITarotSpreadObjectPosition,
+  card: TarotCard
+) {
+  activeSlotData.value = {
+    position,
+    card,
+  };
   spreadSlotInfoDialog.value = true;
 }
 
@@ -145,10 +154,10 @@ onUnmounted(() => {
   <div class="w-full px-4 flex flex-col justify-around h-full">
     <card-info-dialog
       v-model="spreadSlotInfoDialog"
-      :label="activeSlotData.label"
+      :position-data="activeSlotData.position"
       :card="activeSlotData?.card"
-      :disable-deep-reading="inDepthReadCards.has(activeSlotData.label)"
-      :is-revealed="revealedCardsSet.has(activeSlotData.label)"
+      :disable-deep-reading="inDepthReadCards.has(activeSlotData.position.name)"
+      :is-revealed="revealedCardsSet.has(activeSlotData.position.name)"
       @get-deep-reading="getInDepthReading"
     />
     <div
@@ -156,18 +165,18 @@ onUnmounted(() => {
       :class="activeSpread.id"
     >
       <drop-zone
-        v-for="label in activeSpread.labels"
-        :key="label"
-        :label="label"
-        :zone-id="`zone-${label}-${uniqueZoneId}`"
+        v-for="p in activeSpread.positions"
+        :key="p.name"
+        :label="p.name"
+        :zone-id="`zone-${p.name}-${uniqueZoneId}`"
         class="w-[60%] min-w-[3rem]"
-        :class="label"
+        :class="p.name"
         @drop="handleCardDrop"
       >
         <tarot-card
-          v-if="selectedCards[label]"
-          :card="selectedCards[label]!"
-          :flip="revealedCardsSet.has(label)"
+          v-if="selectedCards[p.name]"
+          :card="selectedCards[p.name]!"
+          :flip="revealedCardsSet.has(p.name)"
         />
 
         <arcana-button
@@ -175,7 +184,7 @@ onUnmounted(() => {
           size="small"
           icon
           style="z-index: 100"
-          @click="openSpreadSlotInfoDialog(label, selectedCards[label]!)"
+          @click="openSpreadSlotInfoDialog(p, selectedCards[p.name]!)"
         >
           <icon
             class="text-xl"

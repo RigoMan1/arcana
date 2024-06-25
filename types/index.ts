@@ -19,16 +19,20 @@ interface ITarotPrompt {
   system: string;
 }
 
+interface ITarotSpreadObjectPosition {
+  name: string;
+  description: string;
+}
 interface ITarotSpreadObject {
   id: string;
   name: string;
   description: string;
   focusAreas: string[];
   estimatedTime: string;
-  labels: string[];
+  positions: ITarotSpreadObjectPosition[];
   components: {
     name: string;
-    labels: string[];
+    positions: string[];
   }[];
 }
 

@@ -2,9 +2,10 @@
 const props = defineProps<{
   card: TarotCard;
   flip?: boolean;
+  showOverlay?: boolean;
 }>();
 
-const showOverlay = ref(false);
+const showOverlay = ref(props.showOverlay || false);
 
 watch(
   () => props.flip,
@@ -30,7 +31,10 @@ watch(
         'opacity-0': !showOverlay,
       }"
     >
-      <svg v-if="showOverlay">
+      <svg
+        v-if="showOverlay"
+        viewBox="0 0 100 100"
+      >
         <filter id="mysticalGlow">
           <feTurbulence
             type="fractalNoise"

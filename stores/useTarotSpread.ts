@@ -14,9 +14,9 @@ export const useTarotSpread = defineStore('spread-select-store', {
   actions: {
     initSpread() {
       const spread: Record<string, any | null> = {};
-      const spreadLabels = this.activeSpread.labels;
-      spreadLabels.forEach((label) => {
-        spread[label] = null;
+      const spreadLabels = this.activeSpread.positions;
+      spreadLabels.forEach((pos) => {
+        spread[pos.name] = null;
       });
 
       this.selectedCards = spread;

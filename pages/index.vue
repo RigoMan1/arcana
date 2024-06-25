@@ -67,7 +67,7 @@ async function handleSendMessage(
     const readingContext = `
     tarot-spread:${activeSpread.value.name}
     tarot-spread-description:${activeSpread.value.description}
-    card-count:${activeSpread.value.labels.length}
+    card-count:${activeSpread.value.positions.length}
 
     <user-data>
       name: ${user.value?.user_metadata?.name || 'n/a'}

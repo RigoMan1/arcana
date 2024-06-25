@@ -19,10 +19,10 @@ defineProps({
       :class="activeSpread.id"
     >
       <div
-        v-for="label in activeSpread.labels"
-        :key="label"
+        v-for="label in activeSpread.positions"
+        :key="label.name"
         class="aspect-[11/19] rounded bg-secondary-500 w-[32px] border border-secondary-300"
-        :class="[label]"
+        :class="[label.name]"
       ></div>
     </div>
 
