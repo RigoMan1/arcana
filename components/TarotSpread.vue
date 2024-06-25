@@ -16,10 +16,7 @@ const emit = defineEmits([
   'reveal-spread-component',
 ]);
 
-const handleCardDrop = (
-  cardName: string,
-  spreadLabel: ThreeCardClusterSlots
-) => {
+const handleCardDrop = (cardName: string, spreadLabel: string) => {
   // 1. find card in deck
   const cardIndex = props.tarotDeck.findIndex(
     (card) => card?.name === cardName
@@ -99,6 +96,7 @@ function handleButtonClick() {
 
 const inDepthReadCards = ref(new Set());
 function getInDepthReading(label: string, card: TarotCard) {
+  console.log('getting in-depth reading for:', label, card);
   inDepthReadCards.value.add(label);
 
   const formattedCard = `
@@ -111,6 +109,13 @@ function getInDepthReading(label: string, card: TarotCard) {
     positionPrompts[label],
     activeSpread.value
   );
+}
+
+const spreadSlotInfoDialog = ref(false);
+const activeSlotData = ref({ label: '', card: null as TarotCard | null });
+function openSpreadSlotInfoDialog(label: string, card: TarotCard) {
+  activeSlotData.value = { label, card };
+  spreadSlotInfoDialog.value = true;
 }
 
 const buttonLabel = computed(() => {
@@ -138,6 +143,14 @@ onUnmounted(() => {
 
 <template>
   <div class="w-full px-4 flex flex-col justify-around h-full">
+    <card-info-dialog
+      v-model="spreadSlotInfoDialog"
+      :label="activeSlotData.label"
+      :card="activeSlotData?.card"
+      :disable-deep-reading="inDepthReadCards.has(activeSlotData.label)"
+      :is-revealed="revealedCardsSet.has(activeSlotData.label)"
+      @get-deep-reading="getInDepthReading"
+    />
     <div
       class="spread-grid gap-6 sm:gap-8"
       :class="activeSpread.id"
@@ -158,12 +171,11 @@ onUnmounted(() => {
         />
 
         <arcana-button
-          v-if="revealedCardsSet.has(label)"
-          :disabled="inDepthReadCards.has(label)"
           class="absolute -bottom-6 right-1/2 !translate-x-1/2"
           size="small"
           icon
-          @click="getInDepthReading(label, selectedCards[label]!)"
+          style="z-index: 100"
+          @click="openSpreadSlotInfoDialog(label, selectedCards[label]!)"
         >
           <icon
             class="text-xl"

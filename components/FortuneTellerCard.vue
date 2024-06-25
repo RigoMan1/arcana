@@ -44,7 +44,7 @@ defineProps<{
         <template v-if="fortuneTeller.ability">
           <h3 class="mt-4">Ability</h3>
           <div class="flex space-x-4 items-end p-2 w-full">
-            <div class="object-cover bg-black w-[6rem]">
+            <div class="object-cover bg-black w-[6rem] rounded">
               <img
                 :src="fortuneTeller.ability.image"
                 alt="trait"
