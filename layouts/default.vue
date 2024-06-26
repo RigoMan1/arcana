@@ -2,14 +2,13 @@
 import { useAnonymousUser } from '~/composables/useAnonymousUser';
 
 const appLoaded = ref(false);
-const uuid = ref<string>('');
 
 const { getOrCreateAnonymousUser } = useAnonymousUser();
 const { initializeEnergy } = useEnergyStore();
 
 onMounted(async () => {
   try {
-    uuid.value = await getOrCreateAnonymousUser();
+    await getOrCreateAnonymousUser();
     await initializeEnergy();
     appLoaded.value = true;
   } catch (error) {

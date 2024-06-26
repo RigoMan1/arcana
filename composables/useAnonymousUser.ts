@@ -1,109 +1,54 @@
-interface UUIDEntry {
-  id: string;
-  value: string;
-}
-
 export const useAnonymousUser = () => {
   const supabase = useSupabaseClient();
-  const dbName = 'arcana-db';
-  const storeName = 'uuid-store';
-  const dbVersion = 1;
-  const dbRef = ref<IDBDatabase | null>(null);
-
-  const openDB = (): Promise<IDBDatabase> => {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open(dbName, dbVersion);
-
-      request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
-        const db = (event.target as IDBOpenDBRequest).result;
-        if (!db.objectStoreNames.contains(storeName)) {
-          db.createObjectStore(storeName, { keyPath: 'id' });
-        }
-      };
-
-      request.onsuccess = (event: Event) => {
-        dbRef.value = (event.target as IDBOpenDBRequest).result;
-        resolve(dbRef.value);
-      };
-
-      request.onerror = (event: Event) => {
-        reject((event.target as IDBOpenDBRequest).error);
-      };
-    });
-  };
-
-  const getUUID = (): Promise<string | null> => {
-    return new Promise((resolve, reject) => {
-      if (!dbRef.value) {
-        openDB().then(() => getUUID().then(resolve).catch(reject));
-        return;
-      }
-
-      const transaction = dbRef.value.transaction([storeName], 'readonly');
-      const store = transaction.objectStore(storeName);
-      const request = store.get('uuid');
-
-      request.onsuccess = (event: Event) => {
-        const result = (event.target as IDBRequest).result as
-          | UUIDEntry
-          | undefined;
-        resolve(result ? result.value : null);
-      };
-
-      request.onerror = (event: Event) => {
-        reject((event.target as IDBRequest).error);
-      };
-    });
-  };
-
-  const setUUID = (uuid: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      if (!dbRef.value) {
-        openDB().then(() => setUUID(uuid).then(resolve).catch(reject));
-        return;
-      }
-
-      const transaction = dbRef.value.transaction([storeName], 'readwrite');
-      const store = transaction.objectStore(storeName);
-      const request = store.put({ id: 'uuid', value: uuid });
-
-      request.onsuccess = () => {
-        resolve();
-      };
-
-      request.onerror = (event: Event) => {
-        reject((event.target as IDBRequest).error);
-      };
-    });
-  };
+  const user = useSupabaseUser();
 
   const createAnonymousUser = async (): Promise<string | null> => {
     const { data, error } = await supabase.auth.signInAnonymously();
-
-    // initialize user profile and energy balance
-    (await $fetch('/api/user-init', {
-      method: 'POST',
-      body: { userId: data.user?.id },
-    })) as any;
-
     if (error) {
       console.error('Error creating anonymous user:', error);
       return null;
     }
+
+    // Initialize user profile and energy balance
+    await $fetch('/api/user-init', {
+      method: 'POST',
+      body: { userId: data.user?.id },
+    });
+
     return data.user?.id ?? null;
   };
 
-  const getOrCreateAnonymousUser = async (): Promise<string> => {
-    let uuid = await getUUID();
-    if (!uuid) {
-      const anonymousUserId = await createAnonymousUser();
-      if (!anonymousUserId) {
-        throw new Error('Unable to create or retrieve anonymous user ID');
+  const verifyUserExists = async (userId: string): Promise<boolean> => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles') // Assuming 'profiles' is your user table
+        .select('user_id')
+        .eq('user_id', userId)
+        .single();
+
+      if (error || !data) {
+        console.error('User does not exist or error fetching user:', error);
+        return false;
       }
-      uuid = anonymousUserId;
-      await setUUID(uuid);
+      return true;
+    } catch (error) {
+      console.error('Error verifying user existence:', error);
+      return false;
     }
-    return uuid;
+  };
+
+  const getOrCreateAnonymousUser = async () => {
+    if (user.value) {
+      const exists = await verifyUserExists(user.value.id);
+      if (!exists) {
+        console.log('User cached but not in database, creating new user.');
+        return await createAnonymousUser();
+      }
+      console.log('User already exists:', user.value);
+    } else {
+      console.log('No user cached, creating new anonymous user.');
+      return await createAnonymousUser();
+    }
   };
 
   return { getOrCreateAnonymousUser };
