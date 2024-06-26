@@ -42,7 +42,6 @@ interface IFortuneTeller {
   description: string;
   prompt: string;
   traits: IFortuneTellerTrait[];
-  ability: IFortuneTellerAbility;
 }
 
 interface IFortuneTellerTrait {
@@ -50,10 +49,4 @@ interface IFortuneTellerTrait {
   description: string;
   image: string;
   prompt: string;
-}
-
-interface IFortuneTellerAbility {
-  name: string;
-  description: string;
-  image: string;
 }

@@ -1,40 +1,3 @@
-export const fortuneTellerAbilities = [
-  {
-    name: 'Arcana Reveal',
-    description:
-      'Displays the arcana type while the cards are in face down position.',
-    image: '/images/abilities/ability-arcana-reveal.png',
-  },
-  {
-    name: 'Suit Reveal',
-    description:
-      'Displays the suit of the card while the cards are in face down position.',
-    image: '/images/abilities/ability-suit-reveal.png',
-  },
-  {
-    name: 'Reversed Draw',
-    description: 'Allows cards to be drawn in an upside-down position.',
-    image: '/images/abilities/ability-reversed-draw.png',
-  },
-  {
-    name: 'Elemental Whisper',
-    description:
-      'Shows the elemental association of a card before revealing it.',
-    image: '/images/abilities/ability-elemental-whisper.png',
-  },
-  {
-    name: 'Dual Draw',
-    description:
-      'Draws an additional "Guiding Card" for a dual reading of a single tarot spread slot.',
-    image: '/images/abilities/ability-dual-draw.png',
-  },
-  {
-    name: 'Fate Glimpse',
-    description: 'Reveals the cards for 1 spin.',
-    image: '/images/abilities/ability-fate-glimpse.png',
-  },
-] as IFortuneTellerAbility[];
-
 export const personalityTraits = [
   {
     name: 'Empathetic',
@@ -150,44 +113,6 @@ export const personalityTraits = [
   },
 ] as IFortuneTellerTrait[];
 
-export const intellectLevels = [
-  {
-    level: 1,
-    description: 'Basic understanding, provides simple and clear insights.',
-    image: '/images/intellect/intellect-level-1.png',
-    prompt: `
-      - Set the intention to provide simple and clear insights.'
-      - Encourage the reader to understand basic meanings and connections.'
-      - Use straightforward and easy-to-understand language.'
-      - Infuse your reading with clarity and simplicity.'
-    `,
-  },
-  {
-    level: 2,
-    description:
-      'Intermediate understanding, provides detailed and thoughtful insights.',
-    image: '/images/intellect/intellect-level-2.png',
-    prompt: `
-      - Set the intention to provide detailed and thoughtful insights.'
-      - Encourage the reader to explore deeper meanings and connections.'
-      - Use clear and articulate language to explain your insights.'
-      - Infuse your reading with thoughtfulness and depth.'
-    `,
-  },
-  {
-    level: 3,
-    description:
-      'Advanced understanding, provides profound and comprehensive insights.',
-    image: '/images/intellect/intellect-level-3.png',
-    prompt: `
-      - Set the intention to provide profound and comprehensive insights.'
-      - Encourage the reader to delve into complex meanings and connections.'
-      - Use sophisticated and nuanced language to convey your insights.'
-      - Infuse your reading with intellectual depth and complexity.'
-    `,
-  },
-];
-
 export const fortuneTellers = [
   {
     name: 'Celeste',
@@ -199,7 +124,6 @@ export const fortuneTellers = [
       personalityTraits.find((t) => t.name === 'Empathetic'),
       personalityTraits.find((t) => t.name === 'Serene'),
     ],
-    ability: fortuneTellerAbilities[0],
   },
   {
     name: 'Ezra',
@@ -211,7 +135,6 @@ export const fortuneTellers = [
       personalityTraits.find((t) => t.name === 'Wise'),
       personalityTraits.find((t) => t.name === 'Mysterious'),
     ],
-    ability: fortuneTellerAbilities[1],
   },
   {
     name: 'Ophelia',
@@ -223,7 +146,6 @@ export const fortuneTellers = [
       personalityTraits.find((t) => t.name === 'Pragmatic'),
       personalityTraits.find((t) => t.name === 'Stern'),
     ],
-    ability: fortuneTellerAbilities[2],
   },
   {
     name: 'Mako',
