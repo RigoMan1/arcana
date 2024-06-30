@@ -273,30 +273,43 @@ onBeforeRouteLeave((to, from, next) => {
 
     <div class="p-4">
       <div
-        class="flex items-center space-x-2 w-full max-w-sm mx-auto justify-between"
+        class="flex items-end space-x-2 w-full max-w-sm mx-auto justify-between"
       >
         <!-- left -->
-        <arcana-button
+        <div
           v-if="mode === 'read'"
-          class="!px-2"
-          :disabled="fortuneReadingStore.cardDrawn"
-          @click="toggleMode('chat')"
+          class="flex flex-col items-center"
         >
-          <Icon
-            name="fluent:chat-bubbles-question-16-filled"
-            size="2em"
-          />
-        </arcana-button>
-        <arcana-button
+          <span class="text-xs mb-1 opacity-70"> Chat </span>
+          <arcana-button
+            v-if="mode === 'read'"
+            class="!px-2"
+            :disabled="fortuneReadingStore.cardDrawn"
+            @click="toggleMode('chat')"
+          >
+            <Icon
+              name="fluent:chat-bubbles-question-16-filled"
+              size="2em"
+            />
+          </arcana-button>
+        </div>
+
+        <div
           v-if="mode === 'chat'"
-          class="!px-2"
-          @click="toggleMode('read')"
+          class="flex flex-col items-center"
         >
-          <Icon
-            name="fluent:playing-cards-20-filled"
-            size="2em"
-          />
-        </arcana-button>
+          <span class="text-xs mb-1 opacity-70"> Cards </span>
+          <arcana-button
+            class="!px-2 relative"
+            @click="toggleMode('read')"
+          >
+            <Icon
+              name="fluent:playing-cards-20-filled"
+              size="2em"
+            />
+          </arcana-button>
+        </div>
+
         <!-- mid -->
         <arcana-button
           v-if="mode === 'read'"
@@ -308,25 +321,29 @@ onBeforeRouteLeave((to, from, next) => {
 
         <arcana-text-area
           v-if="mode === 'chat'"
-          class="self-center"
           @message="handleTextMessage"
         />
         <!-- right -->
-        <arcana-button
+        <div
           v-if="mode === 'read'"
-          class="!px-2"
-          :disabled="
-            wheelEl?.disableSpin ||
-            $readingState.fortuneInitiated ||
-            allCardsSelected
-          "
-          @click="wheelEl?.spinCarousel"
+          class="flex flex-col items-center"
         >
-          <Icon
-            name="fluent:arrow-rotate-clockwise-16-filled"
-            size="2em"
-          />
-        </arcana-button>
+          <span class="text-xs opacity-70 mb-1"> Spin </span>
+          <arcana-button
+            class="!px-2"
+            :disabled="
+              wheelEl?.disableSpin ||
+              $readingState.fortuneInitiated ||
+              allCardsSelected
+            "
+            @click="wheelEl?.spinCarousel"
+          >
+            <Icon
+              name="fluent:arrow-rotate-clockwise-16-filled"
+              size="2em"
+            />
+          </arcana-button>
+        </div>
       </div>
     </div>
   </div>

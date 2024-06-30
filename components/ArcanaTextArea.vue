@@ -33,7 +33,7 @@ function handleEnterKey(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="flex items-center py-1 px-2 rounded-lg bg-zinc-900 w-full">
+  <div class="flex items-center py-1 px-2 rounded-lg bg-primary-800 w-full">
     <textarea
       id="chat"
       ref="inputEl"
@@ -41,7 +41,7 @@ function handleEnterKey(event: KeyboardEvent) {
       rows="1"
       class="block p-2.5 w-full text-sm text-primary-900 bg-white rounded-lg
         border-primary-300 focus:ring-secondary-500 focus:border-secondary-500
-        dark:bg-primary-900 dark:border-primary-600 dark:placeholder-primary-400
+        dark:bg-primary-800 dark:border-primary-600 dark:placeholder-primary-400
         dark:text-white dark:focus:ring-secondary-500 dark:focus:border-secondary-500
         resize-none outline-none max-h-40 overflow-y-auto"
       placeholder="Your message..."
