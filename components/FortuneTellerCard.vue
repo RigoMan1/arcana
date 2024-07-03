@@ -22,24 +22,28 @@ defineProps<{
         <hr class="border-primary-700 w-full" />
       </div>
 
-      <div class="rounded-lg">
-        <template
-          v-for="trait in fortuneTeller.traits"
-          :key="trait.name"
-        >
-          <h3 class="mt-4 text-sm pl-3">{{ trait.name }}</h3>
-          <div class="flex space-x-4 items-end p-2 w-full">
-            <div class="object-cover bg-black p-2 w-[6rem] rounded">
-              <img
-                :src="trait.image"
-                alt="trait"
-              />
-            </div>
-            <div>
-              <p class="mt-4 text-xs">{{ trait.description }}</p>
-            </div>
+      <div
+        v-for="trait in fortuneTeller.traits"
+        :key="trait.name"
+        class="mt-4 p-2"
+      >
+        <div class="flex space-x-4 w-full">
+          <div class="object-cover w-[4rem] flex-shrink-0" />
+          <h3 class="text-xs text-zinc-100">{{ trait.name }}</h3>
+        </div>
+        <div class="flex space-x-4 w-full mt-2">
+          <div
+            class="object-cover bg-black p-2 w-[4rem] h-[4rem] rounded flex items-center
+              justify-center flex-shrink-0"
+          >
+            <img
+              :src="trait.image"
+              alt="trait"
+              class="w-full h-full object-contain"
+            />
           </div>
-        </template>
+          <p class="text-zinc-300 text-sm">{{ trait.description }}</p>
+        </div>
       </div>
     </div>
   </div>

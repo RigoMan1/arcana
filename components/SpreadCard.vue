@@ -37,27 +37,40 @@ defineProps({
 
       <div class="rounded-lg p-4 overflow-auto h-full flex flex-col">
         <div
-          class="flex justify-between items-start space-x-4 max-w-sm mx-auto w-full"
+          class="flex justify-between items-start space-x-4 max-w-sm mx-auto w-full
+            bg-zinc-900/40 p-3 rounded-xl"
         >
-          <div>
+          <div class="text-center">
             <h6 class="text-xs">Est. Cost</h6>
 
-            <p class="text-xs truncate text-blue-300">
-              {{ spreadCost }} Energy
-            </p>
+            <img
+              class="w-3.5 rounded-full inline mr-1"
+              src="/images/energy-basic.png"
+              alt=""
+            />
+
+            <span class="text-xs truncate text-blue-300 font-sans">
+              {{ spreadCost }}
+            </span>
           </div>
 
-          <div>
+          <div class="text-center">
             <h6 class="text-xs">Est. Time</h6>
 
-            <p class="text-xs truncate">
+            <Icon
+              name="fluent:clock-20-filled"
+              size="1rem"
+              class="mr-1"
+            />
+
+            <span class="text-xs truncate font-sans capitalize">
               {{ activeSpread?.estimatedTime }}
-            </p>
+            </span>
           </div>
         </div>
 
         <div class="overflow-auto flex flex-col h-full mt-4">
-          <p class="text-center text-sm max-w-xl">
+          <p class="text-center text-zinc-300 text-sm max-w-xl">
             {{ activeSpread?.description }}
           </p>
         </div>
