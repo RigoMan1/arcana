@@ -11,7 +11,7 @@ if (!data.value) {
 </script>
 
 <template>
-  <div class="h-[100%] overflow-y-auto">
-    <ContentDoc class="container prose-sm mb-16 mt-8 lg:mb-0 privacy-policy" />
+  <div class="h-[100%] overflow-y-auto px-8 py-16">
+    <ContentDoc class="container prose-sm lg:mb-0 privacy-policy" />
   </div>
 </template>

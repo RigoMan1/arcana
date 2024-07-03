@@ -5,37 +5,50 @@ last_updated: 2024/6/30
 
 # Privacy Policy
 
-Last updated: June 30, 2024
+**Last updated: June 30, 2024**
 
-This privacy policy outlines how RigoTech Studios uses and protects any information that you provide while using the Arcana - Tarot app. We are committed to ensuring that your privacy is protected. Should we ask you to provide certain information by which you can be identified when using this app, you can be assured that it will only be used in accordance with this privacy statement.
+Welcome to the Arcana - Tarot app by RigoTech Studios. This document serves as our commitment to your privacy. It outlines our practices regarding the collection, use, and sharing of your information through your use of the app. This policy is accessible from our Google Play listing and within the app itself, ensuring compliance with Google Play’s User Data policy.
 
-## What We Collect
+## What We Collect and Why
 
-We may collect the following information:
+- **Name**: To personalize your experience.
+- **Email Address** (optional): For account management and communication if you opt to create an account.
 
-- **Name**: To personalize your experience within the app.
-- **Email Address** (optional): Required only if you choose to create a permanent account for further communications and account management.
+## How We Use Your Information
 
-## Usage of Information
+Your information is essential for:
 
-We use the information we collect for the following purposes:
+- Enhancing your user experience by personalizing the app.
+- Communication purposes, if you have provided contact details.
+- Internal record keeping and service improvement.
 
-- Internal record keeping.
-- To improve our products and services.
+## How We Protect Your Information
 
-## Security
-
-We are committed to ensuring that your information is secure. To prevent unauthorized access or disclosure, we have implemented suitable physical, electronic, and managerial procedures to safeguard and secure the information we collect online.
+To protect your data from unauthorized access, we implement robust physical, electronic, and managerial safeguards.
 
 ## Data Retention and Deletion
 
-Your information is stored in a secure database. If you choose to delete your account, your data will also be deleted permanently from our database.
+Your data is securely stored and will remain in our systems until you decide to delete your account. Upon deletion, all your data is permanently removed from our databases.
 
-## Contact Us
+## Contact Information
 
-If you have any questions about this privacy policy, please contact us at:
-Email: rigodev01@gmail.com
+For any inquiries regarding our privacy practices, please contact us at:
+
+- Email: [rigodev01@gmail.com](mailto:rigodev01@gmail.com)
 
 ## Changes to This Privacy Policy
 
-RigoTech Studios may change this policy from time to time by updating this page. We encourage you to check this page periodically to ensure that you are aware of any changes.
+We may update this policy to reflect changes to our information practices. Any changes will be posted on this page, and we encourage you to review our policy periodically to stay informed of updates.
+
+## Detailed Data Use Disclosure
+
+We disclose the following regarding our data handling:
+
+- **Types of Collected Data**: As specified under "What We Collect and Why."
+- **Data Sharing**: We do not share your personal or sensitive data with third parties unless required by law.
+- **Data Security**: Detailed above under "How We Protect Your Information."
+- **Data Retention and Deletion**: Detailed above.
+
+By using the Arcana - Tarot app, you agree to the collection and use of information in accordance with this policy. If you do not agree to the policy, please do not use the app.
+
+This policy is easily readable in any standard browser, is non-editable, and available publicly via a direct link on our app’s Google Play listing.

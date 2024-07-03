@@ -24,30 +24,33 @@ const menuItems = [
 
 <template>
   <div>
-    <arcana-button
-      size="small"
-      variant="text"
-      icon
-      class="relative"
+    <v-overlay
+      class="v-menu"
+      absolute
+      :open-delay="300"
+      :close-delay="250"
+      :close-on-content-click="false"
+      location-strategy="connected"
+      :scrim="false"
+      scroll-strategy="reposition"
+      transition="scale-transition"
+      width="200"
     >
-      <Icon
-        name="fluent:settings-20-filled"
-        size="2em"
-      />
-
-      <v-overlay
-        class="v-menu"
-        absolute
-        activator="parent"
-        :open-delay="300"
-        :close-delay="250"
-        :close-on-content-click="false"
-        location-strategy="connected"
-        :scrim="false"
-        scroll-strategy="reposition"
-        transition="scale-transition"
-        width="200"
-      >
+      <template #activator="{ props: activatorProps }">
+        <arcana-button
+          v-bind="activatorProps"
+          size="small"
+          variant="text"
+          icon
+          class="relative"
+        >
+          <Icon
+            name="fluent:settings-20-filled"
+            size="2em"
+          />
+        </arcana-button>
+      </template>
+      <template #default>
         <div class="arcana-card-alt">
           <!-- your signed in as anon user id -->
           <div v-if="user?.is_anonymous">
@@ -93,11 +96,20 @@ const menuItems = [
                 />
                 <span class="ml-4"> {{ item.label }} </span>
               </button>
+
+              <div class="flex justify-end">
+                <nuxt-link
+                  class="text-xs text-zinc-200"
+                  to="/privacy-policy"
+                >
+                  Privacy Policy
+                </nuxt-link>
+              </div>
             </template>
           </div>
         </div>
-      </v-overlay>
-    </arcana-button>
+      </template>
+    </v-overlay>
   </div>
 </template>
 
