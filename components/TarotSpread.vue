@@ -181,7 +181,7 @@ onUnmounted(() => {
 
         <arcana-button
           class="absolute -bottom-6 right-1/2 !translate-x-1/2"
-          size="small"
+          size="sm"
           icon
           style="z-index: 100"
           @click="openSpreadSlotInfoDialog(p, selectedCards[p.name]!)"

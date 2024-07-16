@@ -1,40 +1,26 @@
 <script setup lang="ts">
-import { Ripple as vRipple } from '~/modules/sui/runtime/directives/ripple';
+import { makeVButtonProps } from '~/modules/sui/runtime/components/VButton/VButtonMeta';
 
-defineProps<{
-  text?: string;
-  disabled?: boolean;
-  size?: 'small' | 'medium' | 'large';
-  variant?: 'text';
-  loading?: boolean;
-  loadingText?: string;
-  icon?: boolean;
-}>();
+defineProps({
+  loadingText: {
+    type: String,
+    default: 'Loading...',
+  },
+  ...makeVButtonProps(),
+});
 </script>
 
 <template>
-  <button
-    v-ripple
-    class="arcana-button arcana-button--color-primary"
-    :class="[
-      {
-        'arcana-button--state-disabled': disabled,
-        'arcana-button--variant-text': variant === 'text',
-        'arcana-button--icon': icon,
-      },
-      `arcana-button--size-${size || 'medium'}`,
-    ]"
-    :tabindex="disabled ? -1 : 0"
-  >
+  <v-button v-bind="$props">
     <slot>
-      <span v-if="loading">{{ loadingText || 'Loading...' }}</span>
+      <span v-if="loading">{{ loadingText }}</span>
       <span v-else>{{ text }}</span>
     </slot>
-  </button>
+  </v-button>
 </template>
 
 <style scoped>
-.arcana-button {
+.v-button {
   @apply text-white border-2 border-secondary-500;
   @apply rounded-lg;
   @apply whitespace-nowrap cursor-pointer;
@@ -46,23 +32,30 @@ defineProps<{
 }
 
 /* sizes */
-.arcana-button--size-small {
-  @apply px-3 text-xs;
-  height: 2rem;
+.v-button--size-xs {
+  @apply px-2 text-[10px];
+  height: 1.5rem;
+  --v-button-scale: 1.5rem;
 }
 
-.arcana-button--size-medium {
+.v-button--size-sm {
+  @apply px-3 text-xs;
+  height: 2rem;
+  --v-button-scale: 2rem;
+}
+
+.v-button--size-base {
   @apply px-4 text-sm;
   height: 3rem;
 }
 
-.arcana-button--size-large {
+.v-button--size-lg {
   @apply px-7 text-lg;
   height: 3.75rem;
 }
 
 /* color */
-.arcana-button--color-primary:not(.arcana-button--state-disabled) {
+.v-button--color-primary:not(.v-button--state-disabled) {
   background: linear-gradient(
     86deg,
     theme('colors.secondary.400') 15.29%,
@@ -71,28 +64,23 @@ defineProps<{
 }
 
 /* states */
-.arcana-button--state-disabled {
+.v-button--state-disabled {
   @apply !bg-primary-800 border-primary-700  text-white/30;
   pointer-events: none;
 }
 
-.arcana-button:hover {
+.v-button:hover {
   background-position: 0 0;
   box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
 }
 
-.arcana-button:active {
+.v-button:active {
   transform: scale(0.98); /* Slightly shrink when clicked */
 }
 
 /* variants */
-.arcana-button--variant-text {
+.v-button--variant-text {
   background: transparent !important;
   border-color: transparent !important;
-}
-
-.arcana-button--icon {
-  aspect-ratio: 1;
-  padding: 0;
 }
 </style>

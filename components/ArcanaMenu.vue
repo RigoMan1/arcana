@@ -39,7 +39,7 @@ const menuItems = [
       <template #activator="{ props: activatorProps }">
         <arcana-button
           v-bind="activatorProps"
-          size="small"
+          size="sm"
           variant="text"
           icon
           class="relative"

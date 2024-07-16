@@ -70,9 +70,9 @@ const orbColor = computed(() => {
 
       <!-- buy energy icon -->
       <arcana-button
-        size="small"
+        size="sm"
         icon
-        class="items-center !rounded-full !h-8"
+        class="!rounded-full"
       >
         <Icon
           name="fluent:add-20-filled"

@@ -150,7 +150,7 @@ function getDeepReading() {
 
         <arcana-button
           class="mt-6 mb-4"
-          size="small"
+          size="sm"
           :disabled="
             !card || disableDeepReading || chatgpt.isTyping || !isRevealed
           "
