@@ -24,15 +24,7 @@ const menuItems = [
 
 <template>
   <div>
-    <v-overlay
-      class="v-menu"
-      absolute
-      :open-delay="300"
-      :close-delay="250"
-      :close-on-content-click="false"
-      location-strategy="connected"
-      :scrim="false"
-      scroll-strategy="reposition"
+    <v-menu
       transition="scale-transition"
       width="200"
     >
@@ -109,7 +101,7 @@ const menuItems = [
           </div>
         </div>
       </template>
-    </v-overlay>
+    </v-menu>
   </div>
 </template>
 
