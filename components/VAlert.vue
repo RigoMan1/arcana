@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useColor } from '@/modules/sui/runtime/composables/color';
-import type { ColorProps } from '@/modules/sui/runtime/composables/color';
+import { useColor } from '@/modules/sui/runtime/composables/bem/color';
+import type { ColorProps } from '@/modules/sui/runtime/composables/bem/color';
 
 defineOptions({ name: 'VAlert' });
 

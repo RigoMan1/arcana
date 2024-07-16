@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Color } from '@/modules/sui/runtime/composables/color';
+import type { Color } from '@/modules/sui/runtime/composables/bem/color';
 
 withDefaults(
   defineProps<{

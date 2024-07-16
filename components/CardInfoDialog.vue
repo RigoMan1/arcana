@@ -40,7 +40,6 @@ function getDeepReading() {
       <arcana-button
         class="absolute top-2 right-2 text-white z-10"
         variant="text"
-        size="medium"
         icon
         @click="dialog = false"
       >
