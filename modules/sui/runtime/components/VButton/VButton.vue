@@ -18,7 +18,7 @@ const { colorClasses } = useColor(props);
 const isLink = computed(() => !!(props.href || props.to));
 
 const VNuxtLink = resolveComponent('NuxtLink');
-const component = computed(() => (isLink ? VNuxtLink : props.tag));
+const component = computed(() => (isLink.value ? VNuxtLink : props.tag));
 
 const slots = useSlots();
 const hasPrepend = computed(() => !!(props.prependIcon || slots.prepend));
