@@ -126,4 +126,3 @@ const { hasContent } = useLazy(props, groupItem.isSelected);
     </div>
   </MaybeTransition>
 </template>
-./VSlidesMeta

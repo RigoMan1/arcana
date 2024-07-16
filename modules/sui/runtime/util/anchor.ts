@@ -1,5 +1,5 @@
 // Utilities
-import { includes } from '../util/helpers';
+import { includes } from './helpers';
 
 const block = ['top', 'bottom'] as const;
 const inline = ['start', 'end', 'left', 'right'] as const;

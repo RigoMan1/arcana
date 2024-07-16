@@ -15,19 +15,6 @@ import type { ComputedRef } from 'vue';
 import type { GroupProvide } from '../../composables/group';
 import type { TouchHandlers } from '../../directives/touch';
 
-export type VSlidesSlots = {
-  group: GroupProvide;
-  prev: () => void;
-  next: () => void;
-  canMoveBack: ComputedRef<boolean>;
-  canMoveForward: ComputedRef<boolean>;
-};
-
-defineSlots<{
-  default: VSlidesSlots;
-  'external-content': VSlidesSlots;
-}>();
-
 defineOptions({ name: 'VSlides' });
 const props = defineProps(makeVSlidesProps());
 defineEmits<{ 'update:modelValue': [boolean] }>();
@@ -123,6 +110,16 @@ const nextProps = {
   class: `v-slides__${isRtlReverse.value ? 'left' : 'right'}`,
   onClick: next,
 };
+
+export interface VSlideControls {
+  prev: () => void;
+  next: () => void;
+  canMoveBack: ComputedRef<boolean>;
+  canMoveForward: ComputedRef<boolean>;
+  group: GroupProvide;
+}
+
+defineExpose({ prev, next, canMoveBack, canMoveForward, group });
 </script>
 
 <template>
@@ -143,13 +140,4 @@ const nextProps = {
       />
     </div>
   </component>
-
-  <slot
-    name="external-content"
-    :group="group"
-    :prev="prevProps.onClick"
-    :next="nextProps.onClick"
-    :can-move-back="canMoveBack"
-    :can-move-forward="canMoveForward"
-  />
 </template>

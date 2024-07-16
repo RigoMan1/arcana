@@ -1,85 +1,33 @@
 // Composables
-import { useProxiedModel } from './proxiedModel';
+import { useProxiedModel } from '../proxiedModel';
 
 // Utilities
+import { getIds, getItemIndex, getValues } from './utils';
 import {
   computed,
-  inject,
   onBeforeUnmount,
   onMounted,
   provide,
   reactive,
   toRef,
   unref,
-  watch,
+  onUpdated,
 } from 'vue';
 import {
-  deepEqual,
   findChildrenWithProvide,
   getCurrentInstance,
-  getUid,
   propsFactory,
   wrapInArray,
-} from '../util';
+} from '../../util';
 
 // Types
 import type {
   ComponentInternalInstance,
-  ComputedRef,
-  ExtractPropTypes,
   InjectionKey,
   PropType,
-  Ref,
   UnwrapRef,
 } from 'vue';
-import type { EventProp } from '../util';
-
-export interface GroupItem {
-  id: number;
-  value: Ref<unknown>;
-  disabled: Ref<boolean | undefined>;
-}
-
-export interface GroupProps {
-  disabled: boolean;
-  modelValue: unknown;
-  multiple?: boolean;
-  mandatory?: boolean | 'force' | undefined;
-  max?: number | undefined;
-  selectedClass: string | undefined;
-  'onUpdate:modelValue': EventProp<[unknown]> | undefined;
-}
-
-export interface GroupProvide {
-  register: (item: GroupItem, cmp: ComponentInternalInstance) => void;
-  unregister: (id: number) => void;
-  select: (id: number, value: boolean) => void;
-  selected: Ref<Readonly<number[]>>;
-  isSelected: (id: number) => boolean;
-  prev: () => void;
-  next: () => void;
-  selectedClass: Ref<string | undefined>;
-  items: ComputedRef<
-    {
-      id: number;
-      value: unknown;
-      disabled: boolean | undefined;
-    }[]
-  >;
-  disabled: Ref<boolean | undefined>;
-  getItemIndex: (value: unknown) => number;
-}
-
-export interface GroupItemProvide {
-  id: number;
-  isSelected: Ref<boolean>;
-  toggle: () => void;
-  select: (value: boolean) => void;
-  selectedClass: Ref<(string | undefined)[] | false>;
-  value: Ref<unknown>;
-  disabled: Ref<boolean | undefined>;
-  group: GroupProvide;
-}
+import type { GroupItem, GroupProps, GroupProvide } from '.';
 
 export const makeGroupProps = propsFactory(
   {
@@ -95,109 +43,6 @@ export const makeGroupProps = propsFactory(
   },
   'group'
 );
-
-export const makeGroupItemProps = propsFactory(
-  {
-    value: null,
-    disabled: Boolean,
-    selectedClass: String,
-  },
-  'group-item'
-);
-
-// export interface GroupItemProps
-//   extends ExtractPropTypes<ReturnType<typeof makeGroupItemProps>> {
-//   'onGroup:selected': EventProp<[{ value: boolean }]> | undefined;
-// }
-
-export interface GroupItemProps {
-  value?: unknown;
-  disabled?: boolean;
-  selectedClass?: string | undefined;
-  'onGroup:selected'?: EventProp<[{ value: boolean }]> | undefined;
-}
-
-// Composables
-export function useGroupItem(
-  props: GroupItemProps,
-  injectKey: InjectionKey<GroupProvide>,
-  required?: true
-): GroupItemProvide;
-export function useGroupItem(
-  props: GroupItemProps,
-  injectKey: InjectionKey<GroupProvide>,
-  required: false
-): GroupItemProvide | null;
-export function useGroupItem(
-  props: GroupItemProps,
-  injectKey: InjectionKey<GroupProvide>,
-  required = true
-): GroupItemProvide | null {
-  const vm = getCurrentInstance('useGroupItem');
-
-  if (!vm) {
-    throw new Error(
-      '[Vuetify] useGroupItem composable must be used inside a component setup function'
-    );
-  }
-
-  const id = getUid();
-
-  provide(Symbol.for(`${injectKey.description}:id`), id);
-
-  const group = inject(injectKey, null);
-
-  if (!group) {
-    if (!required) return group;
-
-    throw new Error(
-      `[Vuetify] Could not find useGroup injection with symbol ${injectKey.description}`
-    );
-  }
-
-  const value = toRef(props, 'value');
-  const disabled = computed(() => !!(group.disabled.value || props.disabled));
-
-  group.register(
-    {
-      id,
-      value,
-      disabled,
-    },
-    vm
-  );
-
-  onBeforeUnmount(() => {
-    group.unregister(id);
-  });
-
-  const isSelected = computed(() => {
-    return group.isSelected(id);
-  });
-
-  const selectedClass = computed(
-    () => isSelected.value && [group.selectedClass.value, props.selectedClass]
-  );
-
-  watch(
-    isSelected,
-    (value) => {
-      vm.emit('group:selected', { value });
-    },
-    { flush: 'sync' }
-  );
-
-  return {
-    id,
-    isSelected,
-    toggle: () => group.select(id, !isSelected.value),
-    select: (value: boolean) => group.select(id, value),
-    selectedClass,
-    value,
-    disabled,
-    group,
-  };
-}
 
 export function useGroup(
   props: GroupProps,
@@ -233,6 +78,7 @@ export function useGroup(
 
     if (unref(unwrapped.value) == null) {
       unwrapped.value = index;
+      unwrapped.useIndexAsValue = true;
     }
 
     if (index > -1) {
@@ -269,6 +115,15 @@ export function useGroup(
 
   onBeforeUnmount(() => {
     isUnmounted = true;
+  });
+
+  onUpdated(() => {
+    // update the items that use the index as the value.
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].useIndexAsValue) {
+        items[i].value = i;
+      }
+    }
   });
 
   function select(id: number, value?: boolean) {
@@ -350,43 +205,4 @@ export function useGroup(
   provide(injectKey, state);
 
   return state;
-}
-
-function getItemIndex(items: UnwrapRef<GroupItem[]>, value: unknown) {
-  const ids = getIds(items, [value]);
-
-  if (!ids.length) return -1;
-
-  return items.findIndex((item) => item.id === ids[0]);
-}
-
-function getIds(items: UnwrapRef<GroupItem[]>, modelValue: any[]) {
-  const ids: number[] = [];
-
-  modelValue.forEach((value) => {
-    const item = items.find((item) => deepEqual(value, item.value));
-    const itemByIndex = items[value];
-
-    if (item?.value != null) {
-      ids.push(item.id);
-    } else if (itemByIndex != null) {
-      ids.push(itemByIndex.id);
-    }
-  });
-
-  return ids;
-}
-
-function getValues(items: UnwrapRef<GroupItem[]>, ids: any[]) {
-  const values: unknown[] = [];
-
-  ids.forEach((id) => {
-    const itemIndex = items.findIndex((item) => item.id === id);
-    if (~itemIndex) {
-      const item = items[itemIndex];
-      values.push(item.value != null ? item.value : itemIndex);
-    }
-  });
-
-  return values;
 }

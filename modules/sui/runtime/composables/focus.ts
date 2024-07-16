@@ -1,5 +1,5 @@
 // Composables
-import { useProxiedModel } from '../composables/proxiedModel';
+import { useProxiedModel } from './proxiedModel';
 
 // Utilities
 import { computed } from 'vue';

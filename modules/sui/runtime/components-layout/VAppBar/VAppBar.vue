@@ -127,9 +127,4 @@ const { layoutItemStyles } = useLayoutItem({
     />
   </component>
 </template>
-
-<style>
-:root {
-  --v-app-bar-height: v-bind(heightCalculated);
-}
-</style>
+../composables/layout../composables/scroll

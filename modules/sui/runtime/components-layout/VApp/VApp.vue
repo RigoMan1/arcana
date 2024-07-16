@@ -24,3 +24,4 @@ const { layoutClasses, layoutRef } = createLayout(props);
     </div>
   </component>
 </template>
+../composables/layout

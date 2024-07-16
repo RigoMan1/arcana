@@ -33,26 +33,17 @@ export function useProxiedModel<
     ? computed(() => {
         void props[prop];
         return !!(
-          (Object.prototype.hasOwnProperty.call(vm.vnode.props, prop) ||
-            Object.prototype.hasOwnProperty.call(vm.vnode.props, kebabProp)) &&
-          (Object.prototype.hasOwnProperty.call(
-            vm.vnode.props,
-            `onUpdate:${prop}`
-          ) ||
-            Object.prototype.hasOwnProperty.call(
-              vm.vnode.props,
-              `onUpdate:${kebabProp}`
-            ))
+          (vm.vnode.props?.hasOwnProperty(prop) ||
+            vm.vnode.props?.hasOwnProperty(kebabProp)) &&
+          (vm.vnode.props?.hasOwnProperty(`onUpdate:${prop}`) ||
+            vm.vnode.props?.hasOwnProperty(`onUpdate:${kebabProp}`))
         );
       })
     : computed(() => {
         void props[prop];
         return !!(
-          Object.prototype.hasOwnProperty.call(vm.vnode.props, prop) &&
-          Object.prototype.hasOwnProperty.call(
-            vm.vnode.props,
-            `onUpdate:${prop}`
-          )
+          vm.vnode.props?.hasOwnProperty(prop) &&
+          vm.vnode.props?.hasOwnProperty(`onUpdate:${prop}`)
         );
       });
 

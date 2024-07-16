@@ -1,6 +1,6 @@
 // Utilities
 import { getCurrentInstance as _getCurrentInstance } from "vue";
-import { toKebabCase } from "../util/helpers";
+import { toKebabCase } from "./helpers";
 
 // Types
 import type { ComponentInternalInstance } from "vue";

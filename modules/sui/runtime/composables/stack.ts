@@ -18,7 +18,7 @@ import { getCurrentInstance } from '../util';
 // Types
 import type { InjectionKey, Ref } from 'vue';
 
-const StackSymbol: InjectionKey<StackProvide> = Symbol.for('vuetify:stack');
+const StackSymbol: InjectionKey<StackProvide> = Symbol.for('sui:stack');
 
 interface StackProvide {
   activeChildren: Set<number>;

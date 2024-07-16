@@ -2,6 +2,7 @@
 import { useTarotSpread } from '~/stores/useTarotSpread';
 import { spreads } from '@/constants/tarot-spreads';
 import { useEnergyStore } from '@/stores/useEnergyStore';
+import type { VSlideControls } from '~/modules/sui/runtime/components/VSlides/VSlides.vue';
 
 const { $state } = useTarotSpread();
 const { activeSpread } = storeToRefs(useTarotSpread());
@@ -26,6 +27,8 @@ function handleClick() {
     navigateTo('/');
   }
 }
+
+const slides = ref<VSlideControls>();
 </script>
 
 <template>
@@ -37,6 +40,7 @@ function handleClick() {
     </div>
 
     <v-slides
+      ref="slides"
       v-model="$state.activeSpreadIndex"
       class="flex flex-col h-full"
     >
@@ -47,45 +51,44 @@ function handleClick() {
       >
         <spread-card :spread-cost="spreadCost" />
       </v-slide>
-      <!-- controls -->
-      <template #external-content="{ prev, next, canMoveBack, canMoveForward }">
-        <!-- prev/next -->
-        <div class="flex w-full fixed bottom-[65%] px-2 left-0 right-0">
-          <arcana-button
-            :disabled="!canMoveBack"
-            variant="text"
-            class="!px-4"
-            @click="prev"
-          >
-            <Icon
-              name="fluent:chevron-left-16-filled"
-              size="1.5em"
-            />
-          </arcana-button>
-
-          <div class="flex-1" />
-
-          <arcana-button
-            :disabled="!canMoveForward"
-            variant="text"
-            @click="next"
-          >
-            <Icon
-              name="fluent:chevron-right-16-filled"
-              size="1.5em"
-            />
-          </arcana-button>
-        </div>
-        <!-- select button-->
-        <div class="flex justify-center">
-          <nuxt-link @click="handleClick">
-            <arcana-button
-              class="!px-12"
-              text="Select"
-            />
-          </nuxt-link>
-        </div>
-      </template>
     </v-slides>
+
+    <!-- controls -->
+    <!-- prev/next -->
+    <div class="flex w-full fixed bottom-[65%] px-2 left-0 right-0">
+      <arcana-button
+        :disabled="!slides?.canMoveBack"
+        variant="text"
+        class="!px-4"
+        @click="slides?.prev"
+      >
+        <Icon
+          name="fluent:chevron-left-16-filled"
+          size="1.5em"
+        />
+      </arcana-button>
+
+      <div class="flex-1" />
+
+      <arcana-button
+        :disabled="!slides?.canMoveForward"
+        variant="text"
+        @click="slides?.next"
+      >
+        <Icon
+          name="fluent:chevron-right-16-filled"
+          size="1.5em"
+        />
+      </arcana-button>
+    </div>
+    <!-- select button-->
+    <div class="flex justify-center">
+      <nuxt-link @click="handleClick">
+        <arcana-button
+          class="!px-12"
+          text="Select"
+        />
+      </nuxt-link>
+    </div>
   </div>
 </template>

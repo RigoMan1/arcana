@@ -1,5 +1,5 @@
 :root {
-  --v-ripple-opacity: 0.15;
+  --v-ripple-opacity: 0.25;
 }
 
 .v-ripple__container {
@@ -35,9 +35,7 @@
 }
 
 .v-ripple__animation--in {
-  transition:
-    transform 0.25s var(--v-ease-out),
-    opacity 0.1s var(--v-ease-out);
+  transition: transform 0.25s var(--v-ease-out), opacity 0.1s var(--v-ease-out);
   opacity: calc(var(--v-ripple-opacity) * var(--v-theme-overlay-multiplier));
 }
 

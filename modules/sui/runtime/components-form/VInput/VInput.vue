@@ -12,7 +12,6 @@ import { getUid, wrapInArray } from '../../util';
 
 // Types
 import type { ComputedRef } from 'vue';
-// import type { VMessageSlot } from './VMessages.vue';
 
 export interface VInputSlot {
   id: ComputedRef<string>;
@@ -50,7 +49,6 @@ const errorMessages = computed(() => {
 const messages = computed(() => {
   if (hasErrors.value) {
     return errorMessages.value;
-    // } else if (props.hint && (props.persistentHint || props.focused)) {
   } else if (props.hint && props.persistentHint) {
     return props.hint;
   } else {
@@ -95,11 +93,6 @@ const hasDetails = computed(
             {{ props.label }}
           </slot>
         </label>
-
-        <slot
-          name="labelHint"
-          :v-bind="slotProps"
-        />
       </div>
     </template>
 

@@ -89,3 +89,35 @@ export function createCssTransition(
     },
   });
 }
+
+export function createJavascriptTransition(
+  name: string,
+  functions: Record<string, any>,
+  mode = 'in-out'
+) {
+  return defineComponent({
+    name,
+
+    props: {
+      mode: {
+        type: String as PropType<'in-out' | 'out-in' | 'default'>,
+        default: mode,
+      },
+      disabled: Boolean,
+    },
+
+    setup(props, { slots }) {
+      return () => {
+        return h(
+          Transition,
+          {
+            name: props.disabled ? '' : name,
+            css: !props.disabled,
+            ...(props.disabled ? {} : functions),
+          },
+          slots.default
+        );
+      };
+    },
+  });
+}

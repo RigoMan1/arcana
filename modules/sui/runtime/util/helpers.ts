@@ -10,7 +10,7 @@ import {
   unref,
   watchEffect,
 } from 'vue';
-import { IN_BROWSER } from '../util/globals';
+import { IN_BROWSER } from './globals';
 
 // Types
 import type {

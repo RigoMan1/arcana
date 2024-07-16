@@ -29,3 +29,4 @@ const { ssrBootStyles } = useSsrBoot();
     <slot v-else />
   </component>
 </template>
+../composables/layout

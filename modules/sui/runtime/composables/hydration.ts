@@ -1,5 +1,5 @@
 // Composables
-import { useDisplay } from '../composables/display';
+import { useDisplay } from './display';
 
 // Utilities
 import { onMounted, shallowRef } from 'vue';

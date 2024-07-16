@@ -5,7 +5,7 @@ export const spreads: ITarotSpreadObject[] = [
     description:
       'A simple and quick spread to get insight into a specific question or situation. Ideal for quick insights into past, present, and future influences.',
     focusAreas: ['Love', 'Career', 'Personal Growth'],
-    estimatedTime: '5-10 minutes',
+    estimatedTime: '1-5 minutes',
     positions: [
       { name: 'past', description: 'Influences from the past affecting the current situation.' },
       { name: 'present', description: 'Current state or situation.' },
@@ -24,7 +24,7 @@ export const spreads: ITarotSpreadObject[] = [
     description:
       'A detailed spread that provides a comprehensive overview of a situation, revealing hidden influences and possible outcomes. Comprehensive spread for in-depth analysis of complex situations',
     focusAreas: ['Life Path', 'Challenges', 'Future Outlook'],
-    estimatedTime: '20-30 minutes',
+    estimatedTime: '1-10 minutes',
     positions: [
       { name: 'past', description: 'Influences from the past.' },
       { name: 'present', description: 'Current situation.' },
@@ -58,7 +58,7 @@ export const spreads: ITarotSpreadObject[] = [
     description:
       'A spread focused on romantic relationships, providing insights into the dynamics and future of a partnership.',
     focusAreas: ['Love', 'Relationships', 'Emotional Connections'],
-    estimatedTime: '15-20 minutes',
+    estimatedTime: '5-10 minutes',
     positions: [
       { name: 'you', description: 'Your role and perspective in the relationship.' },
       { name: 'past', description: 'Past influences on the relationship.' },
@@ -83,7 +83,7 @@ export const spreads: ITarotSpreadObject[] = [
     description:
       'A spread designed to delve into the meanings and messages behind your dreams, uncovering subconscious thoughts and future possibilities.',
     focusAreas: ['Dreams', 'Subconscious', 'Future Insights'],
-    estimatedTime: '10-15 minutes',
+    estimatedTime: '5-10 minutes',
     positions: [
       { name: 'subconscious', description: 'Subconscious influences revealed by the dream.' },
       { name: 'trigger', description: 'Event or thought that triggered the dream.' },

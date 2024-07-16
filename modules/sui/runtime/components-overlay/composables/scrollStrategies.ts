@@ -100,7 +100,7 @@ function blockScrollStrategy(data: ScrollStrategyData, props: StrategyProps) {
         props.contained ? offsetParent : undefined
       ),
     ]),
-  ].filter((el) => !el.classList.contains('v-overlay-scroll-blocked'));
+  ].filter((el) => !el.classList.contains('v-overlay--scroll-blocked'));
   const scrollbarWidth =
     window.innerWidth - document.documentElement.offsetWidth;
 
@@ -122,7 +122,7 @@ function blockScrollStrategy(data: ScrollStrategyData, props: StrategyProps) {
       );
     }
 
-    el.classList.add('v-overlay-scroll-blocked');
+    el.classList.add('v-overlay--scroll-blocked');
   });
 
   onScopeDispose(() => {
@@ -136,7 +136,7 @@ function blockScrollStrategy(data: ScrollStrategyData, props: StrategyProps) {
       el.style.removeProperty('--v-body-scroll-x');
       el.style.removeProperty('--v-body-scroll-y');
       el.style.removeProperty('--v-scrollbar-offset');
-      el.classList.remove('v-overlay-scroll-blocked');
+      el.classList.remove('v-overlay--scroll-blocked');
 
       el.scrollLeft = -x;
       el.scrollTop = -y;
