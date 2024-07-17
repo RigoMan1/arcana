@@ -18,7 +18,7 @@ withDefaults(
     primaryActionText?: string;
     primaryActionColor?: Color;
 
-    color?: 'error' | 'success';
+    color?: 'danger' | 'success';
   }>(),
   {
     iconColor: 'primary',
@@ -33,7 +33,7 @@ withDefaults(
     primaryActionText: '',
     primaryActionColor: 'primary',
 
-    color: 'error',
+    color: 'danger',
   }
 );
 
@@ -94,7 +94,7 @@ const emit = defineEmits(['click:secondary-action', 'click:primary-action']);
 </template>
 
 <style>
-.v-alert--color-error {
+.v-alert--color-danger {
   @apply text-red-200;
 }
 

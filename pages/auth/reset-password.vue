@@ -46,7 +46,7 @@ const submitResetPassword = handleSubmit(async ({ email }) => {
 
       <v-alert
         v-if="errorMessage"
-        color="error"
+        color="danger"
         class="mt-8"
       >
         {{ errorMessage }}

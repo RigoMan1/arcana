@@ -15,7 +15,7 @@ function handleClick() {
 
     <alert-dialog
       v-model="alert"
-      color="error"
+      color="danger"
       title="Insufficient Energy"
       text="Energy too low to perform this action!"
       icon="fluent:error-circle-24-filled"

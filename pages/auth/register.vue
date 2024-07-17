@@ -5,17 +5,37 @@ definePageMeta({ layout: 'auth' });
 
 useSeoMeta({ title: 'Register - Arcana' });
 
-const register = async ({
-  email,
-  password,
-}: {
+interface Credentials {
   email: string;
   password: string;
-}) => {
-  const { error } = await supabase.auth.signUp({ email, password });
-  if (error) throw error;
-  navigateTo('/reader-select');
+}
+
+const register = async ({ email, password }: Credentials) => {
+  try {
+    console.log('updating email');
+    const emailRes = await supabase.auth.updateUser({ email });
+    console.log(emailRes);
+    const pwRes = await supabase.auth.updateUser({ password });
+    console.log(pwRes);
+
+    navigateTo('/reader-select');
+  } catch (error) {
+    console.error(error);
+  }
 };
+
+const loading = ref(false);
+async function continueWithGoogle() {
+  loading.value = true;
+  const { data, error } = await supabase.auth.linkIdentity({
+    provider: 'google',
+  });
+
+  if (error) throw error;
+
+  console.log(data);
+  loading.value = false;
+}
 </script>
 
 <template>
@@ -28,13 +48,22 @@ const register = async ({
       loading-text="Signing up..."
       :on-submit="register"
     />
+    <arcana-button
+      color="none"
+      class="mt-8 w-full !bg-white !text-blue-800 !font-bold"
+      text="Continue with Google"
+      :loading="loading"
+      loading-text="Signing up..."
+      @click="continueWithGoogle"
+    />
     <p class="mt-20 text-center">
       Already have an account?
       <nuxt-link
         to="/auth/login"
         class="font-semibold text-secondary-500"
-        >Login</nuxt-link
       >
+        Login
+      </nuxt-link>
     </p>
   </div>
 </template>

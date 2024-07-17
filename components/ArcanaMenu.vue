@@ -9,15 +9,27 @@ const logout = async () => {
 };
 
 const menuItems = [
-  // {
-  //   label: 'Settings',
-  //   icon: 'fluent:settings-20-filled',
-  //   action: () => navigateTo('/settings'),
-  // },
+  {
+    label: 'Settings',
+    icon: 'fluent:settings-20-filled',
+    action: () => navigateTo('/settings'),
+  },
   {
     label: 'Logout',
     icon: 'fluent:sign-out-20-filled',
     action: logout,
+  },
+  // create an account if user is anonymous
+  {
+    label: 'Create Account',
+    icon: 'fluent:person-add-20-filled',
+    action: () => navigateTo('/auth/register'),
+  },
+  // pricacy policy
+  {
+    label: 'Privacy Policy',
+    icon: 'fluent:lock-20-filled',
+    action: () => navigateTo('/privacy-policy'),
   },
 ];
 </script>
@@ -26,7 +38,7 @@ const menuItems = [
   <div>
     <v-menu
       transition="scale-transition"
-      width="200"
+      width="240"
     >
       <template #activator="{ props: activatorProps }">
         <arcana-button
@@ -59,45 +71,57 @@ const menuItems = [
 
           <hr class="mt-2 mb-4 opacity-20 -mx-4" />
 
-          <!-- <button
-            class="w-full flex items-center justify-between p-2 text-lg hover:bg-secondary-500
-              hover:bg-opacity-25 rounded transition-colors duration-100 ease-in-out"
-            @click="logout"
-          >
-            <span> Logout </span>
-            <Icon
-              name="fluent:sign-out-20-filled"
-              size="28px"
-            />
-          </button> -->
-
-          <div class="space-y-2">
-            <template
-              v-for="item in menuItems"
-              :key="item.label"
+          <div class="space-y-1">
+            <nuxt-link
+              v-if="user?.is_anonymous"
+              class="w-full flex items-center p-2 text-sm hover:bg-secondary-500 hover:bg-opacity-25
+                rounded transition-colors duration-100 ease-in-out"
+              to="/auth/register"
             >
-              <button
-                v-if="!user?.is_anonymous || item.label !== 'Logout'"
-                class="w-full flex items-center p-2 text-lg hover:bg-secondary-500 hover:bg-opacity-25
-                  rounded transition-colors duration-100 ease-in-out"
-                @click="item.action"
-              >
-                <Icon
-                  :name="item.icon"
-                  size="1.5rem"
-                />
-                <span class="ml-4"> {{ item.label }} </span>
-              </button>
+              <Icon
+                name="fluent:person-add-20-filled"
+                size="1.5rem"
+              />
+              <span class="ml-4"> Create Account </span>
+            </nuxt-link>
 
-              <div class="flex justify-end">
-                <nuxt-link
-                  class="text-xs text-zinc-200"
-                  to="/privacy-policy"
-                >
-                  Privacy Policy
-                </nuxt-link>
-              </div>
-            </template>
+            <nuxt-link
+              class="w-full flex items-center p-2 text-sm hover:bg-secondary-500 hover:bg-opacity-25
+                rounded transition-colors duration-100 ease-in-out"
+              to="/settings"
+            >
+              <Icon
+                name="fluent:settings-20-filled"
+                size="1.5rem"
+              />
+
+              <span class="ml-4"> Settings </span>
+            </nuxt-link>
+
+            <nuxt-link
+              class="w-full flex items-center p-2 text-sm hover:bg-secondary-500 hover:bg-opacity-25
+                rounded transition-colors duration-100 ease-in-out"
+              to="/privacy-policy"
+            >
+              <Icon
+                name="fluent:lock-20-filled"
+                size="1.5rem"
+              />
+              <span class="ml-4"> Privacy Policy </span>
+            </nuxt-link>
+
+            <nuxt-link
+              v-if="!user?.is_anonymous"
+              class="w-full flex items-center p-2 text-sm hover:bg-secondary-500 hover:bg-opacity-25
+                rounded transition-colors duration-100 ease-in-out"
+              @click="logout"
+            >
+              <Icon
+                name="fluent:sign-out-20-filled"
+                size="1.5rem"
+              />
+              <span class="ml-4"> Logout </span>
+            </nuxt-link>
           </div>
         </div>
       </template>

@@ -218,7 +218,7 @@ onBeforeRouteLeave((to, from, next) => {
 
     <alert-dialog
       v-model="quitReadingAlert.showDialog"
-      color="error"
+      color="danger"
       title="Quit Reading?"
       text="Are you sure you want to quit the reading?"
       icon="fluent:error-circle-24-filled"

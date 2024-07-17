@@ -43,13 +43,13 @@ const submit = submitForm(props.onSubmit);
     <h1 class="text-2xl text-center">{{ title }}</h1>
     <v-alert
       v-if="errorMessage"
-      color="error"
+      color="danger"
       class="mt-8"
       >{{ errorMessage }}</v-alert
     >
     <form
       class="mt-8"
-      @submit="submit"
+      @submit.prevent="submit"
     >
       <VeeTextField
         name="email"
@@ -78,6 +78,7 @@ const submit = submitForm(props.onSubmit);
         </template>
       </VeeTextField>
       <arcana-button
+        type="submit"
         class="mt-8 w-full"
         :text="buttonText"
         :loading="loading"
