@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     'nuxt-icon',
     '@vite-pwa/nuxt',
     '@vee-validate/nuxt',
-    './modules/sui/module.ts',
+    './modules/sui/',
     '@nuxtjs/supabase',
   ],
   supabase: {
@@ -60,7 +60,7 @@ export default defineNuxtConfig({
           sizes: '512x512',
           type: 'image/png',
         },
-      ], 
+      ],
       screenshots: [
         {
           src: 'screenshots/screenshot-1.png',
@@ -78,6 +78,7 @@ export default defineNuxtConfig({
       },
       iarc_rating_id: 'your-iarc-rating-id', // Replace with your actual IARC rating ID if available
     },
+
     workbox: {
       navigateFallback: '/',
     },
