@@ -92,7 +92,6 @@ async function handlePurchase(tier: Tier) {
 
   <v-overlay
     v-model="dialog"
-    activator="#toggle-overlay"
     transition="dialog-transition"
     width="90%"
     height="80%"
@@ -105,7 +104,6 @@ async function handlePurchase(tier: Tier) {
       <arcana-button
         class="absolute top-2 right-2 text-white"
         variant="text"
-        size="medium"
         icon
         @click="dialog = false"
       >

@@ -24,9 +24,8 @@ function getDeepReading(close: () => void) {
 </script>
 
 <template>
-  <v-overlay
+  <v-dialog
     v-slot="{ close }"
-    transition="dialog-transition"
     width="90%"
     max-height="90%"
     close-on-back
@@ -155,7 +154,7 @@ function getDeepReading(close: () => void) {
         </arcana-button>
       </div>
     </div>
-  </v-overlay>
+  </v-dialog>
 </template>
 
 <style>
