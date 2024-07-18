@@ -55,7 +55,7 @@ defineProps({
 }
 
 /* color */
-.v-button--color-primary:not(.v-button--state-disabled) {
+.v-button--color-primary:not([data-state='disabled']) {
   background: linear-gradient(
     86deg,
     theme('colors.secondary.400') 15.29%,
@@ -64,7 +64,7 @@ defineProps({
 }
 
 /* states */
-.v-button--state-disabled {
+.v-button[data-state='disabled'] {
   @apply !bg-primary-800 border-primary-700  text-white/30;
   pointer-events: none;
 }
