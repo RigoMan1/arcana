@@ -4,11 +4,7 @@ const chatgpt = useChatgptStore();
 const props = defineProps<{
   card?: TarotCard;
   positionData: ITarotSpreadObjectPosition;
-  disableDeepReading?: boolean;
-  isRevealed?: boolean;
 }>();
-
-const dialog = defineModel<boolean>();
 
 const emit = defineEmits(['get-deep-reading']);
 
@@ -19,15 +15,17 @@ const elementsMap = new Map([
   ['pentacle', 'earth'],
 ]);
 
-function getDeepReading() {
+const disableDeepReading = ref(false);
+function getDeepReading(close: () => void) {
   emit('get-deep-reading', props.positionData, props.card as TarotCard);
-  dialog.value = false;
+  disableDeepReading.value = true;
+  close();
 }
 </script>
 
 <template>
   <v-overlay
-    v-model="dialog"
+    v-slot="{ close }"
     transition="dialog-transition"
     width="90%"
     max-height="90%"
@@ -41,7 +39,7 @@ function getDeepReading() {
         class="absolute top-2 right-2 text-white z-10"
         variant="text"
         icon
-        @click="dialog = false"
+        @click="close"
       >
         <icon
           name="fluent:dismiss-20-filled"
@@ -71,7 +69,7 @@ function getDeepReading() {
 
             <!-- slot for arcana -->
             <div v-if="i === 'arcana'">
-              <div v-if="card && isRevealed">
+              <div v-if="card">
                 <div
                   class="object-cover bg-zinc-900 p-2 w-16 h-16 rounded text-xs flex items-center
                     justify-center"
@@ -91,7 +89,7 @@ function getDeepReading() {
             <!-- slot for suit -->
 
             <div v-else-if="i === 'suit'">
-              <div v-if="card && isRevealed && card.suit">
+              <div v-if="card && card.suit">
                 <div
                   class="object-cover bg-zinc-900 p-2 w-16 h-16 rounded text-xs sprite sprite-suit"
                   :class="card.suit"
@@ -107,7 +105,7 @@ function getDeepReading() {
 
             <!-- slot for element -->
             <div v-else>
-              <div v-if="card?.suit && isRevealed">
+              <div v-if="card?.suit">
                 <div
                   class="object-cover bg-zinc-900 p-2 w-16 h-16 rounded text-xs sprite sprite-el"
                   :class="elementsMap.get(card.suit as any)"
@@ -130,7 +128,7 @@ function getDeepReading() {
           </span>
           <tarot-card
             :card="card"
-            :flip="isRevealed"
+            :flip="true"
             :show-overlay="true"
             class="aspect-[11/19] w-1/3"
           />
@@ -150,10 +148,8 @@ function getDeepReading() {
         <arcana-button
           class="mt-6 mb-4"
           size="sm"
-          :disabled="
-            !card || disableDeepReading || chatgpt.isTyping || !isRevealed
-          "
-          @click="getDeepReading()"
+          :disabled="!card || disableDeepReading || chatgpt.isTyping"
+          @click="getDeepReading(close)"
         >
           <span> get deep reading </span>
         </arcana-button>

@@ -11,6 +11,7 @@ onMounted(() => (tarotDeck.value = shuffleCards(TarotCards, true)));
 
 const user = useSupabaseUser();
 
+// Greet user and ask for their name
 onMounted(() => {
   if (user.value?.user_metadata?.name) {
     handleTextMessage(`
@@ -127,11 +128,27 @@ async function handleTextMessage(message: string) {
   }
 }
 
+function reactToCardDrop({
+  position,
+  card,
+}: {
+  position: string;
+  card: TarotCard;
+}) {
+  handleTextMessage(`
+    The user has drawn ${card.name} for ${position}:
+      - give a very brief intermediary insight about what the card means in that position, in regards to the user's question
+      - Avoid general descriptions of the card
+      - the response should be very brief, as to not to interrupt as the user continues to draw cards
+      - do not instruct the user to draw more cards
+  `);
+  toggleMode('chat');
+}
+
 const dialog = ref(false);
 const readings = ref([]) as Ref<IMessage[]>;
 const CARD_READING_ENERGY_COST = 20;
 const WHOLISTIC_READING_ENERGY_COST = 50;
-const { $state: $readingState } = useFortuneReading();
 
 async function handleSingleCardReading(
   cardPrompt: string,
@@ -156,12 +173,16 @@ async function handleSingleCardReading(
   }
 }
 
-async function handleWholisticReading({ drawnCards }: any) {
-  showCards.value = false;
+const showConcludeReading = ref(false);
+async function handleWholisticReading() {
   const userMessage = `
     The user has drawn all cards for
-    draw-cards-data: ${drawnCards}
+    tarot-spread: ${activeSpread.value.name}
+    tarot-spread-description: ${activeSpread.value.description}
+    card-count: ${activeSpread.value.positions.length}    
   `;
+
+  console.log('userMessage:', userMessage);
 
   const reading = await handleSendMessage(
     wholisticPrompt(fortuneTeller.activeFortuneTeller),
@@ -172,7 +193,18 @@ async function handleWholisticReading({ drawnCards }: any) {
   if (reading) {
     readings.value.push(reading);
     dialog.value = true;
+
+    // todo: improvised complete reading logic
+    handleTextMessage(`
+      - bid the user farewell
+    `);
+
+    showConcludeReading.value = true;
   }
+}
+
+function concludeReading() {
+  window.location.href = '/reader-select';
 }
 
 const wheelEl = ref() as Ref<any>;
@@ -210,6 +242,25 @@ onBeforeRouteLeave((to, from, next) => {
     next();
   }
 });
+
+function handleCardClick() {
+  toggleMode('read');
+
+  // spin the wheel
+  // wait 1000 second before spinning
+  setTimeout(() => {
+    wheelEl.value.spinCarousel();
+  }, 400);
+
+  console.log('spinnging the wheel');
+}
+
+// watch all cards selected
+watch(allCardsSelected, (newVal) => {
+  if (newVal) {
+    // handleWholisticReading();
+  }
+});
 </script>
 
 <template>
@@ -232,11 +283,11 @@ onBeforeRouteLeave((to, from, next) => {
       v-model="dialog"
       :readings="readings"
     />
-    <!-- 1. fortune message  -->
+    <!-- 1. wheel & isTyping loader  -->
     <div class="flex items-center justify-center h-1/6">
       <transition name="scale-transition">
         <card-wheel
-          v-if="mode === 'read' && showCards"
+          v-show="mode === 'read' && showCards"
           ref="wheelEl"
           v-model="selectedCardIndex"
           class="w-full h-full origin-top"
@@ -245,7 +296,7 @@ onBeforeRouteLeave((to, from, next) => {
       </transition>
 
       <div
-        v-if="chatgpt.isTyping"
+        v-if="chatgpt.isTyping && mode === 'chat'"
         class="fortune-oracle"
       >
         <span class="animate-pulse">
@@ -265,86 +316,51 @@ onBeforeRouteLeave((to, from, next) => {
         :tarot-deck="tarotDeck"
         @remove-card="removeCard"
         @card-selected="handleSingleCardReading"
-        @reveal-spread-component="handleWholisticReading"
+        @react-to-card-drop="reactToCardDrop"
       />
     </div>
 
     <!-- 3. controls -->
 
-    <div class="p-4">
-      <div
-        class="flex items-end space-x-2 w-full max-w-sm mx-auto justify-between"
-      >
-        <!-- left -->
-        <div
-          v-if="mode === 'read'"
-          class="flex flex-col items-center"
-        >
-          <span class="text-xs mb-1 opacity-70"> Chat </span>
-          <arcana-button
-            v-if="mode === 'read'"
-            class="!px-2"
-            :disabled="fortuneReadingStore.cardDrawn"
-            @click="toggleMode('chat')"
-          >
-            <Icon
-              name="fluent:chat-bubbles-question-16-filled"
-              size="2em"
-            />
-          </arcana-button>
-        </div>
-
-        <div
-          v-if="mode === 'chat'"
-          class="flex flex-col items-center"
-        >
-          <span class="text-xs mb-1 opacity-70"> Cards </span>
-          <arcana-button
-            class="!px-2 relative"
-            @click="toggleMode('read')"
-          >
-            <Icon
-              name="fluent:playing-cards-20-filled"
-              size="2em"
-            />
-          </arcana-button>
-        </div>
-
-        <!-- mid -->
+    <div class="flex items-end space-x-2 w-full max-w-sm mx-auto p-4">
+      <!-- button: draw card -->
+      <div class="flex flex-col items-center">
+        <span class="text-xs mb-1 opacity-70"> Draw </span>
         <arcana-button
-          v-if="mode === 'read'"
-          :disabled="!allCardsSelected || chatgpt.isTyping"
-          @click="tarotSpreadEl?.handleButtonClick"
+          class="!px-2 relative"
+          :disabled="mode === 'read' || allCardsSelected"
+          @click="handleCardClick"
         >
-          {{ tarotSpreadEl?.buttonLabel }}
+          <Icon
+            name="fluent:playing-cards-20-filled"
+            size="2em"
+          />
         </arcana-button>
-
-        <arcana-text-area
-          v-if="mode === 'chat'"
-          @message="handleTextMessage"
-        />
-        <!-- right -->
-        <div
-          v-if="mode === 'read'"
-          class="flex flex-col items-center"
-        >
-          <span class="text-xs opacity-70 mb-1"> Spin </span>
-          <arcana-button
-            class="!px-2"
-            :disabled="
-              wheelEl?.disableSpin ||
-              $readingState.fortuneInitiated ||
-              allCardsSelected
-            "
-            @click="wheelEl?.spinCarousel"
-          >
-            <Icon
-              name="fluent:arrow-rotate-clockwise-16-filled"
-              size="2em"
-            />
-          </arcana-button>
-        </div>
       </div>
+
+      <!-- button: holistic reading -->
+      <arcana-button
+        v-if="mode === 'chat' && allCardsSelected && !showConcludeReading"
+        class="w-full"
+        :disabled="chatgpt.isTyping"
+        @click="handleWholisticReading"
+      >
+        Get Holistic Reading
+      </arcana-button>
+
+      <arcana-button
+        v-if="showConcludeReading"
+        class="w-full"
+        :disabled="chatgpt.isTyping"
+        @click="concludeReading"
+      >
+        Conclude Reading
+      </arcana-button>
+
+      <arcana-text-area
+        v-if="mode === 'chat' && !allCardsSelected"
+        @message="handleTextMessage"
+      />
     </div>
   </div>
 </template>

@@ -277,7 +277,14 @@ defineExpose({
             contentProps,
           }"
         >
-          <slot :is-active="isActive" />
+          <slot
+            :is-active="isActive"
+            :close="
+              () => {
+                isActive = false;
+              }
+            "
+          />
         </div>
       </maybe-transition>
     </div>
