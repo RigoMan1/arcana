@@ -45,6 +45,7 @@ const emit = defineEmits(['click:secondary-action', 'click:primary-action']);
     activator="#toggle-overlay"
     transition="dialog-transition"
     width="90%"
+    max-width="600px"
     persistent
     close-on-back
     class="flex items-center justify-center text-center"

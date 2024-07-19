@@ -6,7 +6,7 @@ const fortuneTeller = useFortuneTeller();
   <transition name="dialog-transition">
     <div
       v-if="fortuneTeller.currentMessage && fortuneTeller.displayMessage"
-      class="absolute origin-top mr-4 mt-2"
+      class="absolute origin-top mr-4 mt-2 max-w-lg"
     >
       <svg
         class="ml-3.5"

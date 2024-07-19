@@ -22,7 +22,7 @@ onMounted(async () => {
 
   <v-app
     v-if="appLoaded"
-    class="overflow-hidden"
+    class="overflow-hidden max-w-2xl mx-auto"
   >
     <arcana-navbar />
 

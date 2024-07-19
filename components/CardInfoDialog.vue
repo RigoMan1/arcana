@@ -28,6 +28,7 @@ function getDeepReading(close: () => void) {
     v-slot="{ close }"
     width="90%"
     max-height="90%"
+    max-width="600px"
     close-on-back
     class="flex items-center justify-center"
   >

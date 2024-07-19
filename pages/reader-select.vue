@@ -28,7 +28,7 @@ const slides = ref<VSlideControls>();
     </v-slides>
 
     <!-- prev/next -->
-    <div class="flex w-full fixed bottom-[70%] px-2 left-0 right-0">
+    <div class="flex w-full absolute left-0 top-[8.5rem] px-2 v-slide-controls">
       <arcana-button
         :disabled="!slides?.canMoveBack"
         variant="text"

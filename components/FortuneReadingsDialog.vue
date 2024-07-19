@@ -11,8 +11,10 @@ const dialog = defineModel<boolean>();
     activator="#toggle-overlay"
     transition="dialog-transition"
     width="90%"
+    max-width="800px"
     close-on-back
     class="flex items-center justify-center"
+    
   >
     <!-- close button -->
 

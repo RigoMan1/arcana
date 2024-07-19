@@ -94,6 +94,7 @@ async function handlePurchase(tier: Tier) {
     v-model="dialog"
     transition="dialog-transition"
     width="90%"
+    max-width="600px"
     height="80%"
     close-on-back
     class="flex items-center justify-center"

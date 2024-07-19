@@ -27,61 +27,63 @@ const orbColor = computed(() => {
 </script>
 
 <template>
-  <v-app-bar class="flex items-center justify-between p-4">
-    <energy-shop-dialog v-model="energyShop" />
-    <!--  fortune teller avatar -->
+  <v-app-bar>
+    <div class="flex items-center justify-between p-4 h-full max-w-2xl mx-auto">
+      <energy-shop-dialog v-model="energyShop" />
+      <!--  fortune teller avatar -->
 
-    <div v-if="path !== '/reader-select'">
-      <nuxt-link to="/reader-select">
-        <img
-          :src="readerSelectStore.activeFortuneTeller.image"
-          alt="fortune teller"
-          class="w-12 h-12 rounded-full"
-        />
-      </nuxt-link>
-      <text-bubble />
-    </div>
-    <div
-      v-else
-      class="w-12 h-12 rounded-full"
-    />
-
-    <div
-      class="space-x-4 flex energy-bar"
-      @click="energyShop = true"
-    >
-      <!-- basic energy -->
-      <div class="flex items-center">
-        <div
-          class="orb"
-          :style="`--orb-color: ${orbColor}`"
-        >
+      <div v-if="path !== '/reader-select'">
+        <nuxt-link to="/reader-select">
           <img
-            class="w-5 rounded-full"
-            src="/images/energy-basic.png"
-            alt=""
+            :src="readerSelectStore.activeFortuneTeller.image"
+            alt="fortune teller"
+            class="w-12 h-12 rounded-full"
           />
+        </nuxt-link>
+        <text-bubble />
+      </div>
+      <div
+        v-else
+        class="w-12 h-12 rounded-full"
+      />
+
+      <div
+        class="space-x-4 flex energy-bar"
+        @click="energyShop = true"
+      >
+        <!-- basic energy -->
+        <div class="flex items-center">
+          <div
+            class="orb"
+            :style="`--orb-color: ${orbColor}`"
+          >
+            <img
+              class="w-5 rounded-full"
+              src="/images/energy-basic.png"
+              alt=""
+            />
+          </div>
+
+          <span class="text-white ml-3">
+            {{ $state.basicEnergy }}
+          </span>
         </div>
 
-        <span class="text-white ml-3">
-          {{ $state.basicEnergy }}
-        </span>
+        <!-- buy energy icon -->
+        <arcana-button
+          size="sm"
+          icon
+          class="!rounded-full"
+        >
+          <Icon
+            name="fluent:add-20-filled"
+            size="1rem"
+          />
+        </arcana-button>
       </div>
 
-      <!-- buy energy icon -->
-      <arcana-button
-        size="sm"
-        icon
-        class="!rounded-full"
-      >
-        <Icon
-          name="fluent:add-20-filled"
-          size="1rem"
-        />
-      </arcana-button>
+      <arcana-menu />
     </div>
-
-    <arcana-menu />
   </v-app-bar>
 </template>
 

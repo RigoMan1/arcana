@@ -147,7 +147,7 @@ const { allCardsSelected } = storeToRefs(useTarotSpread());
           style="z-index: 1000"
         >
           <draggable-tarot-card
-            class="active-card"
+            class="active-card max-w-24"
             :card="props.tarotDeck[selectedCardIndex]"
           />
         </div>
