@@ -3,7 +3,6 @@ import { shuffleCards } from '@/utils/helpers';
 import TarotCards from '~/constants/tarot-card-data';
 
 const fortuneReadingStore = useFortuneReading();
-const { activeSpread, allCardsSelected } = storeToRefs(useTarotSpread());
 
 const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
 
@@ -54,6 +53,9 @@ const lowEnergyAlert = ref(false);
 
 const userLanguage = ref<string>('es');
 onMounted(() => (userLanguage.value = navigator.language));
+
+const { activeSpread, allCardsSelected, selectedCards } =
+  storeToRefs(useTarotSpread());
 
 async function handleSendMessage(
   prompt: string,
@@ -137,7 +139,7 @@ function reactToCardDrop({
 }) {
   handleTextMessage(`
     The user has drawn ${card.name} for ${position}:
-      - give a very brief intermediary insight about what the card means in that position, in regards to the user's question
+      - give a very brief intermediary insight (1 sentence) about what the card means in that position, in regards to the user's question
       - Avoid general descriptions of the card
       - the response should be very brief, as to not to interrupt as the user continues to draw cards
       - do not instruct the user to draw more cards
@@ -175,14 +177,25 @@ async function handleSingleCardReading(
 
 const showConcludeReading = ref(false);
 async function handleWholisticReading() {
+  const formatCard = (position: string, card: TarotCard) => `
+  spread-label: ${position}
+  card-name: ${card.name}
+  card-image: ${card.image}
+  reversed: ${card.reversed}
+  `;
+
+  const allCardsData = Object.entries(selectedCards.value).map(
+    ([position, card]) => formatCard(position, card)
+  );
+
   const userMessage = `
     The user has drawn all cards for
     tarot-spread: ${activeSpread.value.name}
     tarot-spread-description: ${activeSpread.value.description}
-    card-count: ${activeSpread.value.positions.length}    
+    card-count: ${activeSpread.value.positions.length}
+    drawn-cards: ${allCardsData.join('\n')}
+    give a holstic reading for each group in the tarot spread as whole.
   `;
-
-  console.log('userMessage:', userMessage);
 
   const reading = await handleSendMessage(
     wholisticPrompt(fortuneTeller.activeFortuneTeller),
@@ -246,21 +259,12 @@ onBeforeRouteLeave((to, from, next) => {
 function handleCardClick() {
   toggleMode('read');
 
-  // spin the wheel
-  // wait 1000 second before spinning
   setTimeout(() => {
     wheelEl.value.spinCarousel();
   }, 400);
 
   console.log('spinnging the wheel');
 }
-
-// watch all cards selected
-watch(allCardsSelected, (newVal) => {
-  if (newVal) {
-    // handleWholisticReading();
-  }
-});
 </script>
 
 <template>

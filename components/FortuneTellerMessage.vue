@@ -42,6 +42,10 @@ const parsedContent =
   @apply mt-6 mb-4;
 }
 
+.markdown.prose p strong {
+  @apply bg-indigo-500/20 text-indigo-500 font-semibold rounded px-0.5 py-0;
+}
+
 .fortune-oracle {
   @apply rounded-full text-indigo-100 h-full flex items-center;
   background: radial-gradient(

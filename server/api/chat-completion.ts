@@ -8,6 +8,7 @@ import {
 } from '../../constants/models';
 import { modelMap } from '../../utils/model-map';
 import { useRuntimeConfig } from '#imports';
+import { logitBias } from '../../constants/blacklist';
 
 // Define the function schema
 const funcGetUsersName = {
@@ -51,6 +52,7 @@ export default defineEventHandler(async (event) => {
       ...(options || defaultOptions),
       functions: [funcGetUsersName],
       function_call: 'auto',
+      logit_bias: logitBias,
     });
 
     const message = chatCompletion.choices[0].message;
