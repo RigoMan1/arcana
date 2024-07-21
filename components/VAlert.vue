@@ -24,7 +24,7 @@ const { colorClasses } = useColor(props);
     :class="colorClasses"
     class="flex rounded p-3"
   >
-    <p class="ml-2 !font-medium">
+    <p class="ml-2">
       <slot>
         {{ text }}
       </slot>

@@ -116,7 +116,7 @@ const { allCardsSelected } = storeToRefs(useTarotSpread());
           </mask>
           <path
             d="M393 196.5C393 305.024 305.024 393 196.5 393C87.976 393 0 305.024 0 196.5C0 87.976 87.976 0 196.5 0C305.024 0 393 87.976 393 196.5ZM98.25 196.5C98.25 250.762 142.238 294.75 196.5 294.75C250.762 294.75 294.75 250.762 294.75 196.5C294.75 142.238 250.762 98.25 196.5 98.25C142.238 98.25 98.25 142.238 98.25 196.5Z"
-            class="fill-primary-900 stroke-primary-800"
+            class="fill-surface-900 stroke-surface-800/50"
             stroke-width="4"
             mask="url(#path-1-inside-1_194_285)"
           />
@@ -153,21 +153,6 @@ const { allCardsSelected } = storeToRefs(useTarotSpread());
         </div>
       </transition>
     </div>
-
-    <transition name="fade-transition">
-      <p
-        v-show="!disableSpin && !allCardsSelected"
-        class="text-center text-sm animate-pulse opacity-75"
-      >
-        <span>Spin the wheel</span>
-        <Icon
-          name="fluent:arrow-rotate-clockwise-16-filled"
-          size="1rem"
-          class="mx-2"
-        />
-        <span>to draw a card</span>
-      </p>
-    </transition>
   </div>
 </template>
 

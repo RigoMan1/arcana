@@ -77,7 +77,7 @@ function getInDepthReading(label: string, card: TarotCard) {
       <div
         v-for="p in activeSpread.positions"
         :key="p.name"
-        class="w-[60%] min-w-[3rem]"
+        class="w-[70%] min-w-[3rem]"
         :class="p.name"
       >
         <card-info-dialog
@@ -99,13 +99,13 @@ function getInDepthReading(label: string, card: TarotCard) {
           />
 
           <arcana-button
-            class="absolute -bottom-6 right-1/2 !translate-x-1/2"
-            size="sm"
+            class="absolute -bottom-3 right-1/2 !translate-x-1/2"
+            size="xs"
             icon
             style="z-index: 100"
           >
             <icon
-              class="text-xl"
+              class="text-lg"
               name="fluent:eye-tracking-24-regular"
             />
           </arcana-button>

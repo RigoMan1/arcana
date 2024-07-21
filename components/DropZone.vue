@@ -4,7 +4,7 @@ import { useDrop } from '@/composables/useDragAndDrop/useDrop';
 const props = defineProps<{
   zoneId: string;
   label?: string;
-}>(); 
+}>();
 
 const dropTarget = ref() as Ref<HTMLElement>;
 const { isOver, dndState } = useDrop(dropTarget, props.zoneId);
@@ -23,13 +23,13 @@ watch(selectedCard, (newVal) => {
 <template>
   <div
     ref="dropTarget"
-    class="drop-zone flex items-center justify-center bg-primary-900 border-dashed"
+    class="drop-zone flex items-center justify-center bg-zinc-900 border-dashed"
     :class="{ ' bg-secondary-900/20': isOver }"
   >
     <span
       class="flex text-xs items-center justify-center absolute px-2 h-6 text-center -top-3
         left-1/2 transform -translate-x-1/2 capitalize bg-zinc-900 border
-        border-zinc-600 text-zinc-400 font-medium rounded-lg whitespace-nowrap"
+        border-zinc-600 text-surface-200 font-medium rounded-lg whitespace-nowrap"
     >
       {{ label }}
     </span>
@@ -50,7 +50,7 @@ watch(selectedCard, (newVal) => {
 
 <style>
 .drop-zone {
-  @apply border border-primary-500 relative p-2 flex-1  rounded-lg;
+  @apply border border-primary-500 relative p-1.5 flex-1 rounded-lg;
   aspect-ratio: 11/19;
 }
 </style>

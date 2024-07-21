@@ -51,7 +51,7 @@ const emit = defineEmits(['click:secondary-action', 'click:primary-action']);
     class="flex items-center justify-center text-center"
   >
     <div
-      class="px-8 !py-12 rounded-lg arcana-card-alt"
+      class="px-8 !py-12 rounded-lg arcana-card"
       :class="`v-alert--color-${color}`"
     >
       <Icon
@@ -64,7 +64,7 @@ const emit = defineEmits(['click:secondary-action', 'click:primary-action']);
       <h3 class="mt-2 text-xl">{{ title }}</h3>
       <p
         variant="body-2"
-        class="mt-2"
+        class="mt-2 text-secondary-100"
       >
         <slot>{{ text }}</slot>
       </p>
@@ -73,9 +73,8 @@ const emit = defineEmits(['click:secondary-action', 'click:primary-action']);
         <slot name="actions">
           <arcana-button
             v-if="secondaryActionText"
-            :color="secondaryActionColor"
             :text="secondaryActionText"
-            class="opacity-75"
+            variant="secondary"
             block
             @click="emit('click:secondary-action')"
           />

@@ -95,13 +95,11 @@ async function handlePurchase(tier: Tier) {
     transition="dialog-transition"
     width="90%"
     max-width="600px"
-    height="80%"
+    height="85%"
     close-on-back
     class="flex items-center justify-center"
   >
-    <div
-      class="p-8 rounded-xl text-center relative bg-accent h-full flex flex-col"
-    >
+    <div class="arcana-card bg-arcana-gradient !p-6 h-full flex flex-col">
       <arcana-button
         class="absolute top-2 right-2 text-white"
         variant="text"
@@ -124,7 +122,7 @@ async function handlePurchase(tier: Tier) {
           v-for="tier in tiers"
           :key="tier.name"
           v-ripple
-          class="arcana-card text-center flex items-center justify-around p-6 w-full"
+          class="arcana-glass text-center flex items-center justify-around p-6 w-full"
           @click="handlePurchase(tier)"
         >
           <div class="flex flex-col items-center">

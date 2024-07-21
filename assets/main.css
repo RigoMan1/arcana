@@ -6,6 +6,8 @@
   --v-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --v-ease-out: cubic-bezier(0, 0, 0.2, 1);
   --v-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --v-scrim-color: theme('colors.zinc.900') !important;
+  --v-divider-opacity: 0.05 !important;
 }
 
 .bd,
@@ -21,14 +23,23 @@ body {
 }
 
 body {
-  @apply bg-primary-800/50;
+  /* @apply bg-surface-950; */
+  /* @apply bg-surface-900; */
+  /* @apply bg-zinc-900; */
+  @apply bg-zinc-800/50;
+  background-image: radial-gradient(
+      ellipse at bottom left,
+      rgba(78, 12, 177, 0.02) 0%,
+      rgba(82, 245, 151, 0) 50%
+    ),
+    radial-gradient(
+      ellipse at bottom right,
+      rgba(88, 104, 248, 0.08) -30%,
+      rgba(88, 204, 248, 0) 70%
+    );
 }
 
-.bg-accent {
-  background-color: #1e1e40;
-}
-
-.arcana-card {
+.arcana-glass {
   background: radial-gradient(
     100% 100% at 50% 5%,
     rgba(255, 255, 255, 0.05) 0%,
@@ -40,10 +51,10 @@ body {
   transition: transform 0.2s ease-in-out;
 }
 
-.arcana-card-alt {
+.arcana-card {
+  @apply bg-[#202132];
   position: relative;
   z-index: 2;
-  background: #2d2d59;
   border-radius: 0.5rem;
   padding: 1rem;
   backdrop-filter: blur(8px);
@@ -55,4 +66,19 @@ body {
     0 12.1px 8.5px rgba(0, 0, 0, 0.072),
     0 22.6px 15.9px rgba(0, 0, 0, 0.086),
     0 54px 38px rgba(0, 0, 0, 0.12);
+}
+
+.bg-arcana-gradient {
+  @apply border border-secondary-300/5;
+  background: theme('colors.surface.900');
+  background-image: radial-gradient(
+      ellipse at bottom left,
+      rgba(114, 56, 202, 0.1) 0%,
+      rgba(82, 245, 151, 0) 50%
+    ),
+    radial-gradient(
+      ellipse at bottom right,
+      rgba(88, 104, 248, 0.25) -30%,
+      rgba(88, 204, 248, 0) 70%
+    );
 }

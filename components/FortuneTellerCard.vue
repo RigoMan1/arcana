@@ -5,21 +5,21 @@ defineProps<{
 </script>
 
 <template>
-  <div class="flex flex-col h-full">
+  <div class="h-full flex flex-col justify-center space-y-[2vh]">
     <div>
       <img
         :src="fortuneTeller.image"
         alt="fortune teller"
-        class="w-40 h-40 rounded-xl object-cover mx-auto aspect-square"
+        class="rounded-xl object-cover mx-auto aspect-square h-[20vh] min-h-40 max-h-72"
       />
     </div>
 
     <div
-      class="rounded-lg bg-secondary-300 bg-opacity-5 flex flex-col h-full overflow-auto mt-2"
+      class="rounded-lg bg-secondary-400/10 flex flex-col overflow-auto mt-2 pb-4"
     >
-      <div class="sticky top-0 w-full bg-[#232429] px-4 pt-4">
-        <h2 class="text-center mb-4">{{ fortuneTeller.name }}</h2>
-        <hr class="border-primary-700 w-full" />
+      <div class="sticky top-0 w-full px-4 pt-4">
+        <h2 class="text-center mb-4 text-lg">{{ fortuneTeller.name }}</h2>
+        <v-divider />
       </div>
 
       <div
@@ -29,12 +29,12 @@ defineProps<{
       >
         <div class="flex space-x-4 w-full">
           <div class="object-cover w-[4rem] flex-shrink-0" />
-          <h3 class="text-xs text-zinc-100">{{ trait.name }}</h3>
+          <h3 class="text-sm">{{ trait.name }}</h3>
         </div>
-        <div class="flex space-x-4 w-full mt-2">
+        <div class="flex space-x-4 w-full mt-1">
           <div
-            class="object-cover bg-black p-2 w-[4rem] h-[4rem] rounded flex items-center
-              justify-center flex-shrink-0"
+            class="object-cover p-2 w-[4rem] h-[4rem] rounded flex items-center justify-center
+              flex-shrink-0 bg-seon"
           >
             <img
               :src="trait.image"
@@ -42,7 +42,9 @@ defineProps<{
               class="w-full h-full object-contain"
             />
           </div>
-          <p class="text-zinc-300 text-sm">{{ trait.description }}</p>
+          <p class="text-surface-100 text-sm">
+            {{ trait.description }}
+          </p>
         </div>
       </div>
     </div>

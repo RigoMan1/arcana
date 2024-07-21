@@ -64,7 +64,7 @@ const orbColor = computed(() => {
             />
           </div>
 
-          <span class="text-white ml-3">
+          <span class="text-white ml-3 number">
             {{ $state.basicEnergy }}
           </span>
         </div>
@@ -117,6 +117,6 @@ const orbColor = computed(() => {
 
 .energy-bar {
   @apply rounded-full flex items-center p-0.5 justify-center pl-2;
-  @apply border-2 !bg-primary-800/75 border-primary-800 text-white/30;
+  @apply border-2 !bg-[#202132]/75 border-[#202132] text-white/30;
 }
 </style>

@@ -55,7 +55,7 @@ const menuItems = [
         </arcana-button>
       </template>
       <template #default>
-        <div class="arcana-card-alt">
+        <div class="arcana-card">
           <!-- your signed in as anon user id -->
           <div v-if="user?.is_anonymous">
             <p class="text-xs">Signed in as anonymous user</p>
@@ -64,12 +64,12 @@ const menuItems = [
 
           <h6
             v-else
-            class="text-lg font-medium capitalize"
+            class="text-lg capitalize"
           >
             {{ user?.email?.split('@')[0] }}
           </h6>
 
-          <hr class="mt-2 mb-4 opacity-20 -mx-4" />
+          <v-divider class="mt-4 mb-2" />
 
           <div class="space-y-1">
             <nuxt-link

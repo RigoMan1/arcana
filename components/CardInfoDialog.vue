@@ -33,7 +33,7 @@ function getDeepReading(close: () => void) {
     class="flex items-center justify-center"
   >
     <div
-      class="rounded-xl text-center relative bg-[#232429] h-full flex flex-col overflow-auto"
+      class="rounded-xl text-center relative arcana-card h-full flex flex-col overflow-auto"
     >
       <arcana-button
         class="absolute top-2 right-2 text-white z-10"
@@ -47,14 +47,17 @@ function getDeepReading(close: () => void) {
         />
       </arcana-button>
 
-      <div class="sticky top-0 w-full bg-[#232429] pt-4 px-4">
-        <h2 class="text-center mb-4">{{ positionData.name }}</h2>
+      <div class="sticky top-0 w-full bg-[#202132] pt-1 px-4">
+        <h2 class="text-center capitalize">
+          <span>{{ positionData.name }}</span>
+          <span v-if="card"> - {{ card.name }}</span>
+        </h2>
 
-        <p class="text-sm">
+        <p class="text-sm text-surface-200 mt-2">
           {{ positionData.description }}
         </p>
 
-        <hr class="border-primary-700 w-full mt-4" />
+        <v-divider class="mt-5" />
       </div>
 
       <div class="flex flex-col items-center justify-center mt-4">
@@ -71,16 +74,17 @@ function getDeepReading(close: () => void) {
             <div v-if="i === 'arcana'">
               <div v-if="card">
                 <div
-                  class="object-cover bg-zinc-900 p-2 w-16 h-16 rounded text-xs flex items-center
+                  class="object-cover bg-surface-950/75 p-2 w-16 h-16 rounded text-xs flex items-center
                     justify-center"
                   :class="{ 'text-amber-400': card.arcana === 'major' }"
                 >
-                  <span>{{ card.arcana }}</span>
+                  <span class="capitalize">{{ card.arcana }}</span>
                 </div>
               </div>
               <div
                 v-else
-                class="object-cover bg-zinc-900 p-2 w-16 h-16 rounded flex items-center justify-center"
+                class="object-cover bg-surface-950/75 p-2 w-16 h-16 rounded flex items-center
+                  justify-center"
               >
                 <span v-show="!card">❔</span>
               </div>
@@ -91,13 +95,14 @@ function getDeepReading(close: () => void) {
             <div v-else-if="i === 'suit'">
               <div v-if="card && card.suit">
                 <div
-                  class="object-cover bg-zinc-900 p-2 w-16 h-16 rounded text-xs sprite sprite-suit"
+                  class="object-cover bg-surface-950/75 p-2 w-16 h-16 rounded text-xs sprite sprite-suit"
                   :class="card.suit"
                 />
               </div>
               <div
                 v-else
-                class="object-cover bg-zinc-900 p-2 w-16 h-16 rounded flex items-center justify-center"
+                class="object-cover bg-surface-950/75 p-2 w-16 h-16 rounded flex items-center
+                  justify-center"
               >
                 <span v-show="!card">❔</span>
               </div>
@@ -107,13 +112,14 @@ function getDeepReading(close: () => void) {
             <div v-else>
               <div v-if="card?.suit">
                 <div
-                  class="object-cover bg-zinc-900 p-2 w-16 h-16 rounded text-xs sprite sprite-el"
+                  class="object-cover bg-surface-950/75 p-2 w-16 h-16 rounded text-xs sprite sprite-el"
                   :class="elementsMap.get(card.suit as any)"
                 />
               </div>
               <div
                 v-else
-                class="object-cover bg-zinc-900 p-2 w-16 h-16 rounded flex items-center justify-center"
+                class="object-cover bg-surface-950/75 p-2 w-16 h-16 rounded flex items-center
+                  justify-center"
               >
                 <span v-show="!card">❔</span>
               </div>
@@ -122,31 +128,28 @@ function getDeepReading(close: () => void) {
         </div>
 
         <!-- chosen card -->
-        <template v-if="card">
-          <span class="my-2">
-            {{ card.name }}
-          </span>
-          <tarot-card
-            :card="card"
-            :flip="true"
-            :show-overlay="true"
-            class="aspect-[11/19] w-1/3"
-          />
-        </template>
+
+        <tarot-card
+          v-if="card"
+          :card="card"
+          :flip="true"
+          :show-overlay="true"
+          class="aspect-[11/19] w-1/3 mt-4"
+        />
 
         <!-- empty card slot -->
         <template v-else>
           <span class="mt-4 mb-2"> no card selected </span>
           <div
-            class="object-cover bg-zinc-900 p-2 rounded aspect-[11/19] mt-2 w-1/3 flex items-center
-              justify-center"
+            class="object-cover bg-surface-950/75 p-2 rounded aspect-[11/19] mt-2 w-1/3 flex
+              items-center justify-center"
           >
             <span v-show="!card">❔</span>
           </div>
         </template>
 
         <arcana-button
-          class="mt-6 mb-4"
+          class="mt-6 mb-2"
           size="sm"
           :disabled="!card || disableDeepReading || chatgpt.isTyping"
           @click="getDeepReading(close)"

@@ -39,7 +39,7 @@ export default defineNuxtConfig({
         'window-controls-overlay',
         'browser',
       ],
-      background_color: '#6366f1',
+      background_color: '#202132',
       categories: [
         'entertainment',
         'lifestyle',
@@ -68,7 +68,7 @@ export default defineNuxtConfig({
           type: 'image/png',
         },
       ],
-      theme_color: '#6366f1',
+      theme_color: '#202132',
       id: 'com.arcana-flame.vercel.app',
       orientation: 'portrait',
       dir: 'ltr',

@@ -33,15 +33,15 @@ function handleEnterKey(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="flex items-center py-1 px-2 rounded-lg bg-primary-800 w-full">
+  <div class="flex items-center py-1 px-2 rounded-lg bg-surface-800 w-full">
     <textarea
       id="chat"
       ref="inputEl"
       v-model="message"
       rows="1"
-      class="block p-2.5 w-full text-sm text-primary-900 bg-white rounded-lg
-        border-primary-300 focus:ring-secondary-500 focus:border-secondary-500
-        dark:bg-primary-800 dark:border-primary-600 dark:placeholder-primary-400
+      class="block p-2.5 w-full text-sm text-surface-900 bg-white rounded-lg
+        border-surface-300 focus:ring-secondary-500 focus:border-secondary-500
+        dark:bg-surface-800 dark:border-surface-600 dark:placeholder-surface-400
         dark:text-white dark:focus:ring-secondary-500 dark:focus:border-secondary-500
         resize-none outline-none max-h-40 overflow-y-auto"
       placeholder="Your message..."
@@ -51,7 +51,7 @@ function handleEnterKey(event: KeyboardEvent) {
     <button
       :class="{ 'button--disabled': !message }"
       class="inline-flex justify-center p-2 text-secondary-600 rounded-full cursor-pointer
-        hover:bg-secondary-100 dark:text-secondary-500 dark:hover:bg-primary-600"
+        hover:bg-secondary-100 dark:text-secondary-500 dark:hover:bg-surface-600"
       @click="sendMessage"
     >
       <svg
@@ -70,6 +70,6 @@ function handleEnterKey(event: KeyboardEvent) {
 
 <style>
 .button--disabled {
-  @apply opacity-50 text-primary-300;
+  @apply opacity-50 text-surface-300;
 }
 </style>

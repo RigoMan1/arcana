@@ -21,11 +21,11 @@ defineProps({
 
 <style scoped>
 .v-button {
-  @apply text-white border-2 border-secondary-500;
-  @apply rounded-lg;
+  @apply text-white border border-secondary-600 capitalize;
+  @apply rounded-xl;
   @apply whitespace-nowrap cursor-pointer;
   @apply outline-none focus-visible:ring-2 focus-visible:ring-secondary-300;
-  transition-duration: 0.2s !important;
+  transition-duration: 0.1s !important;
   background-size: 200%;
   cursor: pointer;
   background-position: 28% 0;
@@ -35,7 +35,7 @@ defineProps({
 .v-button--size-xs {
   @apply px-2 text-[10px];
   height: 1.5rem;
-  --v-button-scale: 1.5rem;
+  --v-button-scale: 1.75rem;
 }
 
 .v-button--size-sm {
@@ -45,7 +45,7 @@ defineProps({
 }
 
 .v-button--size-base {
-  @apply px-4 text-sm;
+  @apply px-4 text-base;
   height: 3rem;
 }
 
@@ -55,17 +55,19 @@ defineProps({
 }
 
 /* color */
-.v-button--color-primary:not([data-state='disabled']) {
+.v-button--color-primary:not([data-state='disabled']):not(
+    .v-button--variant-secondary
+  ) {
   background: linear-gradient(
-    86deg,
-    theme('colors.secondary.400') 15.29%,
+    180deg,
+    theme('colors.secondary.500') 0.29%,
     theme('colors.secondary.600') 58.19%
   );
 }
 
 /* states */
 .v-button[data-state='disabled'] {
-  @apply !bg-primary-800 border-primary-700  text-white/30;
+  @apply bg-primary-800 border-primary-700  text-white/30;
   pointer-events: none;
 }
 
@@ -82,5 +84,14 @@ defineProps({
 .v-button--variant-text {
   background: transparent !important;
   border-color: transparent !important;
+}
+
+.v-button--variant-outlined {
+  background: transparent !important;
+  @apply border border-secondary-100/25 text-secondary-100;
+}
+
+.v-button--variant-secondary {
+  @apply bg-surface-800 text-secondary-100 border-transparent;
 }
 </style>

@@ -14,7 +14,7 @@ const parsedContent =
 <template>
   <content-renderer
     v-if="message.content"
-    class="w-full markdown prose prose-sm text-center"
+    class="w-full markdown prose prose-sm text-center leading-normal font-medium"
     :value="parsedContent"
     style="z-index: 10"
   />
