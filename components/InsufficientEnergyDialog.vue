@@ -1,10 +1,10 @@
 <script setup lang="ts">
-const alert = defineModel<boolean>();
-
 const energyShop = ref(false);
 
+const { $state: $energyState, closeEnergyAlert } = useEnergyStore();
+
 function handleClick() {
-  alert.value = false;
+  closeEnergyAlert();
   energyShop.value = true;
 }
 </script>
@@ -14,14 +14,14 @@ function handleClick() {
     <energy-shop-dialog v-model="energyShop" />
 
     <alert-dialog
-      v-model="alert"
+      v-model="$energyState.showLowEnergyAlert"
       color="danger"
       title="Insufficient Energy"
       text="Energy too low to perform this action!"
       icon="fluent:error-circle-24-filled"
       secondary-action-text="Cancel"
       primary-action-text="Buy Energy +"
-      @click:secondary-action="alert = false"
+      @click:secondary-action="closeEnergyAlert"
       @click:primary-action="handleClick"
     />
   </div>

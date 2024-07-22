@@ -1,10 +1,19 @@
 import { defineStore } from 'pinia';
 import { fortuneTellers } from '@/constants/fortune-tellers';
+import { useEnergyStore } from '@/stores/useEnergyStore';
+import { useChatgptStore } from '~/stores/useChatgptStore';
+import { fortuneTellerPrompt } from '@/constants/systemPrompts';
 
 interface FortuneTellerState {
   activeFortuneTellerIndex: number;
   currentMessage: IMessage | null;
   displayMessage: boolean;
+}
+
+interface IFortuneTellerMessage {
+  systemPrompt: string;
+  userPrompt: string;
+  messageCost: number;
 }
 
 export const useFortuneTeller = defineStore('reader-select-store', {
@@ -25,6 +34,43 @@ export const useFortuneTeller = defineStore('reader-select-store', {
     },
     showMessage() {
       this.displayMessage = true;
+    },
+
+    async handleSendMessage({
+      systemPrompt,
+      userPrompt,
+      messageCost = 0,
+    }: IFortuneTellerMessage) {
+      this.clearCurrentMessage();
+
+      const { useBasicEnergy } = useEnergyStore();
+      const chatgpt = useChatgptStore();
+
+      try {
+        await useBasicEnergy(messageCost);
+
+        return await chatgpt.sendMessage({
+          system: systemPrompt,
+          user: userPrompt,
+        });
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
+    },
+    async handleTextMessage(userPrompt: string) {
+      const messageCost = Math.max(1, Math.ceil(userPrompt.length / 20));
+
+      const systemPrompt = `
+        ${this.activeFortuneTeller.description}
+        ${fortuneTellerPrompt(this.activeFortuneTeller)}
+        `;
+
+      const res = await this.handleSendMessage({
+        systemPrompt,
+        userPrompt,
+        messageCost,
+      });
+      if (res) this.setActiveMessage(res);
     },
   },
   getters: {

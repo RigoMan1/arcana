@@ -2,69 +2,23 @@
 import { shuffleCards } from '@/utils/helpers';
 import TarotCards from '~/constants/tarot-card-data';
 
-const fortuneReadingStore = useFortuneReading();
-
 const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
 const user = useSupabaseUser();
 
 onMounted(() => {
   tarotDeck.value = shuffleCards(TarotCards, true);
-  // Greet the user
+
   handleTextMessage(`
-  Greet the user.
-  - mind the tarot spread
-  - be very brief
-  `);
-});
-
-// exposing index from prizewheel to reset the button
-const selectedCardIndex = ref(null) as Ref<TarotCard | null>;
-function removeCard(cardIndex: number) {
-  tarotDeck.value.splice(cardIndex, 1, null);
-  selectedCardIndex.value = null;
-}
-
-// --- fortune reading logic ---
-
-import { useEnergyStore } from '@/stores/useEnergyStore';
-import { useChatgptStore } from '~/stores/useChatgptStore';
-import {
-  fortuneTellerPrompt,
-  cardReadingPrompt,
-  wholisticPrompt,
-} from '@/constants/systemPrompts';
-import type { RouteLocationNormalized } from 'vue-router';
-
-const { useBasicEnergy } = useEnergyStore();
-const fortuneTeller = useFortuneTeller();
-const chatgpt = useChatgptStore();
-
-const lowEnergyAlert = ref(false);
-
-const userLanguage = ref<string>('es');
-onMounted(() => (userLanguage.value = navigator.language));
-
-const { activeSpread, allCardsSelected, selectedCards } =
-  storeToRefs(useTarotSpread());
-
-async function handleSendMessage(
-  prompt: string,
-  userMessage: string,
-  messageCost = 0
-) {
-  fortuneTeller.clearCurrentMessage();
-
-  try {
-    await useBasicEnergy(messageCost);
-
-    const readingContext = `
-    tarot-spread:${activeSpread.value.name}
-    tarot-spread-description:${activeSpread.value.description}
-    card-count:${activeSpread.value.positions.length}
+  <reading-context>
+    <tarot-spread-info>
+      tarot-spread:${activeSpread.value.name} 
+      tarot-spread-description:${activeSpread.value.description}
+      card-count:${activeSpread.value.positions.length}
+    </tarot-spread-info>
 
     <user-data>
       name: ${user.value?.user_metadata?.name || 'n/a'}
-      always respond in user prefered language: ${userLanguage.value}
+      always respond in user prefered language: ${navigator.language}
     </user-data>
 
     <app-instructions>
@@ -75,31 +29,52 @@ async function handleSendMessage(
          4. drag the card to a location on the the spread
 
     </app-instructions>
-    `;
+  </reading-context>
 
-    return await chatgpt.sendMessage({
-      system: prompt + readingContext,
-      user: userMessage,
-    });
-  } catch (error) {
-    lowEnergyAlert.value = true;
-  }
+  <instructions>
+    - greet the user
+    - mind the tarot spread
+    - be very brief
+  </instructions>
+  `);
+});
+
+// exposing index from prizewheel to reset the button
+const selectedCardIndex = ref(null) as Ref<TarotCard | null>;
+function removeCard(cardIndex: number) {
+  tarotDeck.value.splice(cardIndex, 1, null);
+  selectedCardIndex.value = null;
 }
 
-const showCards = ref(false);
+const mode = ref('chat');
 
-async function handleTextMessage(message: string) {
-  const messageCost = Math.max(1, Math.ceil(message.length / 20));
-  const res = await handleSendMessage(
-    `
-    ${fortuneTeller.activeFortuneTeller.description}
-    ${fortuneTellerPrompt(fortuneTeller.activeFortuneTeller)}
-    `,
-    message,
-    messageCost
-  );
-  if (res) fortuneTeller.setActiveMessage(res);
+function toggleMode(newVal: 'chat' | 'read') {
+  if (newVal === 'chat') fortuneTeller.showMessage();
+  else if (newVal === 'read') fortuneTeller.hideMessage();
+
+  mode.value = newVal;
 }
+
+const wheelEl = ref() as Ref<any>;
+function drawCard() {
+  toggleMode('read');
+
+  setTimeout(() => {
+    wheelEl.value.spinCarousel();
+  }, 400);
+}
+
+// #region --- fortune reading messaging ---
+import { useChatgptStore } from '~/stores/useChatgptStore';
+import { cardReadingPrompt, wholisticPrompt } from '@/constants/systemPrompts';
+import type { RouteLocationNormalized } from 'vue-router';
+
+const fortuneTeller = useFortuneTeller();
+const { handleSendMessage, handleTextMessage } = useFortuneTeller();
+const chatgpt = useChatgptStore();
+
+const { activeSpread, allCardsSelected, selectedCards } =
+  storeToRefs(useTarotSpread());
 
 function reactToCardDrop({
   position,
@@ -120,25 +95,27 @@ function reactToCardDrop({
 
 const dialog = ref(false);
 const readings = ref([]) as Ref<IMessage[]>;
-const CARD_READING_ENERGY_COST = 20;
-const WHOLISTIC_READING_ENERGY_COST = 50;
 
+const CARD_READING_ENERGY_COST = 20;
 async function handleSingleCardReading(
   cardPrompt: string,
   positionPrompt: string
 ) {
-  showCards.value = false;
-
-  const userMessage = `
+  const userPrompt = `
     Can you provide more in-depth insights for
     ${cardPrompt}
   `;
 
-  const reading = await handleSendMessage(
-    cardReadingPrompt(positionPrompt, fortuneTeller.activeFortuneTeller),
-    userMessage,
-    CARD_READING_ENERGY_COST
+  const systemPrompt = cardReadingPrompt(
+    positionPrompt,
+    fortuneTeller.activeFortuneTeller
   );
+
+  const reading = await handleSendMessage({
+    systemPrompt,
+    userPrompt,
+    messageCost: CARD_READING_ENERGY_COST,
+  });
 
   if (reading) {
     readings.value.push(reading);
@@ -147,6 +124,7 @@ async function handleSingleCardReading(
 }
 
 const showConcludeReading = ref(false);
+const WHOLISTIC_READING_ENERGY_COST = 50;
 async function handleWholisticReading() {
   const formatCard = (position: string, card: TarotCard) => `
   spread-label: ${position}
@@ -168,11 +146,11 @@ async function handleWholisticReading() {
     give a holstic reading for each group in the tarot spread as whole.
   `;
 
-  const reading = await handleSendMessage(
-    wholisticPrompt(fortuneTeller.activeFortuneTeller),
-    userMessage,
-    WHOLISTIC_READING_ENERGY_COST
-  );
+  const reading = await handleSendMessage({
+    systemPrompt: wholisticPrompt(fortuneTeller.activeFortuneTeller),
+    userPrompt: userMessage,
+    messageCost: WHOLISTIC_READING_ENERGY_COST,
+  });
 
   if (reading) {
     readings.value.push(reading);
@@ -186,26 +164,13 @@ async function handleWholisticReading() {
     showConcludeReading.value = true;
   }
 }
+// #endregion
 
+// #region  --- quit reading guard ---
 function concludeReading() {
   window.location.href = '/reader-select';
 }
 
-const wheelEl = ref() as Ref<any>;
-const tarotSpreadEl = ref() as Ref<any>;
-
-const mode = ref('chat');
-
-function toggleMode(newVal: 'chat' | 'read') {
-  showCards.value = newVal === 'read';
-
-  if (newVal === 'chat') fortuneTeller.showMessage();
-  else if (newVal === 'read') fortuneTeller.hideMessage();
-
-  mode.value = newVal;
-}
-
-// quit reading guard
 const quitReadingAlert = reactive({
   showDialog: false,
   targetRoute: null,
@@ -214,6 +179,7 @@ const quitReadingAlert = reactive({
   targetRoute: RouteLocationNormalized | null;
 };
 
+const fortuneReadingStore = useFortuneReading();
 onBeforeRouteLeave((to, from, next) => {
   if (!quitReadingAlert.showDialog) {
     quitReadingAlert.showDialog = true;
@@ -226,22 +192,11 @@ onBeforeRouteLeave((to, from, next) => {
     next();
   }
 });
-
-function handleCardClick() {
-  toggleMode('read');
-
-  setTimeout(() => {
-    wheelEl.value.spinCarousel();
-  }, 400);
-
-  console.log('spinnging the wheel');
-}
+// #endregion
 </script>
 
 <template>
   <div class="container flex flex-col h-full">
-    <insufficient-energy-dialog v-model="lowEnergyAlert" />
-
     <alert-dialog
       v-model="quitReadingAlert.showDialog"
       color="danger"
@@ -262,7 +217,7 @@ function handleCardClick() {
     <div class="flex items-center justify-center h-1/6">
       <transition name="scale-transition">
         <card-wheel
-          v-show="mode === 'read' && showCards"
+          v-show="mode === 'read'"
           ref="wheelEl"
           v-model="selectedCardIndex"
           class="w-full h-full origin-top"
@@ -287,7 +242,6 @@ function handleCardClick() {
       style="z-index: 10"
     >
       <tarot-spread
-        ref="tarotSpreadEl"
         :tarot-deck="tarotDeck"
         @remove-card="removeCard"
         @card-selected="handleSingleCardReading"
@@ -304,7 +258,7 @@ function handleCardClick() {
         <arcana-button
           class="!px-2 relative"
           :disabled="mode === 'read' || allCardsSelected"
-          @click="handleCardClick"
+          @click="drawCard"
         >
           <Icon
             name="fluent:playing-cards-20-filled"

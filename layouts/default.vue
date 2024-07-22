@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useAnonymousUser } from '~/composables/useAnonymousUser';
+import { useEnergyStore } from '@/stores/useEnergyStore';
 
 const appLoaded = ref(false);
 
@@ -19,6 +20,8 @@ onMounted(async () => {
 
 <template>
   <nuxt-pwa-manifest />
+
+  <insufficient-energy-dialog />
 
   <v-app
     v-if="appLoaded"
