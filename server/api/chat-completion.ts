@@ -2,32 +2,13 @@ import OpenAI from 'openai';
 import { createError, defineEventHandler, readBody } from 'h3';
 import { defaultOptions } from '../../constants/options';
 import {
-  // MODEL_GPT_TURBO_3_5_0125,
+  MODEL_GPT_TURBO_3_5_0125,
   MODEL_GPT_4_OMNI,
   type IModel,
 } from '../../constants/models';
 import { modelMap } from '../../utils/model-map';
 import { useRuntimeConfig } from '#imports';
 import { logitBias } from '../../constants/blacklist';
-
-// Define the function schema
-const funcGetUsersName = {
-  name: 'get_users_name',
-  description: `
-  - use this function to get the user's name from the conversation
-  - always invoke this function if !get_users_name command is present in the prompt.
-  `,
-  parameters: {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string',
-        description: 'The name of the user',
-      },
-    },
-    required: ['name'],
-  },
-};
 
 export default defineEventHandler(async (event) => {
   const { messages, model, options } = await readBody(event);
@@ -48,9 +29,10 @@ export default defineEventHandler(async (event) => {
   try {
     const chatCompletion = await openai.chat.completions.create({
       messages,
-      model: !model ? modelMap[MODEL_GPT_4_OMNI] : modelMap[model as IModel],
+      // model: !model ? modelMap[MODEL_GPT_4_OMNI] : modelMap[model as IModel],
+      // model: modelMap[MODEL_GPT_TURBO_3_5_0125],
+      model: 'gpt-4o-mini',
       ...(options || defaultOptions),
-      functions: [funcGetUsersName],
       function_call: 'auto',
       logit_bias: logitBias,
     });

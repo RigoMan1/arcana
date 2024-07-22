@@ -5,26 +5,16 @@ import TarotCards from '~/constants/tarot-card-data';
 const fortuneReadingStore = useFortuneReading();
 
 const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
-
-onMounted(() => (tarotDeck.value = shuffleCards(TarotCards, true)));
-
 const user = useSupabaseUser();
 
-// Greet user and ask for their name
 onMounted(() => {
-  if (user.value?.user_metadata?.name) {
-    handleTextMessage(`
+  tarotDeck.value = shuffleCards(TarotCards, true);
+  // Greet the user
+  handleTextMessage(`
   Greet the user.
   - mind the tarot spread
   - be very brief
   `);
-  } else {
-    handleTextMessage(`
-      - Greet the user
-      - Ask for their name
-      - if the user provides their name, greet them by name
-    `);
-  }
 });
 
 // exposing index from prizewheel to reset the button
@@ -96,19 +86,8 @@ async function handleSendMessage(
   }
 }
 
-const supabase = useSupabaseClient();
 const showCards = ref(false);
-function updateUserName(name: string) {
-  console.log('updating name in the database with the name:', name);
-  supabase.auth.updateUser({
-    data: { name },
-  });
 
-  handleTextMessage(`
-    - Greet the user by their name, and proceed with the reading
-    - if the user denies providing their name, we will use "n/a" as the name
-  `);
-}
 async function handleTextMessage(message: string) {
   const messageCost = Math.max(1, Math.ceil(message.length / 20));
   const res = await handleSendMessage(
@@ -119,15 +98,7 @@ async function handleTextMessage(message: string) {
     message,
     messageCost
   );
-  if (res) {
-    if (res.function_call) {
-      // *handle user name update
-      const args = JSON.parse(res.function_call.arguments);
-      updateUserName(args.name);
-    } else {
-      fortuneTeller.setActiveMessage(res);
-    }
-  }
+  if (res) fortuneTeller.setActiveMessage(res);
 }
 
 function reactToCardDrop({
