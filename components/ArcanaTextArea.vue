@@ -1,4 +1,10 @@
 <script setup lang="ts">
+defineProps({
+  minHeight: {
+    type: String,
+    default: null,
+  },
+});
 const emit = defineEmits(['message']);
 // Resize the textarea based on its content
 const inputEl = ref<HTMLTextAreaElement>();
@@ -39,6 +45,7 @@ function handleEnterKey(event: KeyboardEvent) {
       ref="inputEl"
       v-model="message"
       rows="1"
+      :style="{ minHeight }"
       class="block p-2.5 w-full text-sm text-surface-900 bg-white rounded-lg
         border-surface-300 focus:ring-secondary-500 focus:border-secondary-500
         dark:bg-surface-800 dark:border-surface-600 dark:placeholder-surface-400

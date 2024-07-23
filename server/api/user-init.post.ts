@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
         .values({
           userId,
           name: '',
+          bio: '',
         })
         .execute();
 

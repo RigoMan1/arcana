@@ -54,18 +54,6 @@ function getInDepthReading(label: string, card: TarotCard) {
     activeSpread.value
   );
 }
-
-//   const formatCard = (position: string, card: TarotCard) =>
-//     `
-//   spread-label: ${position}
-//   card-name: ${card.name}
-//   card-image: ${card.image}
-//   reversed: ${card.reversed}
-//   `;
-
-//   // const allCardsData = currentSpreadComponent.value.positions.map((label) => {
-//   //   return formatCard(label, selectedCards.value[label]!);
-//   // });
 </script>
 
 <template>

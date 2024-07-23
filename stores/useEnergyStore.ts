@@ -26,7 +26,7 @@ export const useEnergyStore = defineStore('energy-store', {
       }
     },
     async addBasicEnergy(amount: number) {
-      if (!Number.isInteger(amount) || amount <= 0) {
+      if (!Number.isInteger(amount) || amount < 0) {
         throw new Error('Amount to add must be a positive integer.');
       }
 
@@ -54,8 +54,8 @@ export const useEnergyStore = defineStore('energy-store', {
       }
     },
     async useBasicEnergy(amount: number) {
-      if (!Number.isInteger(amount) || amount <= 0) {
-        throw new Error('Amount to use must be a positive integer.');
+      if (!Number.isInteger(amount)) {
+        throw new Error('Amount to use must be a non-negative integer.');
       }
       if (!this.isEnergyAvailable(amount)) {
         this.showEnergyAlert();

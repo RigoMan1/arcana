@@ -1,42 +1,34 @@
 <script setup lang="ts">
 import { shuffleCards } from '@/utils/helpers';
 import TarotCards from '~/constants/tarot-card-data';
+import { PROMPT_GREETING } from '@/constants/systemPrompts';
 
 const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
-const user = useSupabaseUser();
+
+const { $state: $profile, updateBio } = useProfileStore();
 
 onMounted(() => {
   tarotDeck.value = shuffleCards(TarotCards, true);
 
-  handleTextMessage(`
-  <reading-context>
-    <tarot-spread-info>
-      tarot-spread:${activeSpread.value.name} 
-      tarot-spread-description:${activeSpread.value.description}
-      card-count:${activeSpread.value.positions.length}
-    </tarot-spread-info>
+  handleTextMessage(
+    `
+    <reading-context>
+      <tarot-spread-info>
+        tarot-spread:${activeSpread.value.name}
+        tarot-spread-description:${activeSpread.value.description}
+        card-count:${activeSpread.value.positions.length}
+      </tarot-spread-info>
 
-    <user-data>
-      name: ${user.value?.user_metadata?.name || 'n/a'}
-      always respond in user prefered language: ${navigator.language}
-    </user-data>
+      <user-data>
+        ${$profile.bio}
+        always respond in user prefered language: ${navigator.language}
+      </user-data>
+    </reading-context>
 
-    <app-instructions>
-      Q: how to draw cards?
-      A: 1. click on the icon at the bottom left corner
-         2. this will bring up a carousel of cards
-         3. spin the carousel to draw a random card
-         4. drag the card to a location on the the spread
-
-    </app-instructions>
-  </reading-context>
-
-  <instructions>
-    - greet the user
-    - mind the tarot spread
-    - be very brief
-  </instructions>
-  `);
+    ${PROMPT_GREETING}
+    `,
+    0
+  );
 });
 
 // exposing index from prizewheel to reset the button
@@ -66,8 +58,12 @@ function drawCard() {
 
 // #region --- fortune reading messaging ---
 import { useChatgptStore } from '~/stores/useChatgptStore';
-import { cardReadingPrompt, wholisticPrompt } from '@/constants/systemPrompts';
 import type { RouteLocationNormalized } from 'vue-router';
+import {
+  PROMPT_READING_SINGLE_CARD,
+  PROMPT_READING_HOLISTIC,
+  PROMPT_BIO_ASSESMENT,
+} from '@/constants/systemPrompts';
 
 const fortuneTeller = useFortuneTeller();
 const { handleSendMessage, handleTextMessage } = useFortuneTeller();
@@ -106,7 +102,7 @@ async function handleSingleCardReading(
     ${cardPrompt}
   `;
 
-  const systemPrompt = cardReadingPrompt(
+  const systemPrompt = PROMPT_READING_SINGLE_CARD(
     positionPrompt,
     fortuneTeller.activeFortuneTeller
   );
@@ -147,7 +143,7 @@ async function handleWholisticReading() {
   `;
 
   const reading = await handleSendMessage({
-    systemPrompt: wholisticPrompt(fortuneTeller.activeFortuneTeller),
+    systemPrompt: PROMPT_READING_HOLISTIC(fortuneTeller.activeFortuneTeller),
     userPrompt: userMessage,
     messageCost: WHOLISTIC_READING_ENERGY_COST,
   });
@@ -160,6 +156,15 @@ async function handleWholisticReading() {
     handleTextMessage(`
       - bid the user farewell
     `);
+
+    const res = await handleSendMessage({
+      systemPrompt: '',
+      userPrompt: PROMPT_BIO_ASSESMENT,
+      messageCost: 0,
+    });
+
+    if (res?.content) await updateBio(res.content);
+    console.log('bio updated');
 
     showConcludeReading.value = true;
   }

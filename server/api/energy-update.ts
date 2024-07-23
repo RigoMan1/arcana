@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   }: { userId: string; amount: number; action: 'add' | 'deduct' } =
     await readBody(event);
 
-  if (!userId || !amount || !action) {
+  if (!userId || amount < 0 || !action) {
     return { error: 'User ID, amount, and action are required' };
   }
 

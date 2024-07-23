@@ -14,6 +14,7 @@ export const profiles = pgTable('profiles', {
   id: serial('id').primaryKey(),
   userId: uuid('user_id').notNull().unique(), // Ensures each user has only one currency balance
   name: text('name'),
+  bio: text('bio'),
 });
 
 export type Profile = InferSelectModel<typeof profiles>;

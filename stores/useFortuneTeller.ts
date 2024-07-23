@@ -57,8 +57,11 @@ export const useFortuneTeller = defineStore('reader-select-store', {
         console.error('Error sending message:', error);
       }
     },
-    async handleTextMessage(userPrompt: string) {
-      const messageCost = Math.max(1, Math.ceil(userPrompt.length / 20));
+    async handleTextMessage(userPrompt: string, cost?: number) {
+      const messageCost =
+        cost !== undefined
+          ? cost
+          : Math.max(1, Math.ceil(userPrompt.length / 20));
 
       const systemPrompt = `
         ${this.activeFortuneTeller.description}

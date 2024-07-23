@@ -6,11 +6,13 @@ const appLoaded = ref(false);
 
 const { getOrCreateAnonymousUser } = useAnonymousUser();
 const { initializeEnergy } = useEnergyStore();
+const { fetchBio } = useProfileStore();
 
 onMounted(async () => {
   try {
     await getOrCreateAnonymousUser();
     await initializeEnergy();
+    await fetchBio();
     appLoaded.value = true;
   } catch (error) {
     console.error(error);
