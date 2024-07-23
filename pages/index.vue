@@ -2,6 +2,9 @@
 import { shuffleCards } from '@/utils/helpers';
 import TarotCards from '~/constants/tarot-card-data';
 import { PROMPT_GREETING } from '@/constants/systemPrompts';
+import { getRandomQueries } from '@/constants/preset-queries.js';
+
+const presetPrompts = getRandomQueries(4);
 
 const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
 
@@ -49,6 +52,7 @@ function toggleMode(newVal: 'chat' | 'read') {
 
 const wheelEl = ref() as Ref<any>;
 function drawCard() {
+  if (!hasUserInteracted.value) return;
   toggleMode('read');
 
   setTimeout(() => {
@@ -68,6 +72,12 @@ import {
 const fortuneTeller = useFortuneTeller();
 const { handleSendMessage, handleTextMessage } = useFortuneTeller();
 const chatgpt = useChatgptStore();
+
+const hasUserInteracted = ref(false);
+function handleUserInput(message: string) {
+  hasUserInteracted.value = true;
+  handleTextMessage(message);
+}
 
 const { activeSpread, allCardsSelected, selectedCards } =
   storeToRefs(useTarotSpread());
@@ -153,7 +163,7 @@ async function handleWholisticReading() {
     dialog.value = true;
 
     // todo: improvised complete reading logic
-    handleTextMessage(`
+    await handleTextMessage(`
       - bid the user farewell
     `);
 
@@ -241,12 +251,31 @@ onBeforeRouteLeave((to, from, next) => {
     </div>
 
     <!-- 2. tarot spread -->
-
     <div
       class="flex-1"
       style="z-index: 10"
     >
+      <div
+        v-if="!hasUserInteracted"
+        class="grid grid-cols-1 gap-3 p-4"
+      >
+        <div
+          v-for="q in presetPrompts"
+          :key="q.slice(0, 10)"
+          class="h-20 whitespace-normal rounded-lg bg-surface-900 border border-surface-100 flex
+            items-center justify-center text-center user-select-none cursor-pointer
+            hover:bg-surface-800/50 text-surface-100 text-sm"
+          variant="outliend"
+          @click="handleUserInput(q)"
+        >
+          {{ q }}
+        </div>
+      </div>
+
       <tarot-spread
+        :class="{
+          'opacity-0 absolute top-0 pointer-events-none': !hasUserInteracted,
+        }"
         :tarot-deck="tarotDeck"
         @remove-card="removeCard"
         @card-selected="handleSingleCardReading"
@@ -262,7 +291,7 @@ onBeforeRouteLeave((to, from, next) => {
         <span class="text-xs mb-1 opacity-70"> Draw </span>
         <arcana-button
           class="!px-2 relative"
-          :disabled="mode === 'read' || allCardsSelected"
+          :disabled="mode === 'read' || allCardsSelected || !hasUserInteracted"
           @click="drawCard"
         >
           <Icon
@@ -293,7 +322,7 @@ onBeforeRouteLeave((to, from, next) => {
 
       <arcana-text-area
         v-if="mode === 'chat' && !allCardsSelected"
-        @message="handleTextMessage"
+        @message="handleUserInput"
       />
     </div>
   </div>

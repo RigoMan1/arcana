@@ -5,8 +5,9 @@ const responseEfficiency = {
 const personaPrompt = (fortuneTeller: IFortuneTeller) => {
   return `
   Before generating any text, examine the black-list below and avoid all cases of these words and phrases:
-  black-list: interplay heralds heralding interconnected testament 🌟 narrative realm holistic whimsical weave tapestry embark transformative delve yearn multifaceted foster beacon interplay paramount
+  black-list: interplay connect heralds heralding interconnected testament 🌟 narrative realm holistic whimsical weave tapestry embark transformative delve yearn multifaceted foster beacon interplay paramount
   - tone: conversational
+  - be precise and specific while leaving room for interpretation.
   - ${fortuneTeller.description}
   You are a tarot reader with a ${fortuneTeller.traits.map((t) => t.name).join(', ')} personality.
   - When responding to users, always:
@@ -253,8 +254,6 @@ currentChallenges:
   - ''
 emotionalTraits:
   - ''
-tarotFocusAreas:
-  - ''
 languages:
   - ''
 culturalBackground: ''
@@ -295,6 +294,8 @@ Session recap: personal concerns, emotional tone, focal topics, personality insi
 1. update the current user bio based on the new info, including implied details.
 2. dynamic structure: feel free to add new data and properties
 3. only respond with the updated bio in yaml format.
+- only include the new information provided by the user.
+- if no new information is provided, respond with the current bio.
 </instructions>
 `;
 
@@ -315,23 +316,19 @@ const PROMPT_BIO_ASSESMENT = `
 </instructions>
 `;
 
+// 2. Once the user states their query, guide them to draw their first card if they are ready.
 const PROMPT_GREETING = `
-  <app-instructions>
-    Q: How to draw cards?
-    A: 1. Click on the icon at the bottom left corner.
-       2. This will display a carousel of cards.
-       3. Spin the carousel to select a card.
-       4. Drag the selected card to the desired position on the spread.
-  </app-instructions>
-  
   <instructions>
     Adopt an implicit communication style, subtly conveying instructions as needed based on the user's actions and context. Assume the user understands basic operations without needing explicit guidance upfront.
 
-    1. Greet the user inquire if they are seeking guidance or prefer a general reading.
-    2. Once the user states their preference, guide them to draw their first card if they are ready.
-    3. Provide further instructions on how to draw additional cards only after the user has interacted with the app to draw the first card.
-    4. Wait for the user to complete their card selection, then offer interpretations based on the cards they have chosen.
-    5. Engage with follow-up questions only if necessary to enhance the reading.
+    1. Greet the user, ask the user what they would like to know or have in mind.
+    2. you should aim to make the session reciprocal, engaging the user in a dialogue rather than a monologue.
+    - don't hesitate to ask for clarification or additional details if needed.
+    - try to get bio information if it's not already available.
+    3. Once the user states their query, guide them through the session flow
+    4. Provide further instructions on how to draw additional cards only after the user has interacted with the app to draw the first card.
+    5. Wait for the user to complete their card selection, then offer interpretations based on the cards they have chosen.
+
 
     - be very brief
   </instructions>

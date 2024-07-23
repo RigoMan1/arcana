@@ -24,7 +24,7 @@ watch(selectedCard, (newVal) => {
   <div
     ref="dropTarget"
     class="drop-zone flex items-center justify-center bg-zinc-900 border-dashed"
-    :class="{ ' bg-secondary-900/20': isOver }"
+    :class="{ ' bg-secondary-800/20': isOver }"
   >
     <span
       class="flex text-xs items-center justify-center absolute px-2 h-6 text-center -top-3
