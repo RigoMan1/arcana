@@ -26,8 +26,21 @@ export default defineEventHandler(async (event) => {
     }
 
     const currentBalance = result[0].basicEnergy;
-    const newBalance =
-      action === 'add' ? currentBalance + amount : currentBalance - amount;
+    let newBalance;
+
+    if (action === 'add') {
+      newBalance = currentBalance + amount;
+    } else {
+      if (currentBalance < amount) {
+        return {
+          error: {
+            message: 'Insufficient energy balance',
+            type: 'insufficient-energy',
+          },
+        };
+      }
+      newBalance = currentBalance - amount;
+    }
 
     await db
       .update(currencyBalance)

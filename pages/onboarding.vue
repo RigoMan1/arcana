@@ -41,7 +41,7 @@ async function assesConversation() {
     <div>
       <arcana-text-area
         min-height="8rem"
-        @message="handleTextMessage"
+        @message="handleTextMessage($event, 0)"
       />
     </div>
 
@@ -50,7 +50,7 @@ async function assesConversation() {
         class="flex-1"
         text="Skip"
         variant="outlined"
-        @click="handleTextMessage('skip')"
+        @click="handleTextMessage('skip', 0)"
       />
 
       <arcana-button

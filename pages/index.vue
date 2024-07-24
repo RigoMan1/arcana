@@ -76,7 +76,7 @@ const chatgpt = useChatgptStore();
 const hasUserInteracted = ref(false);
 function handleUserInput(message: string) {
   hasUserInteracted.value = true;
-  handleTextMessage(message);
+  handleTextMessage(message, 0);
 }
 
 const { activeSpread, allCardsSelected, selectedCards } =
@@ -89,13 +89,16 @@ function reactToCardDrop({
   position: string;
   card: TarotCard;
 }) {
-  handleTextMessage(`
+  handleTextMessage(
+    `
     The user has drawn ${card.name} for ${position}:
       - give a very brief intermediary insight (1 sentence) about what the card means in that position, in regards to the user's question
       - Avoid general descriptions of the card
       - the response should be very brief, as to not to interrupt as the user continues to draw cards
       - do not instruct the user to draw more cards
-  `);
+  `,
+    0
+  );
   toggleMode('chat');
 }
 
@@ -130,7 +133,7 @@ async function handleSingleCardReading(
 }
 
 const showConcludeReading = ref(false);
-const WHOLISTIC_READING_ENERGY_COST = 50;
+
 async function handleWholisticReading() {
   const formatCard = (position: string, card: TarotCard) => `
   spread-label: ${position}
@@ -155,7 +158,7 @@ async function handleWholisticReading() {
   const reading = await handleSendMessage({
     systemPrompt: PROMPT_READING_HOLISTIC(fortuneTeller.activeFortuneTeller),
     userPrompt: userMessage,
-    messageCost: WHOLISTIC_READING_ENERGY_COST,
+    messageCost: 0,
   });
 
   if (reading) {

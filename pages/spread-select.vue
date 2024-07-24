@@ -7,22 +7,24 @@ import type { VSlideControls } from '~/modules/sui/runtime/components/VSlides/VS
 const { $state } = useTarotSpread();
 const { activeSpread } = storeToRefs(useTarotSpread());
 
-const WHOLISTIC_READING_ENERGY_COST = 50;
-const MIN_MESSAGE_COST = 10;
+const BASE_COST_PER_CARD = 60;
+const DISCOUNT_PER_CARD = 25;
 
 const spreadCost = computed(() => {
-  return (
-    WHOLISTIC_READING_ENERGY_COST * activeSpread.value.components.length +
-    MIN_MESSAGE_COST
-  );
+  const numCards = activeSpread.value.positions.length;
+  // Apply a discount that increases with the number of cards
+  const discount = numCards > 1 ? DISCOUNT_PER_CARD * (numCards - 1) : 0;
+  const totalCost = BASE_COST_PER_CARD * numCards - discount;
+  return totalCost;
 });
 
 const energyStore = useEnergyStore();
-function handleClick() {
-  if (energyStore.basicEnergy < spreadCost.value) {
-    energyStore.showLowEnergyAlert();
-  } else {
+async function handleClick() {
+  try {
+    await energyStore.useBasicEnergy(spreadCost.value);
     navigateTo('/');
+  } catch (error) {
+    console.error(error);
   }
 }
 

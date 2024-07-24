@@ -44,8 +44,7 @@ export const useEnergyStore = defineStore('energy-store', {
         if (response.error) {
           throw new Error(response.error);
         } else {
-          this.basicEnergy += amount;
-
+          this.basicEnergy = response.newBalance;
           return true;
         }
       } catch (error) {
@@ -54,12 +53,11 @@ export const useEnergyStore = defineStore('energy-store', {
       }
     },
     async useBasicEnergy(amount: number) {
+      // free of cost
+      if (amount === 0) return true;
+
       if (!Number.isInteger(amount)) {
         throw new Error('Amount to use must be a non-negative integer.');
-      }
-      if (!this.isEnergyAvailable(amount)) {
-        this.showLowEnergyAlert();
-        throw new Error('Insufficient energy.');
       }
 
       try {
@@ -73,10 +71,12 @@ export const useEnergyStore = defineStore('energy-store', {
           },
         })) as any;
 
-        if (response.error) {
+        if (response.error && response.error.type === 'insufficient-energy') {
+          this.showLowEnergyAlert();
+
           throw new Error(response.error);
         } else {
-          this.basicEnergy -= amount;
+          this.basicEnergy = response.newBalance;
         }
       } catch (error) {
         console.error('Error updating energy:', error);

@@ -13,7 +13,7 @@ interface FortuneTellerState {
 interface IFortuneTellerMessage {
   systemPrompt: string;
   userPrompt: string;
-  messageCost: number;
+  messageCost?: number;
 }
 
 export const useFortuneTeller = defineStore('reader-select-store', {

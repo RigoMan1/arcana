@@ -21,6 +21,10 @@ function getDeepReading(close: () => void) {
   disableDeepReading.value = true;
   close();
 }
+
+const isDisabled = computed(() => {
+  return !props.card || disableDeepReading.value || chatgpt.isTyping;
+});
 </script>
 
 <template>
@@ -151,11 +155,25 @@ function getDeepReading(close: () => void) {
         <arcana-button
           class="mt-6 mb-2"
           size="sm"
-          :disabled="!card || disableDeepReading || chatgpt.isTyping"
+          :disabled="isDisabled"
           @click="getDeepReading(close)"
         >
           <span> get deep reading </span>
         </arcana-button>
+        <div
+          class="text-center"
+          :class="{
+            'opacity-50': isDisabled,
+          }"
+        >
+          <img
+            class="w-3.5 rounded-full inline mr-1"
+            src="/images/energy-basic.png"
+            alt=""
+          />
+
+          <span class="text-xs truncate text-blue-300 font-sans"> 20 </span>
+        </div>
       </div>
     </div>
   </v-dialog>

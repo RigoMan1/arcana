@@ -38,11 +38,11 @@ defineProps({
       <div class="rounded-lg p-4 overflow-auto h-full flex flex-col">
         <!-- bg-surface-800/50 -->
         <div
-          class="flex justify-between items-start space-x-4 max-w-sm mx-auto w-full p-3
+          class="flex justify-around items-start space-x-4 max-w-sm mx-auto w-full py-4
             rounded-xl bg-secondary-400/10"
         >
           <div class="text-center">
-            <h6 class="text-xs">Est. Cost</h6>
+            <h6 class="text-xs">Cost</h6>
 
             <img
               class="w-3.5 rounded-full inline mr-1"
