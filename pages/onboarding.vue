@@ -23,6 +23,10 @@ async function assesConversation() {
 
   navigateTo('/reader-select');
 }
+
+onBeforeUnmount(() => {
+  fortuneTeller.$reset();
+});
 </script>
 
 <template>
@@ -38,13 +42,6 @@ async function assesConversation() {
 
     <div class="flex-1" />
 
-    <div>
-      <arcana-text-area
-        min-height="8rem"
-        @message="handleTextMessage($event, 0)"
-      />
-    </div>
-
     <div class="flex mt-6 space-x-4">
       <arcana-button
         class="flex-1"
@@ -54,9 +51,16 @@ async function assesConversation() {
       />
 
       <arcana-button
-        class="flex-1"
-        text="Continue"
+        variant="outlined"
+        text="Continue to app"
         @click="assesConversation"
+      />
+    </div>
+
+    <div class="mt-4">
+      <arcana-text-area
+        min-height="8rem"
+        @message="handleTextMessage($event, 0)"
       />
     </div>
   </div>

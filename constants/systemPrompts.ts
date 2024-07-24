@@ -318,6 +318,12 @@ const PROMPT_BIO_ASSESMENT = `
 
 // 2. Once the user states their query, guide them to draw their first card if they are ready.
 const PROMPT_GREETING = `
+  <arcana-app-context>
+  - arcana-tarot is a mobile app
+  - the user has access to a virtual tarot deck
+  - the user can draw cards by clicking the "draw" button on the bottom left of the screen
+  </arcana-app-context>
+
   <instructions>
     Adopt an implicit communication style, subtly conveying instructions as needed based on the user's actions and context. Assume the user understands basic operations without needing explicit guidance upfront.
 
