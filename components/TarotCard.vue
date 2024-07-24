@@ -1,27 +1,27 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   card: TarotCard;
   flip?: boolean;
   showOverlay?: boolean;
 }>();
 
-const showOverlay = ref(props.showOverlay || false);
+// const showOverlay = ref(props.showOverlay || false);
 
-watch(
-  () => props.flip,
-  (newVal) => {
-    if (newVal) {
-      setTimeout(() => {
-        showOverlay.value = true;
-      }, 200);
-    }
-  }
-);
+// watch(
+//   () => props.flip,
+//   (newVal) => {
+//     if (newVal) {
+//       setTimeout(() => {
+//         showOverlay.value = true;
+//       }, 200);
+//     }
+//   }
+// );
 </script>
 
 <template>
   <div class="relative">
-    <div
+    <!-- <div
       class="card__overlay card__inner glow--inactive"
       :class="{
         'is-flipped': !flip,
@@ -57,7 +57,7 @@ watch(
           />
         </filter>
       </svg>
-    </div>
+    </div> -->
 
     <div class="card overflow-hidden">
       <div
