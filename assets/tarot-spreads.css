@@ -26,6 +26,18 @@
     'core-message c-8 call-to-action';
 }
 
+.single-card-draw {
+  grid-template-areas:
+    'c1 c2 c3'
+    'c4 insight c5'
+    'c6 c7 c8';
+}
+
+/* single card draw */
+.spread-grid .insight {
+  grid-area: insight;
+}
+
 .spread-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

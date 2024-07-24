@@ -1,5 +1,25 @@
 export const spreads: ITarotSpreadObject[] = [
   {
+    id: 'single-card-draw',
+    name: 'Single Card Draw',
+    description:
+      'A direct and focused spread ideal for daily insights or answering specific questions. This single card draw cuts through complexity to provide clarity and immediate understanding.',
+    focusAreas: ['Daily Guidance', 'Decision Making', 'Immediate Insight'],
+    estimatedTime: '1 minute',
+    positions: [
+      {
+        name: 'insight',
+        description: 'The key insight or guidance for the moment.',
+      },
+    ],
+    components: [
+      {
+        name: 'single',
+        positions: ['insight'],
+      },
+    ],
+  },
+  {
     id: 'three-card-cluster',
     name: 'Three Card Cluster',
     description:
@@ -7,9 +27,16 @@ export const spreads: ITarotSpreadObject[] = [
     focusAreas: ['Love', 'Career', 'Personal Growth'],
     estimatedTime: '1-5 minutes',
     positions: [
-      { name: 'past', description: 'Influences from the past affecting the current situation.' },
+      {
+        name: 'past',
+        description:
+          'Influences from the past affecting the current situation.',
+      },
       { name: 'present', description: 'Current state or situation.' },
-      { name: 'future', description: 'Potential outcomes or future influences.' },
+      {
+        name: 'future',
+        description: 'Potential outcomes or future influences.',
+      },
     ],
     components: [
       {
@@ -33,8 +60,14 @@ export const spreads: ITarotSpreadObject[] = [
       { name: 'conscious', description: 'Conscious thoughts and focus.' },
       { name: 'subconscious', description: 'Subconscious influences.' },
       { name: 'outcome', description: 'Final outcome of the situation.' },
-      { name: 'fears-hopes', description: 'Hopes and fears related to the situation.' },
-      { name: 'influences', description: 'External influences affecting the situation.' },
+      {
+        name: 'fears-hopes',
+        description: 'Hopes and fears related to the situation.',
+      },
+      {
+        name: 'influences',
+        description: 'External influences affecting the situation.',
+      },
       { name: 'advice', description: 'Guidance or advice for the situation.' },
     ],
     components: [
@@ -60,11 +93,20 @@ export const spreads: ITarotSpreadObject[] = [
     focusAreas: ['Love', 'Relationships', 'Emotional Connections'],
     estimatedTime: '5-10 minutes',
     positions: [
-      { name: 'you', description: 'Your role and perspective in the relationship.' },
+      {
+        name: 'you',
+        description: 'Your role and perspective in the relationship.',
+      },
       { name: 'past', description: 'Past influences on the relationship.' },
-      { name: 'relationship', description: 'Current state of the relationship.' },
+      {
+        name: 'relationship',
+        description: 'Current state of the relationship.',
+      },
       { name: 'future', description: 'Potential future of the relationship.' },
-      { name: 'partner', description: 'Your partner’s role and perspective in the relationship.' },
+      {
+        name: 'partner',
+        description: 'Your partner’s role and perspective in the relationship.',
+      },
     ],
     components: [
       {
@@ -85,10 +127,22 @@ export const spreads: ITarotSpreadObject[] = [
     focusAreas: ['Dreams', 'Subconscious', 'Future Insights'],
     estimatedTime: '5-10 minutes',
     positions: [
-      { name: 'subconscious', description: 'Subconscious influences revealed by the dream.' },
-      { name: 'trigger', description: 'Event or thought that triggered the dream.' },
-      { name: 'core-message', description: 'The main message or theme of the dream.' },
-      { name: 'call-to-action', description: 'Suggested actions based on the dream.' },
+      {
+        name: 'subconscious',
+        description: 'Subconscious influences revealed by the dream.',
+      },
+      {
+        name: 'trigger',
+        description: 'Event or thought that triggered the dream.',
+      },
+      {
+        name: 'core-message',
+        description: 'The main message or theme of the dream.',
+      },
+      {
+        name: 'call-to-action',
+        description: 'Suggested actions based on the dream.',
+      },
     ],
     components: [
       {
