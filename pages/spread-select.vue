@@ -7,8 +7,6 @@ import type { VSlideControls } from '~/modules/sui/runtime/components/VSlides/VS
 const { $state } = useTarotSpread();
 const { activeSpread } = storeToRefs(useTarotSpread());
 
-const lowEnergyAlert = ref(false);
-
 const WHOLISTIC_READING_ENERGY_COST = 50;
 const MIN_MESSAGE_COST = 10;
 
@@ -22,7 +20,7 @@ const spreadCost = computed(() => {
 const energyStore = useEnergyStore();
 function handleClick() {
   if (energyStore.basicEnergy < spreadCost.value) {
-    lowEnergyAlert.value = true;
+    energyStore.showLowEnergyAlert();
   } else {
     navigateTo('/');
   }
@@ -32,7 +30,6 @@ const slides = ref<VSlideControls>();
 </script>
 
 <template>
-  <insufficient-energy-dialog v-model="lowEnergyAlert" />
   <div class="px-4 pb-2 flex flex-col h-full justify-around">
     <div>
       <h1 class="text-center text-surface-200 text-xl">Choose your spread</h1>

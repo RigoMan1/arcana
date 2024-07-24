@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 export const useEnergyStore = defineStore('energy-store', {
   state: () => ({
     basicEnergy: 0,
-    showLowEnergyAlert: false,
+    isLowEnergyAlertVisible: false,
   }),
   actions: {
     async initializeEnergy() {
@@ -58,7 +58,7 @@ export const useEnergyStore = defineStore('energy-store', {
         throw new Error('Amount to use must be a non-negative integer.');
       }
       if (!this.isEnergyAvailable(amount)) {
-        this.showEnergyAlert();
+        this.showLowEnergyAlert();
         throw new Error('Insufficient energy.');
       }
 
@@ -83,11 +83,11 @@ export const useEnergyStore = defineStore('energy-store', {
         throw new Error('Failed to use energy.');
       }
     },
-    showEnergyAlert() {
-      this.showLowEnergyAlert = true;
+    showLowEnergyAlert() {
+      this.isLowEnergyAlertVisible = true;
     },
     closeEnergyAlert() {
-      this.showLowEnergyAlert = false;
+      this.isLowEnergyAlertVisible = false;
     },
   },
   getters: {

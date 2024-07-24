@@ -14,7 +14,7 @@ function handleClick() {
     <energy-shop-dialog v-model="energyShop" />
 
     <alert-dialog
-      v-model="$energyState.showLowEnergyAlert"
+      v-model="$energyState.isLowEnergyAlertVisible"
       color="danger"
       title="Insufficient Energy"
       text="Energy too low to perform this action!"
