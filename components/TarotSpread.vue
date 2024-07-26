@@ -1,36 +1,29 @@
 <script setup lang="ts">
 import { positionPrompts } from '~/constants/systemPrompts';
 
-const emit = defineEmits([
-  'remove-card',
-  'reveal-fortune',
-  'card-selected',
-  'react-to-card-drop',
-]);
+const emit = defineEmits(['interpret-single', 'interpret-card-drop']);
 
-const props = defineProps<{
-  tarotDeck: TarotCard[] | null[];
-}>();
+const tarotSession = useTarotSession();
 
 const { activeSpread, selectedCards } = storeToRefs(useTarotSpread());
 
 const revealedCardsSet = ref(new Set());
 const handleCardDrop = (cardName: string, spreadLabel: string) => {
   // 1. find card in deck
-  const cardIndex = props.tarotDeck.findIndex(
-    (card) => card?.name === cardName
+  const cardIndex = tarotSession.tarotDeck.findIndex(
+    (card: TarotCard) => card?.name === cardName
   );
   if (cardIndex === -1) return;
 
   // 2. update selected cards
-  const foundCard = props.tarotDeck[cardIndex];
+  const foundCard = tarotSession.tarotDeck[cardIndex];
   selectedCards.value[spreadLabel] = foundCard;
 
   // 3. remove card from deck
-  emit('remove-card', cardIndex);
+  tarotSession.removeCard(cardIndex);
 
   // 4. add card to revealed set after 1 second
-  emit('react-to-card-drop', { position: spreadLabel, card: foundCard });
+  emit('interpret-card-drop', { position: spreadLabel, card: foundCard });
   setTimeout(() => {
     revealedCardsSet.value.add(spreadLabel);
   }, 200);
@@ -48,7 +41,7 @@ function getInDepthReading(label: string, card: TarotCard) {
   card-name: ${card.name}`;
 
   emit(
-    'card-selected',
+    'interpret-single',
     formattedCard,
     positionPrompts[label],
     activeSpread.value

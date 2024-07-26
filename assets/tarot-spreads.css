@@ -33,6 +33,33 @@
     'c6 c7 c8';
 }
 
+.onboarding-spread {
+  grid-template-areas:
+    'a personality b'
+    'work you challenges'
+    'c relationships d';
+
+  & .personality {
+    grid-area: personality;
+  }
+
+  & .work {
+    grid-area: work;
+  }
+
+  & .challenges {
+    grid-area: challenges;
+  }
+
+  & .relationships {
+    grid-area: relationships;
+  }
+
+  & .you {
+    grid-area: you;
+  }
+}
+
 /* single card draw */
 .spread-grid .insight {
   grid-area: insight;

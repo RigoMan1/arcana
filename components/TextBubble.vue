@@ -17,7 +17,7 @@ const fortuneTeller = useFortuneTeller();
       >
         <polygon
           points="0,10 10,0 20,10"
-          class="fill-secondary-700"
+          class="fill-secondary-800"
         />
       </svg>
       <div class="h-full overflow-auto chat-bubble">
@@ -33,6 +33,6 @@ const fortuneTeller = useFortuneTeller();
 
 <style>
 .chat-bubble {
-  @apply relative rounded-lg bg-secondary-700 p-2 max-h-[40vh] overflow-auto;
+  @apply relative rounded-lg bg-secondary-800 p-2 max-h-[40vh] overflow-auto;
 }
 </style>

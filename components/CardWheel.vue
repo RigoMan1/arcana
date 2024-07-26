@@ -1,21 +1,16 @@
 <script setup lang="ts">
-const props = defineProps<{
-  tarotDeck: TarotCard[] | null[];
-}>();
-const { $state: $fortuneReadingState } = useFortuneReading();
+const tarotSession = useTarotSession();
 
 const circle = ref() as Ref<HTMLDivElement | null>;
 
-const selectedCardIndex = defineModel<number | null>();
-
 const cumulativeRotation = ref(0); // Track cumulative rotation across spins
 
-const totalItems = props.tarotDeck.length;
+const totalItems = tarotSession.tarotDeck.length;
 const removedIndexes = ref<number[]>([]); // Track removed indexes to avoid duplicates
 const isSpinning = ref(false);
 const spinCarousel = () => {
   if (isSpinning.value) return;
-  $fortuneReadingState.cardDrawn = true;
+  tarotSession.cardDrawn = true;
   isSpinning.value = true;
   const targetIndex = Math.floor(Math.random() * totalItems); // Randomly select a target card index
   const stepDegrees = 360 / totalItems; // Degrees each card takes up on the circle
@@ -57,22 +52,20 @@ const spinCarousel = () => {
 
   // Update the selected card index after the animation completes
   setTimeout(() => {
-    selectedCardIndex.value = computedTargetIndex;
+    tarotSession.selectedCardIndex = computedTargetIndex;
     removedIndexes.value.push(computedTargetIndex);
     isSpinning.value = false;
   }, randomDuration); // Adjust timeout to match your CSS transition
 };
 
 const disableSpin = computed(
-  () => selectedCardIndex.value !== null || isSpinning.value
+  () => tarotSession.selectedCardIndex !== null || isSpinning.value
 );
 
 defineExpose({
   spinCarousel,
   disableSpin,
 });
-
-const { allCardsSelected } = storeToRefs(useTarotSpread());
 </script>
 
 <template>
@@ -84,15 +77,16 @@ const { allCardsSelected } = storeToRefs(useTarotSpread());
         :style="`--items: ${totalItems}`"
       >
         <template
-          v-for="(card, cardIndex) in props.tarotDeck"
+          v-for="(card, cardIndex) in tarotSession.tarotDeck"
           :key="cardIndex"
         >
           <div
-            v-if="card && selectedCardIndex !== cardIndex"
+            v-if="card && tarotSession.selectedCardIndex !== cardIndex"
             class="item-el p-2 text-center text-xs text-zinc-500 transform"
             :style="`--index: ${cardIndex}`"
             :class="{
-              'z-50 scale-150 -translate-y-4': selectedCardIndex === cardIndex,
+              'z-50 scale-150 -translate-y-4':
+                tarotSession.selectedCardIndex === cardIndex,
             }"
           >
             <span class="text-[10px]">{{ cardIndex + 1 }}</span>
@@ -143,12 +137,12 @@ const { allCardsSelected } = storeToRefs(useTarotSpread());
     <div class="flex justify-center absolute -bottom-1/4 w-full">
       <transition name="slide-down">
         <div
-          v-if="selectedCardIndex !== null"
+          v-if="tarotSession.selectedCardIndex !== null"
           style="z-index: 1000"
         >
           <draggable-tarot-card
             class="active-card max-w-24"
-            :card="props.tarotDeck[selectedCardIndex]"
+            :card="tarotSession.tarotDeck[tarotSession.selectedCardIndex]"
           />
         </div>
       </transition>

@@ -3,6 +3,7 @@ import { fortuneTellers } from '@/constants/fortune-tellers';
 import { useEnergyStore } from '@/stores/useEnergyStore';
 import { useChatgptStore } from '~/stores/useChatgptStore';
 import { fortuneTellerPrompt } from '@/constants/systemPrompts';
+import { PROMPT_BIO_ASSESMENT } from '@/constants/systemPrompts';
 
 interface FortuneTellerState {
   activeFortuneTellerIndex: number;
@@ -35,7 +36,6 @@ export const useFortuneTeller = defineStore('reader-select-store', {
     showMessage() {
       this.displayMessage = true;
     },
-
     async handleSendMessage({
       systemPrompt,
       userPrompt,
@@ -66,6 +66,11 @@ export const useFortuneTeller = defineStore('reader-select-store', {
       const systemPrompt = `
         ${this.activeFortuneTeller.description}
         ${fortuneTellerPrompt(this.activeFortuneTeller)}
+        - engage in small talk
+        - your goal is to develop a deep friendship with the querent over time
+        - if related to the user's question, try to get bio information if it's not already available.
+        eg. names, dates, locations, etc.
+        - be very concise
         `;
 
       const res = await this.handleSendMessage({
@@ -74,6 +79,17 @@ export const useFortuneTeller = defineStore('reader-select-store', {
         messageCost,
       });
       if (res) this.setActiveMessage(res);
+    },
+    async assesConversation() {
+      const { updateBio } = useProfileStore();
+
+      const res = await this.handleSendMessage({
+        systemPrompt: '',
+        userPrompt: PROMPT_BIO_ASSESMENT,
+        messageCost: 0,
+      });
+
+      if (res?.content) updateBio(res.content);
     },
   },
   getters: {

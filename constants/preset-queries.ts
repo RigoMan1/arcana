@@ -27,6 +27,9 @@ export const PRESET_QUERIES = [
   // 'How can I improve my financial situation?',
   // 'What is the state of my health, and what steps should I take to enhance it?',
   // 'How can I foster more meaningful friendships in my life?',
+
+  // Category: Love
+  'When will I find true love?',
 ];
 
 // get 4 random queries

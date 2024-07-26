@@ -1,29 +1,21 @@
 <script setup lang="ts">
-import { shuffleCards } from '@/utils/helpers';
-import TarotCards from '~/constants/tarot-card-data';
 import { PROMPT_GREETING } from '@/constants/systemPrompts';
 import { getRandomQueries } from '@/constants/preset-queries.js';
 
 const presetPrompts = getRandomQueries(4);
 
-const tarotDeck = ref(TarotCards) as Ref<TarotCard[] | null[]>;
-
-const { $state: $profile, updateBio } = useProfileStore();
-
 onMounted(() => {
-  tarotDeck.value = shuffleCards(TarotCards, true);
-
-  handleTextMessage(
+  fortuneTeller.handleTextMessage(
     `
     <reading-context>
       <tarot-spread-info>
-        tarot-spread:${activeSpread.value.name}
-        tarot-spread-description:${activeSpread.value.description}
-        card-count:${activeSpread.value.positions.length}
+        tarot-spread:${tarotSessionSpread.activeSpread.name}
+        tarot-spread-description:${tarotSessionSpread.activeSpread.description}
+        card-count:${tarotSessionSpread.activeSpread.positions.length}
       </tarot-spread-info>
 
       <user-data>
-        ${$profile.bio}
+        ${useProfileStore().bio}
         always respond in user prefered language: ${navigator.language}
       </user-data>
     </reading-context>
@@ -34,53 +26,26 @@ onMounted(() => {
   );
 });
 
-// exposing index from prizewheel to reset the button
-const selectedCardIndex = ref(null) as Ref<TarotCard | null>;
-function removeCard(cardIndex: number) {
-  tarotDeck.value.splice(cardIndex, 1, null);
-  selectedCardIndex.value = null;
-}
-
-const mode = ref('chat');
-
-function toggleMode(newVal: 'chat' | 'read') {
-  if (newVal === 'chat') fortuneTeller.showMessage();
-  else if (newVal === 'read') fortuneTeller.hideMessage();
-
-  mode.value = newVal;
-}
-
 const wheelEl = ref() as Ref<any>;
-function drawCard() {
-  if (!hasUserInteracted.value) return;
-  toggleMode('read');
-
-  setTimeout(() => {
-    wheelEl.value.spinCarousel();
-  }, 400);
-}
 
 // #region --- fortune reading messaging ---
 import { useChatgptStore } from '~/stores/useChatgptStore';
-import type { RouteLocationNormalized } from 'vue-router';
 import {
   PROMPT_READING_SINGLE_CARD,
   PROMPT_READING_HOLISTIC,
-  PROMPT_BIO_ASSESMENT,
 } from '@/constants/systemPrompts';
+import TarotSpread from '~/components/TarotSpread.vue';
 
-const fortuneTeller = useFortuneTeller();
-const { handleSendMessage, handleTextMessage } = useFortuneTeller();
 const chatgpt = useChatgptStore();
+const fortuneTeller = useFortuneTeller();
+const tarotSessionSpread = useTarotSpread();
+const tarotSession = useTarotSession();
 
 const hasUserInteracted = ref(false);
 function handleUserInput(message: string) {
   hasUserInteracted.value = true;
-  handleTextMessage(message, 0);
+  fortuneTeller.handleTextMessage(message, 0);
 }
-
-const { activeSpread, allCardsSelected, selectedCards } =
-  storeToRefs(useTarotSpread());
 
 function reactToCardDrop({
   position,
@@ -89,7 +54,7 @@ function reactToCardDrop({
   position: string;
   card: TarotCard;
 }) {
-  handleTextMessage(
+  fortuneTeller.handleTextMessage(
     `
     The user has drawn ${card.name} for ${position}:
       - give a very brief intermediary insight (1 sentence) about what the card means in that position, in regards to the user's question
@@ -99,7 +64,7 @@ function reactToCardDrop({
   `,
     0
   );
-  toggleMode('chat');
+  tarotSession.toggleMode('chat');
 }
 
 const dialog = ref(false);
@@ -120,7 +85,7 @@ async function handleSingleCardReading(
     fortuneTeller.activeFortuneTeller
   );
 
-  const reading = await handleSendMessage({
+  const reading = await fortuneTeller.handleSendMessage({
     systemPrompt,
     userPrompt,
     messageCost: CARD_READING_ENERGY_COST,
@@ -142,20 +107,20 @@ async function handleWholisticReading() {
   reversed: ${card.reversed}
   `;
 
-  const allCardsData = Object.entries(selectedCards.value).map(
+  const allCardsData = Object.entries(tarotSessionSpread.selectedCards).map(
     ([position, card]) => formatCard(position, card)
   );
 
   const userMessage = `
     The user has drawn all cards for
-    tarot-spread: ${activeSpread.value.name}
-    tarot-spread-description: ${activeSpread.value.description}
-    card-count: ${activeSpread.value.positions.length}
+    tarot-spread: ${tarotSessionSpread.activeSpread.name}
+    tarot-spread-description: ${tarotSessionSpread.activeSpread.description}
+    card-count: ${tarotSessionSpread.activeSpread.positions.length}
     drawn-cards: ${allCardsData.join('\n')}
     give a holstic reading for each group in the tarot spread as whole.
   `;
 
-  const reading = await handleSendMessage({
+  const reading = await fortuneTeller.handleSendMessage({
     systemPrompt: PROMPT_READING_HOLISTIC(fortuneTeller.activeFortuneTeller),
     userPrompt: userMessage,
     messageCost: 0,
@@ -165,29 +130,20 @@ async function handleWholisticReading() {
     readings.value.push(reading);
     dialog.value = true;
 
-    // todo: improvised complete reading logic
-    await handleTextMessage(`
+    await fortuneTeller.assesConversation();
+
+    await fortuneTeller.handleTextMessage(`
       - bid the user farewell
     `);
-
-    const res = await handleSendMessage({
-      systemPrompt: '',
-      userPrompt: PROMPT_BIO_ASSESMENT,
-      messageCost: 0,
-    });
-
-    if (res?.content) await updateBio(res.content);
-    console.log('bio updated');
 
     showConcludeReading.value = true;
   }
 }
+
 // #endregion
 
 // #region  --- quit reading guard ---
-function concludeReading() {
-  window.location.href = '/reader-select';
-}
+import type { RouteLocationNormalized } from 'vue-router';
 
 const quitReadingAlert = reactive({
   showDialog: false,
@@ -197,16 +153,17 @@ const quitReadingAlert = reactive({
   targetRoute: RouteLocationNormalized | null;
 };
 
-const fortuneReadingStore = useFortuneReading();
+// todo: if reading session is complete, don't show alert
 onBeforeRouteLeave((to, from, next) => {
-  if (!quitReadingAlert.showDialog) {
+  if (!quitReadingAlert.showDialog && !showConcludeReading.value) {
     quitReadingAlert.showDialog = true;
     quitReadingAlert.targetRoute = to;
     next(false);
   } else {
     chatgpt.$reset();
     fortuneTeller.$reset();
-    fortuneReadingStore.$reset();
+    tarotSession.$reset();
+    tarotSessionSpread.$reset();
     next();
   }
 });
@@ -235,16 +192,14 @@ onBeforeRouteLeave((to, from, next) => {
     <div class="flex items-center justify-center h-1/6">
       <transition name="scale-transition">
         <card-wheel
-          v-show="mode === 'read'"
+          v-show="tarotSession.mode === 'read'"
           ref="wheelEl"
-          v-model="selectedCardIndex"
           class="w-full h-full origin-top"
-          :tarot-deck="tarotDeck"
         />
       </transition>
 
       <div
-        v-if="chatgpt.isTyping && mode === 'chat'"
+        v-if="chatgpt.isTyping && tarotSession.mode === 'chat'"
         class="fortune-oracle"
       >
         <span class="animate-pulse">
@@ -279,10 +234,8 @@ onBeforeRouteLeave((to, from, next) => {
         :class="{
           'opacity-0 absolute top-0 pointer-events-none': !hasUserInteracted,
         }"
-        :tarot-deck="tarotDeck"
-        @remove-card="removeCard"
-        @card-selected="handleSingleCardReading"
-        @react-to-card-drop="reactToCardDrop"
+        @interpret-card-drop="reactToCardDrop"
+        @interpret-single="handleSingleCardReading"
       />
     </div>
 
@@ -294,8 +247,12 @@ onBeforeRouteLeave((to, from, next) => {
         <span class="text-xs mb-1 opacity-70"> Draw </span>
         <arcana-button
           class="!px-2 relative"
-          :disabled="mode === 'read' || allCardsSelected || !hasUserInteracted"
-          @click="drawCard"
+          :disabled="
+            tarotSession.mode === 'read' ||
+            tarotSessionSpread.allCardsSelected ||
+            !hasUserInteracted
+          "
+          @click="tarotSession.drawCard(wheelEl)"
         >
           <Icon
             name="fluent:playing-cards-20-filled"
@@ -306,7 +263,11 @@ onBeforeRouteLeave((to, from, next) => {
 
       <!-- button: holistic reading -->
       <arcana-button
-        v-if="mode === 'chat' && allCardsSelected && !showConcludeReading"
+        v-if="
+          tarotSession.mode === 'chat' &&
+          tarotSessionSpread.allCardsSelected &&
+          !showConcludeReading
+        "
         class="w-full"
         :disabled="chatgpt.isTyping"
         @click="handleWholisticReading"
@@ -318,13 +279,15 @@ onBeforeRouteLeave((to, from, next) => {
         v-if="showConcludeReading"
         class="w-full"
         :disabled="chatgpt.isTyping"
-        @click="concludeReading"
+        @click="navigateTo('/reader-select')"
       >
         Conclude Reading
       </arcana-button>
 
       <arcana-text-area
-        v-if="mode === 'chat' && !allCardsSelected"
+        v-if="
+          tarotSession.mode === 'chat' && !tarotSessionSpread.allCardsSelected
+        "
         @message="handleUserInput"
       />
     </div>

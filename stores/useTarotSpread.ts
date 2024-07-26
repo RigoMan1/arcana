@@ -4,12 +4,14 @@ import { spreads } from '@/constants/tarot-spreads';
 interface TarotSpreadState {
   activeSpreadIndex: number;
   selectedCards: Record<string, any | null>;
+  selectedSpread: ITarotSpreadObject | null;
 }
 
 export const useTarotSpread = defineStore('spread-select-store', {
   state: (): TarotSpreadState => ({
     activeSpreadIndex: 0,
     selectedCards: {},
+    selectedSpread: null,
   }),
   actions: {
     initSpread() {
@@ -21,10 +23,13 @@ export const useTarotSpread = defineStore('spread-select-store', {
 
       this.selectedCards = spread;
     },
+    setActiveSpread(spread: ITarotSpreadObject) {
+      this.selectedSpread = spread;
+    },
   },
   getters: {
     activeSpread(): ITarotSpreadObject {
-      return spreads[this.activeSpreadIndex];
+      return this.selectedSpread || spreads[this.activeSpreadIndex];
     },
     someCardsSelected(): boolean {
       return Object.values(this.selectedCards).some((card) => card !== null);

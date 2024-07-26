@@ -156,3 +156,45 @@ export const spreads: ITarotSpreadObject[] = [
     ],
   },
 ];
+
+// onboarding tarot spread to get to know the user
+
+export const onboardingSpread: ITarotSpreadObject = {
+  id: 'onboarding-spread',
+  name: 'Onboarding Spread',
+  description:
+    'A spread designed to help you get to know yourself better and provide insights into your current state and future potential.',
+  focusAreas: ['Self-Discovery', 'Personal Growth', 'Future Insights'],
+  estimatedTime: '5-10 minutes',
+  positions: [
+    {
+      name: 'you',
+      description:
+        'Your current state and perspective. This position reflects how you see yourself and your present mindset.',
+    },
+    {
+      name: 'relationships',
+      description: `Your relationships with others. This position highlights the dynamics and health of your interactions with people in your life.
+        followup: consider asking about relationship status when the user draws this card
+        `,
+    },
+    {
+      name: 'challenges',
+      description:
+        'Challenges you are facing or will face. This position reveals obstacles that may be hindering your progress or growth.',
+    },
+    {
+      name: 'work',
+      description:
+        'Potential future outcomes and opportunities in your professional life. This position provides insights into your career trajectory and ambitions.',
+    },
+    {
+      name: 'personality',
+      description:
+        'Key traits and qualities. This position uncovers your core characteristics and how they influence your actions and decisions.',
+      followUpQuestion:
+        `How would you describe your personality, and how do you think it affects your relationships and career?`
+    },
+  ],
+  components: [],
+};
