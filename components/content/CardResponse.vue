@@ -12,7 +12,7 @@ const reverse = props.reversed === 'true';
   <div>
     <h3 class="text-lg font-bold text-left">{{ title }}</h3>
     <div>
-      <img
+      <nuxt-img
         :src="`images/tarot-deck-classic/${image}`"
         class="w-16 rounded border-2 border-white float-left mr-4 my-0"
         alt="tarot card"

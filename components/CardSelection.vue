@@ -23,7 +23,7 @@ onMounted(() => {
       class="min-w-[140px] border border-zinc-500 relative p-4 first:rounded-l-lg
         last:rounded-r-lg"
     >
-      <!-- <img src="iamgesima" /> -->
+      <!-- <nuxt-img src="iamgesima" /> -->
       <!-- {{ `images/gemstones/${cardIndex % 12}.png` }} -->
 
       <!-- <span
@@ -40,7 +40,7 @@ onMounted(() => {
           text-zinc-400 font-bold rounded-full"
       >
         <!-- {{ cardIndex + 1 }} -->
-        <img
+        <nuxt-img
           :src="`images/gemstones/${(cardIndex % 12) + 1}.png`"
           alt="gemstone"
           class="h-4 w-4 object-cover"

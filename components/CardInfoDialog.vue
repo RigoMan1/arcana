@@ -166,7 +166,7 @@ const isDisabled = computed(() => {
             'opacity-50': isDisabled,
           }"
         >
-          <img
+          <nuxt-img
             class="w-3.5 rounded-full inline mr-1"
             src="/images/energy-basic.png"
             alt=""

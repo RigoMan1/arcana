@@ -134,7 +134,7 @@ async function handlePurchase(tier: Tier) {
                 'glow-divine': tier.name === 'Divine',
               }"
             >
-              <img
+              <nuxt-img
                 class="w-12 shadow-blue-400 rounded-full orb"
                 :src="tier.image"
                 :alt="tier.name"

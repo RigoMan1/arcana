@@ -34,7 +34,7 @@ const orbColor = computed(() => {
 
       <div v-if="path !== '/reader-select'">
         <nuxt-link to="/reader-select">
-          <img
+          <nuxt-img
             :src="readerSelectStore.activeFortuneTeller.image"
             alt="fortune teller"
             class="w-12 h-12 rounded-full"
@@ -57,7 +57,7 @@ const orbColor = computed(() => {
             class="orb"
             :style="`--orb-color: ${orbColor}`"
           >
-            <img
+            <nuxt-img
               class="w-5 rounded-full"
               src="/images/energy-basic.png"
               alt=""
@@ -96,7 +96,7 @@ const orbColor = computed(() => {
   position: relative;
 }
 
-.orb img {
+.orb nuxt-img {
   filter: grayscale(100%);
 }
 

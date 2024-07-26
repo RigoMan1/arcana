@@ -71,7 +71,7 @@ defineProps<{
             'card--major': card.arcana === 'major',
           }"
         >
-          <img
+          <nuxt-img
             v-if="card.image"
             :src="`images/tarot-deck-classic/${card.image}`"
             :alt="`${card.name} - ${card.arcana}`"
@@ -91,7 +91,7 @@ defineProps<{
           </div>
         </div>
         <div class="card__back">
-          <img
+          <nuxt-img
             src="/images/tarot-back.png"
             alt="Tarot Card Back Design"
             class="h-full w-full object-cover"

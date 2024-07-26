@@ -7,7 +7,7 @@ defineProps<{
 <template>
   <div class="h-full flex flex-col justify-center space-y-[2vh]">
     <div>
-      <img
+      <nuxt-img
         :src="fortuneTeller.image"
         alt="fortune teller"
         class="rounded-xl object-cover mx-auto aspect-square h-[20vh] min-h-40 max-h-72"
@@ -36,7 +36,7 @@ defineProps<{
             class="object-cover p-2 w-[4rem] h-[4rem] rounded flex items-center justify-center
               flex-shrink-0 bg-seon"
           >
-            <img
+            <nuxt-img
               :src="trait.image"
               alt="trait"
               class="w-full h-full object-contain"

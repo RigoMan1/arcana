@@ -44,7 +44,7 @@ defineProps({
           <div class="text-center">
             <h6 class="text-xs">Cost</h6>
 
-            <img
+            <nuxt-img
               class="w-3.5 rounded-full inline mr-1"
               src="/images/energy-basic.png"
               alt=""

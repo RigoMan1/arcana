@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     './modules/sui/',
     '@nuxtjs/supabase',
+    '@nuxt/image',
   ],
   supabase: {
     redirect: false,
