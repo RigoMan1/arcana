@@ -16,22 +16,22 @@ const tiers = ref<Tier[]>([
   {
     sku_id: 'energy_basic',
     name: 'Basic',
-    cost: 1.99,
-    yield: 400,
+    cost: 2.99,
+    yield: 600, // 0% bonus
     image: '/images/energy-basic.png',
   },
   {
     sku_id: 'energy_cosmic',
     name: 'Cosmic',
-    cost: 3.99,
-    yield: 900,
+    cost: 6.99,
+    yield: 1540, // 10% bonus
     image: '/images/energy-cosmic.png',
   },
   {
     sku_id: 'energy_divine',
     name: 'Divine',
-    cost: 5.99,
-    yield: 1400,
+    cost: 12.99,
+    yield: 3120, // 20% bonus
     image: '/images/energy-divine.png',
   },
 ]);
