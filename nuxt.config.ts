@@ -31,6 +31,7 @@ export default defineNuxtConfig({
     manifest: {
       name: 'Arcana',
       short_name: 'Arcana',
+      id: '/reader-select',
       start_url: '/reader-select',
       display: 'standalone',
       display_override: [
@@ -62,15 +63,7 @@ export default defineNuxtConfig({
           type: 'image/png',
         },
       ],
-      screenshots: [
-        {
-          src: 'screenshots/screenshot-1.png',
-          sizes: '470x835',
-          type: 'image/png',
-        },
-      ],
       theme_color: '#202132',
-      id: 'com.arcana-flame.vercel.app',
       orientation: 'portrait',
       dir: 'ltr',
       scope: '/',

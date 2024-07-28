@@ -5,9 +5,9 @@
     ],
     "target": {
       "namespace": "android_app",
-      "package_name": "app.vercel.arcana_flame.twa",
+      "package_name": "net.arcana_tarot.app",
       "sha256_cert_fingerprints": [
-        "E4:EB:59:95:22:8B:B4:BD:69:41:4B:69:3D:DD:5B:E9:79:31:5D:B3:F1:AD:A6:5F:AD:4E:99:F2:18:E9:B3:89"
+        "B6:71:9A:7A:87:18:0F:9F:70:73:BF:83:E7:BC:6D:D2:39:CE:BB:9C:95:B3:FF:FD:84:33:1A:D3:94:D3:03:A3"
       ]
     }
   }
