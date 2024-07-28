@@ -1,4 +1,5 @@
 export default defineNuxtRouteMiddleware((to) => {
+  
   const excludedRoutes = ['auth-login', 'auth-register', 'onboarding'];
 
   if (excludedRoutes.includes(to.name)) return;
