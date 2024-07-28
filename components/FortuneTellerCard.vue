@@ -11,6 +11,7 @@ defineProps<{
         :src="fortuneTeller.image"
         alt="fortune teller"
         class="rounded-xl object-cover mx-auto aspect-square h-[20vh] min-h-40 max-h-72"
+        placeholder
       />
     </div>
 
@@ -40,6 +41,7 @@ defineProps<{
               :src="trait.image"
               alt="trait"
               class="w-full h-full object-contain"
+              placeholder
             />
           </div>
           <p class="text-surface-100 text-sm">

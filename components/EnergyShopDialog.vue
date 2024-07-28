@@ -138,6 +138,7 @@ async function handlePurchase(tier: Tier) {
                 class="w-12 shadow-blue-400 rounded-full orb"
                 :src="tier.image"
                 :alt="tier.name"
+                placeholder
               />
             </div>
             <p class="mt-2 text-green-300 text-xs">+ {{ tier.yield }} Energy</p>
