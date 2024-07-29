@@ -31,16 +31,10 @@ export default defineNuxtConfig({
     manifest: {
       name: 'Arcana',
       short_name: 'Arcana',
-      id: '/reader-select',
       start_url: '/reader-select',
+      id: 'net.arcana-tarot.app',
       display: 'standalone',
-      display_override: [
-        'standalone',
-        'minimal-ui',
-        'fullscreen',
-        'window-controls-overlay',
-        'browser',
-      ],
+      display_override: ['standalone'],
       background_color: '#202132',
       categories: [
         'entertainment',
