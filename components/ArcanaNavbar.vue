@@ -32,8 +32,8 @@ const orbColor = computed(() => {
       <energy-shop-dialog v-model="energyShop" />
       <!--  fortune teller avatar -->
 
-      <div v-if="path !== '/reader-select'">
-        <nuxt-link to="/reader-select">
+      <div v-if="path !== '/'">
+        <nuxt-link to="/">
           <nuxt-img
             :src="readerSelectStore.activeFortuneTeller.image"
             alt="fortune teller"

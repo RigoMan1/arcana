@@ -22,7 +22,7 @@ const energyStore = useEnergyStore();
 async function handleClick() {
   try {
     await energyStore.useBasicEnergy(spreadCost.value);
-    navigateTo('/');
+    navigateTo('/tarot-reading');
   } catch (error) {
     console.error(error);
   }

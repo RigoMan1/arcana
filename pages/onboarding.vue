@@ -61,7 +61,7 @@ function reactToCardDrop({
 async function concludeReading() {
   await fortuneTeller.assesConversation();
 
-  navigateTo('/reader-select');
+  navigateTo('/');
 }
 
 import type { RouteLocationNormalized } from 'vue-router';

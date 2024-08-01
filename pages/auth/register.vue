@@ -18,7 +18,7 @@ const register = async ({ email, password }: Credentials) => {
     const pwRes = await supabase.auth.updateUser({ password });
     console.log(pwRes);
 
-    navigateTo('/reader-select');
+    navigateTo('/');
   } catch (error) {
     console.error(error);
   }

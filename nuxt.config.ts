@@ -37,7 +37,7 @@ export default defineNuxtConfig({
     manifest: {
       name: 'Arcana',
       short_name: 'Arcana',
-      start_url: '/reader-select',
+      start_url: '/',
       id: 'net.arcana-tarot.app',
       display: 'standalone',
       display_override: ['standalone'],
