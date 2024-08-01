@@ -66,13 +66,12 @@ export default defineNuxtConfig({
       },
       iarc_rating_id: 'your-iarc-rating-id', // Replace with your actual IARC rating ID if available
     },
-
+    devOptions: {
+      enabled: false,
+      type: 'module',
+    },
     workbox: {
       navigateFallback: '/',
-    },
-    devOptions: {
-      enabled: true,
-      type: 'module',
     },
   },
 });

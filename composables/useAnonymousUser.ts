@@ -37,19 +37,57 @@ export const useAnonymousUser = () => {
     }
   };
 
-  const getOrCreateAnonymousUser = async () => {
-    if (user.value) {
-      const exists = await verifyUserExists(user.value.id);
-      if (!exists) {
-        console.log('User cached but not in database, creating new user.');
-        return await createAnonymousUser();
+  const getOrCreateDevUser = async (): Promise<string | null> => {
+    const devEmail = 'dev@example.com';
+    const devPassword = 'securepassword';
+
+    try {
+      // Attempt to sign in the dev user
+      let { data: signInData, error: signInError } =
+        await supabase.auth.signInWithPassword({
+          email: devEmail,
+          password: devPassword,
+        });
+
+      if (signInError) {
+        // If sign-in fails, try creating the user
+        let { data: signUpData, error: signUpError } =
+          await supabase.auth.signUp({
+            email: devEmail,
+            password: devPassword,
+          });
+
+        if (signUpError) {
+          console.error('Error creating dev user:', signUpError);
+          return null;
+        }
+
+        // Initialize user profile and energy balance for the new dev user
+        await $fetch('/api/user-init', {
+          method: 'POST',
+          body: { userId: signUpData.user?.id },
+        });
+
+        return signUpData.user?.id ?? null;
       }
-      console.log('User already exists:', user.value);
-    } else {
-      console.log('No user cached, creating new anonymous user.');
-      return await createAnonymousUser();
+
+      // If sign-in succeeds, return the existing user ID
+      return signInData.user?.id ?? null;
+    } catch (error) {
+      console.error('Unexpected error:', error);
+      return null;
     }
   };
 
-  return { getOrCreateAnonymousUser };
+  const getOrCreateAnonymousUser = async () => {
+    if (user.value) {
+      const userExists = await verifyUserExists(user.value.id);
+      if (userExists) {
+        return user.value;
+      }
+    }
+    return await createAnonymousUser();
+  };
+
+  return { getOrCreateAnonymousUser, getOrCreateDevUser };
 };

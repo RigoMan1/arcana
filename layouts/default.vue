@@ -4,15 +4,18 @@ import { useEnergyStore } from '@/stores/useEnergyStore';
 
 const appLoaded = ref(false);
 
-const { getOrCreateAnonymousUser } = useAnonymousUser();
+const { getOrCreateAnonymousUser, getOrCreateDevUser } = useAnonymousUser();
 const { initializeEnergy } = useEnergyStore();
 const { fetchBio } = useProfileStore();
 
 onMounted(async () => {
   try {
-    await getOrCreateAnonymousUser();
-    await initializeEnergy();
-    await fetchBio();
+    process.env.NODE_ENV === 'development'
+      ? await getOrCreateDevUser()
+      : await getOrCreateAnonymousUser();
+
+    await Promise.all([initializeEnergy(), fetchBio()]);
+
     appLoaded.value = true;
   } catch (error) {
     console.error(error);
