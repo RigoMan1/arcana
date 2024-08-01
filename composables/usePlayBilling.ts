@@ -107,11 +107,11 @@ export function usePlayBilling() {
     async validatePurchase(sku: PlayBillingServiceSku): Promise<boolean> {
       const energyYield =
         sku.itemId === 'energy_basic'
-          ? 400
+          ? 600
           : sku.itemId === 'energy_cosmic'
-            ? 900
+            ? 1540
             : sku.itemId === 'energy_divine'
-              ? 1400
+              ? 3120
               : 0;
 
       return await addBasicEnergy(energyYield);
