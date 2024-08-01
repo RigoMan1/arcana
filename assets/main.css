@@ -82,3 +82,19 @@ body {
       rgba(88, 204, 248, 0) 70%
     );
 }
+
+/* Page transitions */
+.fade-transition-enter-active,
+.fade-transition-leave-active {
+  transition: opacity 0.2s var(--v-ease-in-out);
+}
+
+.fade-transition-enter-from,
+.fade-transition-leave-to {
+  opacity: 0;
+}
+
+.fade-transition-enter-to,
+.fade-transition-leave-from {
+  opacity: 1;
+}

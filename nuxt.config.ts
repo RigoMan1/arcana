@@ -14,6 +14,12 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase',
     '@nuxt/image',
   ],
+  app: {
+    pageTransition: {
+      name: 'fade-transition',
+      mode: 'out-in',
+    },
+  },
   supabase: {
     redirect: false,
   },
