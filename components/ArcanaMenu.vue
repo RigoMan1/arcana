@@ -7,31 +7,6 @@ const logout = async () => {
   await supabase.auth.signOut();
   navigateTo('/auth/login');
 };
-
-const menuItems = [
-  {
-    label: 'Settings',
-    icon: 'fluent:settings-20-filled',
-    action: () => navigateTo('/settings'),
-  },
-  {
-    label: 'Logout',
-    icon: 'fluent:sign-out-20-filled',
-    action: logout,
-  },
-  // create an account if user is anonymous
-  {
-    label: 'Create Account',
-    icon: 'fluent:person-add-20-filled',
-    action: () => navigateTo('/auth/register'),
-  },
-  // pricacy policy
-  {
-    label: 'Privacy Policy',
-    icon: 'fluent:lock-20-filled',
-    action: () => navigateTo('/privacy-policy'),
-  },
-];
 </script>
 
 <template>
@@ -56,7 +31,6 @@ const menuItems = [
       </template>
       <template #default>
         <div class="arcana-card">
-          <!-- your signed in as anon user id -->
           <div v-if="user?.is_anonymous">
             <p class="text-xs">Signed in as anonymous user</p>
             <p class="text-xs opacity-75 mt-1">{{ user?.id }}</p>
@@ -85,7 +59,7 @@ const menuItems = [
               <span class="ml-4"> Create Account </span>
             </nuxt-link>
 
-            <nuxt-link
+            <!-- <nuxt-link
               class="w-full flex items-center p-2 text-sm hover:bg-secondary-500 hover:bg-opacity-25
                 rounded transition-colors duration-100 ease-in-out"
               to="/settings"
@@ -96,7 +70,7 @@ const menuItems = [
               />
 
               <span class="ml-4"> Settings </span>
-            </nuxt-link>
+            </nuxt-link> -->
 
             <nuxt-link
               class="w-full flex items-center p-2 text-sm hover:bg-secondary-500 hover:bg-opacity-25
@@ -128,5 +102,3 @@ const menuItems = [
     </v-menu>
   </div>
 </template>
-
-<style></style>
