@@ -202,6 +202,7 @@ const positionPrompts = {
   `,
 } as Record<string, string>;
 
+import { NEW_BIO_TEMPLATE } from './bio-template';
 // - Additional Information: Is there anything else you’d like to share about yourself?
 const PROMPT_BIO_QUERY = ` 
 
@@ -256,47 +257,8 @@ const PROMPT_BIO_QUERY = `
     </instructions>
     
     here is the template for the bio we're trying to fill in, only fill in the information that the user doesn't mind sharing.
-    name: ''
-birthDate: '' 
-astrologicalSign: ''
-relationship:
-  status: ''
-  insight: ''
-occupation: ''
-hobbies:
-- ''
-spiritualGoals:
-  - ''
-lifeMilestones:
-  - Year: Description
-currentChallenges:
-  - ''
-emotionalTraits:
-  - ''
-languages:
-  - ''
-culturalBackground: ''
-personalValues:
-  - ''
-lifePhilosophy: ''
-spiritualBeliefs:
-  - ''
-personalChallenges:
-  - ''
-healthConcerns:
-  - ''
-recentChanges:
-  - ''
-dreamsAndAspirations:
-  - ''
-fearsAndAnxieties:
-  - ''
-importantRelationships:
-  - Name: ''
-    Relationship: ''
-    Insight: ''
-summary: >
-  ""
+    
+  ${NEW_BIO_TEMPLATE}
 `;
 
 const PROMPT_BIO_ASSESMENT_ALT = `

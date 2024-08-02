@@ -1,5 +1,6 @@
 import { currencyBalance, profiles } from '@/server/schemas/schema';
 import { db } from '@/server/db';
+import { NEW_BIO_TEMPLATE } from '~/constants/bio-template';
 
 export default defineEventHandler(async (event) => {
   const { userId } = await readBody(event);
@@ -11,7 +12,7 @@ export default defineEventHandler(async (event) => {
         .values({
           userId,
           name: '',
-          bio: '',
+          bio: NEW_BIO_TEMPLATE,
         })
         .execute();
 
