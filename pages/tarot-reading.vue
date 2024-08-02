@@ -54,6 +54,8 @@ function reactToCardDrop({
   position: string;
   card: TarotCard;
 }) {
+  tarotSession.toggleMode('chat');
+
   fortuneTeller.handleTextMessage(
     `
     The user has drawn ${card.name} for ${position}:
@@ -64,7 +66,6 @@ function reactToCardDrop({
   `,
     0
   );
-  tarotSession.toggleMode('chat');
 }
 
 const dialog = ref(false);
@@ -189,7 +190,7 @@ onBeforeRouteLeave((to, from, next) => {
       :readings="readings"
     />
     <!-- 1. wheel & isTyping loader  -->
-    <div class="flex items-center justify-center h-1/6">
+    <div class="flex items-center justify-center h-1/6 relative">
       <transition name="scale-transition">
         <card-wheel
           v-show="tarotSession.mode === 'read'"
@@ -200,7 +201,7 @@ onBeforeRouteLeave((to, from, next) => {
 
       <div
         v-if="chatgpt.isTyping && tarotSession.mode === 'chat'"
-        class="fortune-oracle"
+        class="fortune-oracle absolute -z-10"
       >
         <span class="animate-pulse">
           {{ fortuneTeller.activeFortuneTeller.name }} is typing...
