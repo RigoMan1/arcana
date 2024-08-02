@@ -10,32 +10,16 @@ interface Credentials {
   password: string;
 }
 
+// convert anonymous user to permanent user
 const register = async ({ email, password }: Credentials) => {
-  try {
-    console.log('updating email');
-    const emailRes = await supabase.auth.updateUser({ email });
-    console.log(emailRes);
-    const pwRes = await supabase.auth.updateUser({ password });
-    console.log(pwRes);
+  const emailRes = await supabase.auth.updateUser({ email });
+  if (emailRes.error) throw emailRes.error;
 
-    navigateTo('/');
-  } catch (error) {
-    console.error(error);
-  }
+  const pwRes = await supabase.auth.updateUser({ password });
+  if (pwRes.error) throw pwRes.error;
+
+  navigateTo('/');
 };
-
-const loading = ref(false);
-async function continueWithGoogle() {
-  loading.value = true;
-  const { data, error } = await supabase.auth.linkIdentity({
-    provider: 'google',
-  });
-
-  if (error) throw error;
-
-  console.log(data);
-  loading.value = false;
-}
 </script>
 
 <template>
@@ -44,18 +28,10 @@ async function continueWithGoogle() {
   >
     <auth-form
       title="Create an Account"
-      button-text="Register"
-      loading-text="Signing up..."
+      type="register"
       :on-submit="register"
     />
-    <arcana-button
-      color="none"
-      class="mt-8 w-full !bg-white !text-blue-800 !font-bold"
-      text="Continue with Google"
-      :loading="loading"
-      loading-text="Signing up..."
-      @click="continueWithGoogle"
-    />
+
     <p class="mt-20 text-center">
       Already have an account?
       <nuxt-link

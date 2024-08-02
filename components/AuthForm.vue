@@ -4,14 +4,18 @@ import { string, object } from 'yup';
 
 const props = defineProps<{
   title: string;
-  buttonText: string;
-  loadingText: string;
   onSubmit: (values: { email: string; password: string }) => Promise<void>;
-  resetPasswordLink?: string;
+  type?: 'register' | 'login';
 }>();
 
-const loading = ref(false);
-const errorMessage = ref('');
+const buttonText = props.type === 'register' ? 'Register' : 'Sign In';
+const loadingText =
+  props.type === 'register' ? 'Signing up...' : 'Signing in...';
+
+const state = reactive({
+  loading: false,
+  errorMessage: '',
+});
 
 const { handleSubmit } = useForm({
   validationSchema: object({
@@ -20,36 +24,60 @@ const { handleSubmit } = useForm({
   }),
 });
 
-const submitForm = (
-  submitFn: (values: { email: string; password: string }) => Promise<void>
-) =>
-  handleSubmit(async (values: any) => {
-    loading.value = true;
-    errorMessage.value = '';
-    try {
-      await submitFn(values);
-    } catch (error: any) {
-      errorMessage.value = error.message;
-    } finally {
-      loading.value = false;
+const submitForm = handleSubmit(async (values: any) => {
+  state.loading = true;
+  state.errorMessage = '';
+  try {
+    await props.onSubmit(values);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      state.errorMessage = error.message;
+    } else {
+      state.errorMessage = 'An unknown error occurred';
     }
-  });
+  } finally {
+    state.loading = false;
+  }
+});
 
-const submit = submitForm(props.onSubmit);
+const supabase = useSupabaseClient();
+
+async function continueWithGoogle() {
+  state.loading = true;
+  try {
+    if (props.type === 'register') {
+      const { error } = await supabase.auth.linkIdentity({
+        provider: 'google',
+      });
+      if (error) throw new Error(error.message);
+    } else {
+      await supabase.auth.signInWithOAuth({ provider: 'google' });
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      state.errorMessage = error.message;
+    } else {
+      state.errorMessage = 'An unknown error occurred';
+    }
+  } finally {
+    state.loading = false;
+  }
+}
 </script>
 
 <template>
   <div>
     <h1 class="text-2xl text-center">{{ title }}</h1>
     <v-alert
-      v-if="errorMessage"
+      v-if="state.errorMessage"
       color="danger"
       class="mt-8"
-      >{{ errorMessage }}</v-alert
     >
+      {{ state.errorMessage }}
+    </v-alert>
     <form
       class="mt-8"
-      @submit.prevent="submit"
+      @submit.prevent="submitForm"
     >
       <VeeTextField
         name="email"
@@ -57,7 +85,6 @@ const submit = submitForm(props.onSubmit);
         placeholder="Enter your email"
         autocomplete="email"
       />
-
       <VeeTextField
         name="password"
         label="Password"
@@ -67,23 +94,34 @@ const submit = submitForm(props.onSubmit);
         class="mt-6"
       >
         <template
-          v-if="props.resetPasswordLink"
+          v-if="props.type === 'login'"
           #labelHint
         >
           <nuxt-link
-            :to="resetPasswordLink"
+            to="/auth/reset-password"
             class="text-sm font-semibold text-secondary-500"
-            >Forgot password?</nuxt-link
           >
+            Forgot password?
+          </nuxt-link>
         </template>
       </VeeTextField>
       <arcana-button
         type="submit"
         class="mt-8 w-full"
         :text="buttonText"
-        :loading="loading"
+        :loading="state.loading"
         :loading-text="loadingText"
+        :disabled="state.loading"
       />
     </form>
+    <arcana-button
+      color="none"
+      class="mt-8 w-full !bg-white !text-blue-800 !font-bold"
+      text="Continue with Google"
+      :loading="state.loading"
+      :loading-text="loadingText"
+      :disabled="state.loading"
+      @click="continueWithGoogle"
+    />
   </div>
 </template>

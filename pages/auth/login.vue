@@ -5,15 +5,18 @@ definePageMeta({ layout: 'auth' });
 
 useSeoMeta({ title: 'Login - Arcana' });
 
-const login = async ({
-  email,
-  password,
-}: {
+interface Credentials {
   email: string;
   password: string;
-}) => {
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+}
+
+const login = async ({ email, password }: Credentials) => {
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
   if (error) throw error;
+
   navigateTo('/');
 };
 </script>
@@ -24,18 +27,18 @@ const login = async ({
   >
     <AuthForm
       title="Sign in"
-      button-text="Sign In"
-      loading-text="Signing in..."
-      reset-password-link="/auth/reset-password"
+      type="login"
       :on-submit="login"
     />
+
     <p class="mt-20 text-center">
       Don’t have an account yet?
       <nuxt-link
         to="/auth/register"
         class="font-semibold text-secondary-500"
-        >Sign up</nuxt-link
       >
+        Sign up
+      </nuxt-link>
     </p>
   </div>
 </template>
