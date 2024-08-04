@@ -1,29 +1,49 @@
 <script setup lang="ts">
-import { PROMPT_GREETING } from '@/constants/systemPrompts';
+import {
+  APP_CONTEXT,
+  SMALL_TALK,
+  PROMPT_READING_CARD_REACTION,
+  fortuneTellerPrompt,
+} from '@/constants/systemPrompts';
 import { getRandomQueries } from '@/constants/preset-queries.js';
 
 const presetPrompts = getRandomQueries(4);
 
+const TAROT_SESSSION_CONTEXT = computed(() => {
+  return `
+  ${fortuneTellerPrompt(fortuneTeller.activeFortuneTeller)}
+
+  <tarot-session-context>
+    <chosen-tarot-spread>
+      tarot-spread:${tarotSessionSpread.activeSpread.name}
+      tarot-spread-description:${tarotSessionSpread.activeSpread.description}
+      card-count:${tarotSessionSpread.activeSpread.positions.length}
+    <chosen-/tarot-spread>
+
+    <user-bio>
+      always respond in user prefered language: ${navigator.language}
+      ${useProfileStore().bio}
+    </user-bio>
+
+    ${APP_CONTEXT}
+
+    <communication>
+      ${SMALL_TALK}
+      </communication>
+      <current-world-context>
+      ${getWorldContext()}
+      </current-world-context>
+    </tarot-session-context>
+    `;
+});
+
 onMounted(() => {
-  fortuneTeller.handleTextMessage(
-    `
-    <reading-context>
-      <tarot-spread-info>
-        tarot-spread:${tarotSessionSpread.activeSpread.name}
-        tarot-spread-description:${tarotSessionSpread.activeSpread.description}
-        card-count:${tarotSessionSpread.activeSpread.positions.length}
-      </tarot-spread-info>
-
-      <user-data>
-        ${useProfileStore().bio}
-        always respond in user prefered language: ${navigator.language}
-      </user-data>
-    </reading-context>
-
-    ${PROMPT_GREETING}
-    `,
-    0
-  );
+  fortuneTeller.handleTextMessage({
+    systemPrompt: `
+    ${TAROT_SESSSION_CONTEXT.value},
+    - Greet the user, mind the chosen tarot spread.`,
+    userPrompt: `Hello`,
+  });
 });
 
 const wheelEl = ref() as Ref<any>;
@@ -44,7 +64,10 @@ const tarotSession = useTarotSession();
 const hasUserInteracted = ref(false);
 function handleUserInput(message: string) {
   hasUserInteracted.value = true;
-  fortuneTeller.handleTextMessage(message, 0);
+  fortuneTeller.handleTextMessage({
+    systemPrompt: TAROT_SESSSION_CONTEXT.value,
+    userPrompt: message,
+  });
 }
 
 function reactToCardDrop({
@@ -56,16 +79,15 @@ function reactToCardDrop({
 }) {
   tarotSession.toggleMode('chat');
 
-  fortuneTeller.handleTextMessage(
-    `
-    The user has drawn ${card.name} for ${position}:
-      - give a very brief intermediary insight (1 sentence) about what the card means in that position, in regards to the user's question
-      - Avoid general descriptions of the card
-      - the response should be very brief, as to not to interrupt as the user continues to draw cards
-      - do not instruct the user to draw more cards
-  `,
-    0
-  );
+  fortuneTeller.handleTextMessage({
+    systemPrompt: `
+      ${TAROT_SESSSION_CONTEXT.value}
+      ${PROMPT_READING_CARD_REACTION}
+    `,
+    userPrompt: `
+      I have drawn ${card.name} for ${position}
+    `,
+  });
 }
 
 const dialog = ref(false);
@@ -81,10 +103,10 @@ async function handleSingleCardReading(
     ${cardPrompt}
   `;
 
-  const systemPrompt = PROMPT_READING_SINGLE_CARD(
-    positionPrompt,
-    fortuneTeller.activeFortuneTeller
-  );
+  const systemPrompt = `
+  ${TAROT_SESSSION_CONTEXT.value}
+  ${PROMPT_READING_SINGLE_CARD(fortuneTeller.activeFortuneTeller)}
+  `;
 
   const reading = await fortuneTeller.handleSendMessage({
     systemPrompt,
@@ -121,8 +143,13 @@ async function handleWholisticReading() {
     give a holstic reading for each group in the tarot spread as whole.
   `;
 
+  const systemPrompt = `
+    ${TAROT_SESSSION_CONTEXT.value}
+    ${PROMPT_READING_HOLISTIC(fortuneTeller.activeFortuneTeller)}
+    `;
+
   const reading = await fortuneTeller.handleSendMessage({
-    systemPrompt: PROMPT_READING_HOLISTIC(fortuneTeller.activeFortuneTeller),
+    systemPrompt,
     userPrompt: userMessage,
     messageCost: 0,
   });
@@ -131,11 +158,21 @@ async function handleWholisticReading() {
     readings.value.push(reading);
     dialog.value = true;
 
-    await fortuneTeller.assesConversation();
+    await fortuneTeller.assesConversation(
+      `
+    <current-user-bio>
+      ${useProfileStore().bio}
+    </current-user-bio>
 
-    await fortuneTeller.handleTextMessage(`
-      - bid the user farewell
-    `);
+    <current-world-context>
+      ${getWorldContext()}
+    </current-world-context>
+      `
+    );
+
+    await fortuneTeller.handleTextMessage({
+      userPrompt: '- bid the user farewell',
+    });
 
     showConcludeReading.value = true;
   }
@@ -154,7 +191,6 @@ const quitReadingAlert = reactive({
   targetRoute: RouteLocationNormalized | null;
 };
 
-// todo: if reading session is complete, don't show alert
 onBeforeRouteLeave((to, from, next) => {
   if (!quitReadingAlert.showDialog && !showConcludeReading.value) {
     quitReadingAlert.showDialog = true;

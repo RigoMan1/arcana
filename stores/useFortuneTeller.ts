@@ -12,7 +12,7 @@ interface FortuneTellerState {
 }
 
 interface IFortuneTellerMessage {
-  systemPrompt: string;
+  systemPrompt?: string;
   userPrompt: string;
   messageCost?: number;
 }
@@ -50,41 +50,35 @@ export const useFortuneTeller = defineStore('reader-select-store', {
         await useBasicEnergy(messageCost);
 
         return await chatgpt.sendMessage({
-          system: systemPrompt,
+          system: systemPrompt || '',
           user: userPrompt,
         });
       } catch (error) {
         console.error('Error sending message:', error);
       }
     },
-    async handleTextMessage(userPrompt: string, cost?: number) {
-      const messageCost =
-        cost !== undefined
-          ? cost
+    async handleTextMessage({
+      systemPrompt,
+      userPrompt,
+      messageCost = 0,
+    }: IFortuneTellerMessage) {
+      const messageCostComputed =
+        messageCost !== undefined
+          ? messageCost
           : Math.max(1, Math.ceil(userPrompt.length / 20));
-
-      const systemPrompt = `
-        ${this.activeFortuneTeller.description}
-        ${fortuneTellerPrompt(this.activeFortuneTeller)}
-        - engage in small talk
-        - your goal is to develop a deep friendship with the querent over time
-        - if related to the user's question, try to get bio information if it's not already available.
-        eg. names, dates, locations, etc.
-        - be very concise
-        `;
 
       const res = await this.handleSendMessage({
         systemPrompt,
         userPrompt,
-        messageCost,
+        messageCost: messageCostComputed,
       });
       if (res) this.setActiveMessage(res);
     },
-    async assesConversation() {
+    async assesConversation(systemPrompt: string) {
       const { updateBio } = useProfileStore();
 
       const res = await this.handleSendMessage({
-        systemPrompt: '',
+        systemPrompt,
         userPrompt: PROMPT_BIO_ASSESMENT,
         messageCost: 0,
       });

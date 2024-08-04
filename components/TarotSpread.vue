@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { positionPrompts } from '~/constants/systemPrompts';
-
 const emit = defineEmits(['interpret-single', 'interpret-card-drop']);
 
 const tarotSession = useTarotSession();
@@ -40,12 +38,7 @@ function getInDepthReading(label: string, card: TarotCard) {
   spread-label: ${label}
   card-name: ${card.name}`;
 
-  emit(
-    'interpret-single',
-    formattedCard,
-    positionPrompts[label],
-    activeSpread.value
-  );
+  emit('interpret-single', formattedCard, activeSpread.value);
 }
 </script>
 

@@ -20,3 +20,21 @@ export function shuffleCards(
 
   return shuffled;
 }
+
+export function getWorldContext() {
+  const now = new Date();
+  const hour = now.getHours();
+  // prettier-ignore
+  const timeOfDay = hour === 0 ? 'midnight' :
+                    hour < 6 ? 'early morning' :
+                    hour < 12 ? 'morning' :
+                    hour === 12 ? 'noon' :
+                    hour < 18 ? 'afternoon' :
+                    hour < 21 ? 'evening' : 'night';
+  return `
+    day: ${now.toLocaleDateString('en-US', { weekday: 'long' })},
+    date: ${now.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })},
+    year: ${now.getFullYear()},
+    timeOfDay: ${timeOfDay}
+  `;
+}

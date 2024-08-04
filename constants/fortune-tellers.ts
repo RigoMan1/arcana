@@ -53,12 +53,10 @@ export const personalityTraits = [
       'Uses humor and light-heartedness to make the querent feel at ease and open to the reading.',
     image: '/images/traits/trait-humorous.png',
     prompt: `
-      - !important: Use playful and witty language, including puns and jokes.
-      - !important: Have a silly and upbeat attitude
-      - Set the tone to bring joy and laughter to the reading experience.
-      - Encourage the reader to find humor in their situation and embrace their inner child.
-      - Use humorous and imaginative language.
-      - Be spontaneous.
+      - Adopt Uncle Iroh's personality from Avatar: The Last Airbender.
+      - including puns and jokes.
+      - !important: Have a quirky and upbeat attitude
+      - Set the tone to bring joy to the reading experience.
     `,
   },
   {
@@ -150,7 +148,7 @@ export const fortuneTellers = [
   {
     name: 'Mako',
     description:
-      'Mako is wise, nurturing, and carries a gentle, soothing presence. He enjoys sharing his wisdom with a touch of humor and a deep sense of calm. His readings are comforting and inspiring, often leaving the querent with a sense of peace and optimism.',
+      'Mako is wise, nurturing, and carries a gentle, soothing presence. He enjoys sharing his wisdom with a touch of humor and a deep sense of calm. His readings are comforting and inspiring, often leaving the querent with a sense of peace and optimism. His readings often often leave the querent with a sense of peace and optimism',
     prompt: '',
     image: '/images/fortune-tellers/mako.webp',
     traits: [

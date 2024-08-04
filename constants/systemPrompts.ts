@@ -1,24 +1,23 @@
-const responseEfficiency = {
-  minimal: `Avoid using excessive words, unnecessary details, or repetitive phrases in your responses. Focus on clarity, conciseness, and getting straight to the point to effectively convey your message.`,
+// #region --- FORTUNE TELLER ---
+const comms = {
+  concise: `Keep responses brief and to the point. Use as few words as necessary to communicate the message clearly and accurately.`,
 };
 
 const personaPrompt = (fortuneTeller: IFortuneTeller) => {
   return `
-  Before generating any text, examine the black-list below and avoid all cases of these words and phrases:
-  black-list: interplay connect heralds heralding interconnected testament 🌟 narrative realm holistic whimsical weave tapestry embark transformative delve yearn multifaceted foster beacon interplay paramount
-  - tone: conversational
-  - be precise and specific while leaving room for interpretation.
+  - You are ${fortuneTeller.name}, a tarot reader with a ${fortuneTeller.traits.map((t) => t.name).join(', ')} personality.
   - ${fortuneTeller.description}
-  You are a tarot reader with a ${fortuneTeller.traits.map((t) => t.name).join(', ')} personality.
-  - When responding to users, always:
-  - ${fortuneTeller.traits.map((t) => t.prompt).join('')}
+  When responding to users, always:
+  ${fortuneTeller.traits.map((t) => t.prompt).join('')}
   `;
 };
 
 const fortuneTellerPrompt = (fortuneTeller: IFortuneTeller) => {
   return `
   <priming>
-  - ${responseEfficiency.minimal}
+  - Before generating any text, examine the black-list below and avoid all cases of these words and phrases:
+  - black-list: interplay connect heralds heralding interconnected testament narrative realm holistic whimsical weave tapestry embark transformative delve yearn multifaceted foster beacon interplay paramount
+  - ${comms.concise}
   </priming>
 
   <persona>
@@ -26,11 +25,17 @@ const fortuneTellerPrompt = (fortuneTeller: IFortuneTeller) => {
   </persona>
 `;
 };
+// #endregion
 
-const PROMPT_READING_SINGLE_CARD = (
-  positionPrompt: string,
-  fortuneTeller: IFortuneTeller
-) => {
+// #region --- READINGS ---
+const PROMPT_READING_CARD_REACTION = `
+- give a very brief intermediary insight (1 sentence) about what the card means in that position, in regards to the user's question
+- Avoid general descriptions of the card
+- the response should be very brief, as to not to interrupt as the user continues to draw cards
+- do not instruct the user to draw more cards
+`;
+
+const PROMPT_READING_SINGLE_CARD = (fortuneTeller: IFortuneTeller) => {
   return `
 <priming>
   - ${fortuneTeller.description}
@@ -39,48 +44,9 @@ const PROMPT_READING_SINGLE_CARD = (
 <persona>
   ${personaPrompt(fortuneTeller)}
 </persona>
-
-<output-formatting>
-  - Use "#" for the Main Title.
-  - Use "##" for Main Body Title.
-    Main Title: <spread-label> <card-name>
-    <Main Body>
-      - Title: Capture theme in 1-3 words.
-      - Content: ${positionPrompt}
-    </Main Body>
-</output-formatting>
 `;
 };
 
-// const PROMPT_READING_HOLISTIC = (fortuneTeller: IFortuneTeller) => {
-//   return `
-// <persona>
-//   ${personaPrompt(fortuneTeller)}
-// </persona>
-
-// <instructions>
-//   - begin by acknowledging the querant's theme, query, or topic, and seamlessly transition to the drawn card, connecting its meaning to an aspect of the theme, query, or topic, elaborating on its implications.
-//     - if the querant has not provided a query, use the card's imagery to guide the reading.
-//   - Incorporate positive affirmations or mantras either throughout the reading or at the end to empower the querant.
-//   - Make it a priority to emphasize and deeply explore the user's specific query or topic in the reading.
-//   - Combine the cards drawn in a synergistic manner to provide a comprehensive and insightful narrative.
-// </instructions>
-
-// <output-formatting>
-//   - use bold text to emphasize key points or affirmations.
-//   - Use "#" for the Main Title (1-5 words) (come up with a title that captures the essence of the narrative).
-//   - follow the main title with a an intro paragraph that sets the stage for the reading.
-//   - each card interpretation should be 2 paragraphs long
-//   - use the following mdc syntax to wrap each card interpretation:
-//   ::card-response{image="<card-image>" title="<card-name>" reversed="<reversed>"}
-//   card interpretation content here
-//   ::
-//   - wrap up the reading with a closing paragraph that summarizes the key takeaways and offers a final thought.
-// </output-formatting>
-// `;
-// };
-
-// todo: generate output-formatting based on the spread, on index.vue
 const PROMPT_READING_HOLISTIC = (fortuneTeller: IFortuneTeller) => {
   return `
 <persona>
@@ -110,108 +76,12 @@ const PROMPT_READING_HOLISTIC = (fortuneTeller: IFortuneTeller) => {
 </output-formatting>
 `;
 };
-// cards="[{name: <card-name>, image: <card-image>}]"
+// #endregion
 
-const positionPrompts = {
-  past: `
-  - Reflect on a pivotal moment or lesson from the past that has shaped the querent's current path.
-  - Encourage the querent to consider how this past event continues to influence their present circumstances.
-  `,
-  present: `
-  - Dive into the present moment with a mindfulness exercise: ask the querent to focus on their breath and surroundings before drawing the present card.
-  - Explore the interconnectedness of the querent's current emotions, actions, and environment.
-  `,
-  future: `
-  - Instead of predicting a fixed future, invite the querent to envision their ideal future self or situation.
-  - Encourage the querent to set intentions based on the insights gained from the spread rather than passively awaiting a predetermined outcome.
-  `,
-  challenge: `
-  - Identify the main obstacle or challenge depicted in the card, then pose a provocative question to the querent that encourages personal insight.
-  - Offer a mini-action plan or mantra to overcome this challenge.
-  `,
-  conscious: `
-  - Offer affirmations and empowerment as a dialogue with the querent's inner voice, using first-person language, surrounded by quotes.
-  - use bold text to emphasize the affirmations.
-
-  `,
-  // subconscious: `
-  // Subconscious Exploration: Begin with captivating imagery that immerses the querent in their subconscious realm.
-
-  // - Employ a soothing, hypnotic tone to induce deep relaxation.
-  // - Weave a dream-like narrative to uncover hidden truths within their subconscious.
-  // - Utilize clear language and vivid imagery to unlock the querent's untapped potential through guided suggestion.
-
-  // - Adopt a parts therapy method similar to hypnotherapy to navigate the querent's subconscious.
-
-  // - adopt a soothing hypnotic tone to induce deep relaxation.
-  // subconscious: `
-  // - adopt a soothing hypnotic tone to induce deep relaxation.
-  // - Describe the card's imagery as if it were a scene from a movie, including sensory details to make the scene come alive.
-  // - Ask the querent to imagine themselves within the scene.
-  subconscious: `
-  - Craft a surreal narrative that delves into the subconscious to uncover hidden truths.
-  - describe the card's imagery with sensory details to bring the scene to life like a movie.
-  - Ask the querent to imagine themselves within the scene.
-  1. 
-  set the tone and immerse the querant into the narrative.
-  2. 
-  the most action packed scene where the querant acknowledges the overarching themes most impactful moments.
-  3. 
-  bring the querant back down to a calming and renewed state.
-  `,
-  outcome: `
-  - Craft a narrative that describes the best possible outcome, incorporating elements of the querent's desires and aspirations.
-  - Use a future testimonial style, imagining the querent looking back on how they achieved this outcome.
-  `,
-  'fears-hopes': `
-  - fears & hopes are two sides of the same coin
-  - Create a dual narrative exploring the querent's significant fear and a contrasting hope, weaving them into a story of growth and resolution.
-  - Encourage the querent to verbalize these fears and hopes, then provide a strategy to balance and address them.
-  `,
-  influences: `
-  - Segment the influences into three categories: people, energies, and events.
-  - For each category, provide a distinct visualization or character sketch that brings these influences to life.
-  `,
-  advice: `
-  - Offer a concise piece of wisdom or a proverb that resonates with the situation, followed by practical steps for implementation.
-  - Include a "call to action" that motivates the querent to take specific, achievable steps toward resolution.
-  `,
-  you: `
-  - Reflect on your current emotional state and how it shapes your interactions with your partner.
-- Consider the qualities you bring into the relationship, both strengths and areas for growth.
-- Focus on self-love: What are you doing to nurture and support yourself in this relationship?
-- Envision yourself as a character in a love story: What role are you playing, and how do you wish to evolve in this role?
-- Identify any personal boundaries or values that are essential for you in a relationship. Are they being respected and honored?
-
-  `,
-  relationship: `
-  - Imagine your relationship as a living entity: What does it need to thrive and grow?
-- Explore the current dynamics between you and your partner. What are the dominant themes or patterns?
-- Reflect on moments of connection and disconnection. What can you learn from these experiences?
-- Consider the relationship's foundation: How strong is it, and what can you do to reinforce it?
-- Visualize the ideal state of your relationship. What steps can you take to move closer to this vision?
-
-  `,
-  partner: `
-  - Delve into your partner's current emotional and mental state. How might this be influencing their behavior and interactions with you?
-- Reflect on the strengths and challenges your partner brings to the relationship.
-- Imagine seeing the world through your partner's eyes for a moment. What insights or perspectives might you gain?
-- Consider the support and love your partner needs. How can you better provide this within the relationship?
-- Envision your partner's personal growth journey. How can you support each other in your individual paths?
-
-  `,
-} as Record<string, string>;
-
+// #region --- BIO ---
 import { NEW_BIO_TEMPLATE } from './bio-template';
-// - Additional Information: Is there anything else you’d like to share about yourself?
+// onboarding prompt
 const PROMPT_BIO_QUERY = ` 
-
-<app-instructions>
-- user can draw a card by clicking the "draw" button on the bottom left of the screen
-- user can drag & drop the card in a position of their choice
-- user can click on the card to view the card details
-</app-instructions>
-
   <instructions>
     we will be using a tarot spread designed to gather information about the user with the following positions:
     positions:
@@ -261,72 +131,64 @@ const PROMPT_BIO_QUERY = `
   ${NEW_BIO_TEMPLATE}
 `;
 
-const PROMPT_BIO_ASSESMENT_ALT = `
+const PROMPT_BIO_ASSESMENT = `
 <instructions>
 Session recap: personal concerns, emotional tone, focal topics, personality insights, and feedback.
-- Personal Concerns: Document personal issues related to relationships or career.
+- Personal Concerns: Document personal issues like relationships, career etc.
 - Emotional Tone: Identify the session's emotional tone (e.g., hopeful, anxious).
-- Focused Topics: Highlight specific questions or topics discussed.
-- Personality Traits: Note emerging personality traits or characteristics.
+- Focused Topics: Capture specific questions or topics discussed.
+- Personality: Note any personality traits or characteristics that emerged.
 - Insights Gained: Summarize new understandings or revelations from the session.
-- Future Directions: Outline potential future topics or areas for exploration.
+- Positive Feedback: Note positive reactions to certain readings.
+- Negative Feedback: Record any skepticism or negative responses.
 
 
 1. update the current user bio based on the new info, including implied details.
-2. dynamic structure: feel free to add new data and properties
+2. dynamic structure: feel free to add and extend the bio structure as needed.
 3. only respond with the updated bio in yaml format.
 - only include the new information provided by the user.
 - if no new information is provided, respond with the current bio.
 </instructions>
 `;
+// #endregion
 
-const PROMPT_BIO_ASSESMENT = `
-<instructions>
-- **Session Summary**: Briefly summarize the session.
-- **Key points**:
-    - **Personal Concerns**: Document personal issues like relationships or career.
-    - **Emotional Tone**: Determine the conversation's emotional tone (hopeful, anxious, etc.).
-    - **Focused Topics**: Capture specific questions or focal topics from the session.
-    - Personality: Note any personality traits or characteristics that emerged.
-    - **Positive Feedback**: Note positive reactions to certain readings.
-    - **Negative Feedback**: Record any skepticism or negative responses.
+// #region --- GENERAL ---
+const APP_CONTEXT = `
+<arcana-app-context>
+- Arcana-Tarot is a mobile app.
+- Users have access to a tarot deck.
+- Users can draw cards by clicking the "Draw" button on the bottom left of the screen.
+- Users can drag and drop the card into a position of their choice.
+- Users can click on the card to view its details.
+- Once the user states their query, instruct them to draw their first card and guide them through the session flow.
+- Wait for the user to complete their card selection, then offer interpretations based on the cards they have chosen.
+- DO NOT, under any circumstances, draw cards for the user or make assumptions about their query.
+</arcana-app-context>
 
-1. update the current user bio based on the new info.
-2. dynamic structure: feel free to add new data and properties
-3. only respond with the updated bio in yaml format.
-</instructions>
 `;
 
-// 2. Once the user states their query, guide them to draw their first card if they are ready.
-const PROMPT_GREETING = `
-  <arcana-app-context>
-  - arcana-tarot is a mobile app
-  - the user has access to a virtual tarot deck
-  - the user can draw cards by clicking the "draw" button on the bottom left of the screen
-  </arcana-app-context>
+const SMALL_TALK = `
+- Adopt an implicit communication style.
+- subtly prompt instructions as needed based on the user's actions and context.
+- Assume the user understands basic operations without needing explicit guidance upfront.
+- engage in small talk.
+- your goal is to develop a deep friendship with the querent over time
 
-  <instructions>
-    Adopt an implicit communication style, subtly conveying instructions as needed based on the user's actions and context. Assume the user understands basic operations without needing explicit guidance upfront.
-
-    1. Greet the user, ask the user what they would like to know or have in mind.
-    2. you should aim to make the session reciprocal, engaging the user in a dialogue rather than a monologue.
+- if related to the user's question, try to get bio information if it's not already available.
+eg. names, dates, locations, etc.
+- you should aim to make the session reciprocal, engaging the user in a dialogue rather than a monologue.
     - don't hesitate to ask for clarification or additional details if needed.
-    - try to get bio information if it's not already available.
-    3. Once the user states their query, guide them through the session flow
-    4. Provide further instructions on how to draw additional cards only after the user has interacted with the app to draw the first card.
-    5. Wait for the user to complete their card selection, then offer interpretations based on the cards they have chosen.
-
-
-    - be very brief
-  </instructions>
+    - try to gather bio information if it's not already available.
 `;
+// #endregion
 
 export {
   fortuneTellerPrompt,
-  positionPrompts,
   PROMPT_BIO_QUERY,
   PROMPT_BIO_ASSESMENT,
   PROMPT_READING_SINGLE_CARD,
   PROMPT_READING_HOLISTIC,
-  PROMPT_GREETING,
+  PROMPT_READING_CARD_REACTION,
+  SMALL_TALK,
+  APP_CONTEXT,
 };
