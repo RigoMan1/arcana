@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { fortuneTellers } from '@/constants/fortune-tellers';
 import { useEnergyStore } from '@/stores/useEnergyStore';
 import { useChatgptStore } from '~/stores/useChatgptStore';
-import { fortuneTellerPrompt } from '@/constants/systemPrompts';
+
 import { PROMPT_BIO_ASSESMENT } from '@/constants/systemPrompts';
 
 interface FortuneTellerState {

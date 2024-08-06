@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: false },
+
   modules: [
     '@nuxtjs/tailwindcss',
     '@vueuse/nuxt',
@@ -14,25 +15,31 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase',
     '@nuxt/image',
   ],
+
   app: {
     pageTransition: {
       name: 'fade-transition',
       mode: 'out-in',
     },
   },
+
   supabase: {
     redirect: false,
   },
+
   tailwindcss: {
     exposeConfig: true,
     configPath: './tailwind.config.ts',
   },
+
   runtimeConfig: {
     chatgpt: {
       apiKey: process.env.OPENAI_API_KEY,
     },
   },
+
   css: ['./assets/main.css'],
+
   pwa: {
     manifest: {
       name: 'Arcana',
@@ -80,4 +87,6 @@ export default defineNuxtConfig({
       navigateFallback: '/',
     },
   },
+
+  compatibilityDate: '2024-08-06',
 });

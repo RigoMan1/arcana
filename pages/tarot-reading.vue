@@ -94,10 +94,7 @@ const dialog = ref(false);
 const readings = ref([]) as Ref<IMessage[]>;
 
 const CARD_READING_ENERGY_COST = 20;
-async function handleSingleCardReading(
-  cardPrompt: string,
-  positionPrompt: string
-) {
+async function handleSingleCardReading(cardPrompt: string) {
   const userPrompt = `
     Can you provide more in-depth insights for
     ${cardPrompt}

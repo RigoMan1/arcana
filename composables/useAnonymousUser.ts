@@ -43,7 +43,7 @@ export const useAnonymousUser = () => {
 
     try {
       // Attempt to sign in the dev user
-      let { data: signInData, error: signInError } =
+      const { data: signInData, error: signInError } =
         await supabase.auth.signInWithPassword({
           email: devEmail,
           password: devPassword,
@@ -51,7 +51,7 @@ export const useAnonymousUser = () => {
 
       if (signInError) {
         // If sign-in fails, try creating the user
-        let { data: signUpData, error: signUpError } =
+        const { data: signUpData, error: signUpError } =
           await supabase.auth.signUp({
             email: devEmail,
             password: devPassword,
