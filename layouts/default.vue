@@ -26,6 +26,8 @@ onMounted(async () => {
 <template>
   <nuxt-pwa-manifest />
 
+  <global-error-dialog />
+
   <insufficient-energy-dialog />
 
   <v-app

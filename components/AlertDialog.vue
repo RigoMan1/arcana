@@ -18,7 +18,7 @@ withDefaults(
     primaryActionText?: string;
     primaryActionColor?: Color;
 
-    color?: 'danger' | 'success';
+    color?: 'danger' | 'danger-alt' | 'success';
   }>(),
   {
     iconColor: 'primary',
@@ -62,10 +62,15 @@ const emit = defineEmits(['click:secondary-action', 'click:primary-action']);
       />
 
       <h3 class="mt-2 text-xl">{{ title }}</h3>
+
       <p
-        variant="body-2"
-        class="mt-2 text-secondary-100"
+        class="text-sm"
+        v-if="color === 'danger-alt'"
       >
+        Report this error to the Arcana team.
+      </p>
+
+      <p class="mt-4 text-secondary-100">
         <slot>{{ text }}</slot>
       </p>
 
@@ -96,6 +101,10 @@ const emit = defineEmits(['click:secondary-action', 'click:primary-action']);
 <style>
 .v-alert--color-danger {
   @apply text-red-200;
+}
+
+.v-alert--color-danger-alt {
+  @apply text-red-200 !bg-red-950/80  border border-red-900;
 }
 
 .v-alert--color-success {
