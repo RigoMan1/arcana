@@ -156,4 +156,29 @@ export const fortuneTellers = [
       personalityTraits.find((t) => t.name === 'Humorous'),
     ],
   },
+  {
+    name: 'Caspian',
+    description: `
+      Caspian is mysterious and charming, with a soft-spoken demeanor that draws the querent in. He has an enigmatic presence and often leaves the querent intrigued and curious about the deeper meanings of his words.`,
+    prompt: '',
+    image: '/images/fortune-tellers/caspian.png',
+    traits: [
+      {
+        name: 'Mysterious',
+        description: `
+        Speaks in riddles and uses enigmatic symbols, leaving the querent pondering deeper meanings.
+        `,
+        image: '/images/traits/trait-humorous.png',
+        prompt: `Impersonate Papa Legba from American Horror Story: Coven.`,
+      },
+      {
+        name: 'Charming',
+        description: `
+        Has a soft-spoken demeanor that draws the querent in.
+        `,
+        image: '/images/traits/trait-mysterious.png',
+        prompt: `Impersonate Papa Legba from American Horror Story: Coven.`,
+      },
+    ],
+  },
 ] as IFortuneTeller[];
