@@ -155,6 +155,57 @@ export const spreads: ITarotSpreadObject[] = [
       },
     ],
   },
+  {
+    id: 'yes-no-clarity-spread',
+    name: 'Yes/No Clarity Spread',
+    description:
+      'A five-card spread offering clarity on a yes or no question, providing a direct answer along with insights into underlying factors and additional guidance. It blends traditional yes/no indicators with deeper context.',
+    focusAreas: [
+      'Decision Making',
+      'Clarity',
+      'Guidance on Specific Questions',
+    ],
+    estimatedTime: '3-5 minutes',
+    positions: [
+      {
+        name: 'query-indicator',
+        description:
+          'The core question or the main energy surrounding the inquiry. This card sets the tone for the reading.',
+      },
+      {
+        name: 'hidden-factors',
+        description:
+          "Unseen influences or obstacles that may affect the outcome. This card reveals what is hidden from the querent's awareness.",
+      },
+      {
+        name: 'benefits',
+        description:
+          'The positive aspects or advantages of the situation or decision. This card highlights the good that could come from the scenario.',
+      },
+      {
+        name: 'additional-guidance',
+        description:
+          'Extra information or advice that the querent should consider. This card offers further insights that could be crucial in decision-making.',
+      },
+      {
+        name: 'yes-no-outcome',
+        description:
+          "The final card that provides the answer to the question. Major arcana and even-numbered cards indicate 'Yes,' while court cards and odd-numbered cards indicate 'No.'",
+      },
+    ],
+    components: [
+      {
+        name: 'arm',
+        positions: [
+          'query-indicator',
+          'hidden-factors',
+          'benefits',
+          'additional-guidance',
+          'yes-no-outcome',
+        ],
+      },
+    ],
+  },
 ];
 
 // onboarding tarot spread to get to know the user
@@ -192,8 +243,7 @@ export const onboardingSpread: ITarotSpreadObject = {
       name: 'personality',
       description:
         'Key traits and qualities. This position uncovers your core characteristics and how they influence your actions and decisions.',
-      followUpQuestion:
-        `How would you describe your personality, and how do you think it affects your relationships and career?`
+      followUpQuestion: `How would you describe your personality, and how do you think it affects your relationships and career?`,
     },
   ],
   components: [],

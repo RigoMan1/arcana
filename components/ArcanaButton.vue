@@ -35,7 +35,7 @@ defineProps({
 .v-button--size-xs {
   @apply px-2 text-[10px];
   height: 1.5rem;
-  --v-button-scale: 1.75rem;
+  --v-button-scale: 1.6rem;
 }
 
 .v-button--size-sm {

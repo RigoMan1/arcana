@@ -73,15 +73,19 @@ function getInDepthReading(label: string, card: TarotCard) {
           />
 
           <arcana-button
-            class="absolute -bottom-3 right-1/2 !translate-x-1/2"
+            class="absolute -bottom-4 right-1/2 !translate-x-1/2 !rounded-full"
             size="xs"
             icon
             style="z-index: 100"
           >
             <icon
-              class="text-lg"
+              class="text-base"
               name="fluent:eye-tracking-24-regular"
             />
+            <!-- <icon
+              class="text-lg"
+              name="fluent:eye-tracking-24-regular"
+            /> -->
           </arcana-button>
         </drop-zone>
       </div>

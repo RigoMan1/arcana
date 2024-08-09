@@ -28,7 +28,8 @@ defineProps({
 
     <!-- info -->
     <div
-      class="rounded-lg bg-secondary-400/10 pb-4 flex flex-col overflow-auto mt-2"
+      class="rounded-lg bg-secondary-400/10 pb-4 flex flex-col overflow-auto mt-2 border
+        border-secondary-500/20"
     >
       <div class="sticky top-0 w-full px-4 pt-4">
         <h2 class="text-center mb-4">{{ activeSpread.name }}</h2>

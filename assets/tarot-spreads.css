@@ -1,15 +1,109 @@
-.celtic-cross {
-  grid-template-areas:
-    'outcome     conscious     fears-hopes'
-    'past        present       future'
-    'influences  subconscious  advice';
+.spread-grid {
+  --columns: 3;
+  --rows: 3;
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
+  grid-template-rows: repeat(var(--rows), 1fr);
+
+  justify-items: center;
+  align-items: center;
+
+  .challenge {
+    grid-area: 2 / 2 / 3 / 3;
+    transform: rotate(-90deg) translate(-1rem, 0rem);
+    z-index: 1;
+  }
+}
+
+.single-card-draw {
+  --columns: 1;
+  --rows: 1;
+
+  .insight {
+    grid-area: 1;
+  }
 }
 
 .three-card-cluster {
+  --columns: 3;
+  --rows: 1;
+  grid-template-areas: 'past present future';
+}
+
+/*  three card cluster */
+.spread-grid .past {
+  grid-area: past;
+}
+
+.spread-grid .present {
+  grid-area: present;
+}
+
+.spread-grid .future {
+  grid-area: future;
+}
+
+.celtic-cross {
+  --rows: 4;
+  --columns: 4;
+
   grid-template-areas:
-    'c-1 c-2 c-3'
-    'past present future'
-    'c-4 c-5 c-6';
+    '.       .              . advice'
+    '.    conscious    .     influences'
+    'past   present future    fears-hopes'
+    '.    subconscious      . outcome';
+
+  /* cross */
+
+  .conscious {
+    grid-column: 2;
+    grid-row: 1/3;
+  }
+
+  .past {
+    grid-column: 1;
+    grid-row: 2/4;
+  }
+
+  .present {
+    grid-column: 2;
+    grid-row: 2/4;
+  }
+
+  .future {
+    grid-column: 3;
+    grid-row: 2/4;
+  }
+
+  .subconscious {
+    grid-column: 2;
+    grid-row: 3/5;
+  }
+
+  .challenge {
+    grid-column: 2;
+    grid-row: 2/4;
+    transform: rotate(-90deg) translate(-1rem, 0rem);
+    z-index: 1;
+  }
+
+  /* staff */
+
+  .fears-hopes {
+    grid-area: fears-hopes;
+  }
+
+  .influences {
+    grid-area: influences;
+  }
+
+  .advice {
+    grid-area: advice;
+  }
+
+  .outcome {
+    grid-area: outcome;
+  }
 }
 
 .love-spread {
@@ -17,6 +111,18 @@
     'a you b'
     'past relationship future'
     'c partner d';
+
+  .you {
+    grid-area: you;
+  }
+
+  .relationship {
+    grid-area: relationship;
+  }
+
+  .partner {
+    grid-area: partner;
+  }
 }
 
 .dream-interpretation {
@@ -24,13 +130,53 @@
     'subconscious c-2 trigger'
     'c-4 c-5 c-6'
     'core-message c-8 call-to-action';
+
+  .trigger {
+    grid-area: trigger;
+  }
+
+  .core-message {
+    grid-area: core-message;
+  }
+
+  .call-to-action {
+    grid-area: call-to-action;
+  }
 }
 
-.single-card-draw {
+.yes-no-clarity-spread {
+  --columns: 3;
+  --rows: 2;
+
   grid-template-areas:
-    'c1 c2 c3'
-    'c4 insight c5'
-    'c6 c7 c8';
+    'query-indicator  benefits  additional-guidance'
+    ' hidden-factors  . yes-no-outcome ';
+
+  /* top row */
+  .query-indicator {
+    grid-area: query-indicator;
+  }
+
+  .benefits {
+    grid-area: benefits;
+  }
+
+  .additional-guidance {
+    grid-area: additional-guidance;
+  }
+
+  /* bottom row */
+  .hidden-factors {
+    grid-area: hidden-factors;
+
+    transform: translateX(65%);
+  }
+
+  .yes-no-outcome {
+    grid-area: yes-no-outcome;
+
+    transform: translateX(-65%);
+  }
 }
 
 .onboarding-spread {
@@ -58,89 +204,4 @@
   & .you {
     grid-area: you;
   }
-}
-
-/* single card draw */
-.spread-grid .insight {
-  grid-area: insight;
-}
-
-.spread-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-
-  justify-items: center;
-}
-
-.spread-grid .challenge {
-  grid-area: 2 / 2 / 3 / 3;
-  transform: rotate(-90deg) translate(-1rem, 0rem);
-  z-index: 1;
-}
-
-/* celtic cross */
-.spread-grid .conscious {
-  grid-area: conscious;
-}
-
-.spread-grid .subconscious {
-  grid-area: subconscious;
-}
-
-.spread-grid .outcome {
-  grid-area: outcome;
-}
-
-.spread-grid .fears-hopes {
-  grid-area: fears-hopes;
-}
-
-.spread-grid .influences {
-  grid-area: influences;
-}
-
-.spread-grid .advice {
-  grid-area: advice;
-}
-
-/* love spread */
-
-.spread-grid .you {
-  grid-area: you;
-}
-
-.spread-grid .relationship {
-  grid-area: relationship;
-}
-
-.spread-grid .partner {
-  grid-area: partner;
-}
-
-/*  three card cluster */
-.spread-grid .past {
-  grid-area: past;
-}
-
-.spread-grid .present {
-  grid-area: present;
-}
-
-.spread-grid .future {
-  grid-area: future;
-}
-
-/* dream  interpretation */
-
-.spread-grid .trigger {
-  grid-area: trigger;
-}
-
-.spread-grid .core-message {
-  grid-area: core-message;
-}
-
-.spread-grid .call-to-action {
-  grid-area: call-to-action;
 }
