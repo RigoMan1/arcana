@@ -16,9 +16,10 @@ defineProps<{
     </div>
 
     <div
-      class="rounded-lg bg-secondary-400/10 flex flex-col overflow-auto mt-2 pb-4"
+      class="rounded-lg bg-secondary-400/10 border border-secondary-500/20 flex flex-col
+        overflow-auto mt-2 pb-4 h-[45vh]"
     >
-      <div class="sticky top-0 w-full px-4 pt-4">
+      <div class="sticky top-0 w-full px-4 pt-4 bg-[#272939]">
         <h2 class="text-center mb-4 text-lg">{{ fortuneTeller.name }}</h2>
         <v-divider />
       </div>

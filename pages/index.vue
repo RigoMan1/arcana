@@ -20,7 +20,6 @@ const slides = ref<VSlideControls>();
       <v-slide
         v-for="fortuneTeller in fortuneTellers"
         :key="fortuneTeller.name"
-        class="h-[75vh] flex"
       >
         <fortune-teller-card :fortune-teller="fortuneTeller" />
       </v-slide>
@@ -54,11 +53,44 @@ const slides = ref<VSlideControls>();
       </div>
     </v-slides>
 
-    <!-- select button-->
-    <arcana-button
-      class="w-3/4 self-center"
-      text="Select"
-      to="/spread-select"
-    />
+    <div class="flex items-center justify-center space-x-2">
+      <v-item-group
+        v-model="$state.activeFortuneTellerIndex"
+        class="flex space-x-2 overflow-x-auto"
+        mandatory
+      >
+        <v-item-slot
+          v-for="(fortuneTeller, fortuneTellerIndex) in fortuneTellers"
+          :key="fortuneTeller.name"
+          v-slot="{ isSelected, toggle }"
+          :value="fortuneTellerIndex"
+        >
+          <v-button
+            :class="{ 'opacity-25': !isSelected }"
+            class="rounded-xl overflow-hidden aspect-square h-[6vh] max-h-20 flex-shrink-0"
+            @click="toggle"
+          >
+            <nuxt-img
+              :src="fortuneTeller.image"
+              alt="fortune teller"
+              class="object-cover w-full h-full"
+              placeholder
+            />
+          </v-button>
+        </v-item-slot>
+      </v-item-group>
+
+      <arcana-button
+        to="/spread-select"
+        variant="primary"
+        class="!h-full aspect-square"
+        size="none"
+      >
+        <Icon
+          name="fluent:arrow-circle-right-16-regular"
+          size="1.5em"
+        />
+      </arcana-button>
+    </div>
   </div>
 </template>
