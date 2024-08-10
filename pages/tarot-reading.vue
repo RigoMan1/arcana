@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   APP_CONTEXT,
-  SMALL_TALK,
+  COMMUNICATION_STYLE,
   PROMPT_READING_CARD_REACTION,
   fortuneTellerPrompt,
 } from '@/constants/systemPrompts';
@@ -15,9 +15,9 @@ const TAROT_SESSSION_CONTEXT = computed(() => {
 
   <tarot-session-context>
     <chosen-tarot-spread>
-      tarot-spread:${tarotSessionSpread.activeSpread.name}
-      tarot-spread-description:${tarotSessionSpread.activeSpread.description}
-      card-count:${tarotSessionSpread.activeSpread.positions.length}
+      tarot-spread: ${tarotSessionSpread.activeSpread.name}
+      tarot-spread-description: ${tarotSessionSpread.activeSpread.description}
+      card-count: ${tarotSessionSpread.activeSpread.positions.length}
     <chosen-/tarot-spread>
 
     <user-bio>
@@ -28,7 +28,7 @@ const TAROT_SESSSION_CONTEXT = computed(() => {
     ${APP_CONTEXT}
 
     <communication>
-      ${SMALL_TALK}
+      ${COMMUNICATION_STYLE}
       </communication>
       <current-world-context>
       ${getWorldContext()}
@@ -71,7 +71,7 @@ function handleUserInput(message: string) {
 }
 
 function reactToCardDrop({
-  position,
+  position: positionLabel,
   card,
 }: {
   position: string;
@@ -79,13 +79,22 @@ function reactToCardDrop({
 }) {
   tarotSession.toggleMode('chat');
 
+  const position = tarotSessionSpread.activeSpread.positions.find(
+    (p) => p.name === positionLabel
+  );
+  console.log('reactToCardDrop', position);
+
   fortuneTeller.handleTextMessage({
     systemPrompt: `
       ${TAROT_SESSSION_CONTEXT.value}
       ${PROMPT_READING_CARD_REACTION}
+      <tarot-spread-position>
+        position-description: ${position?.description}
+        
+      </tarot-spread-position>
     `,
     userPrompt: `
-      I have drawn ${card.name} for ${position}
+      I have drawn ${card.name} for ${positionLabel} ${card.reversed ? 'in reversed position' : ''}
     `,
   });
 }

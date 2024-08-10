@@ -8,6 +8,7 @@ const personaPrompt = (fortuneTeller: IFortuneTeller) => {
   - You are ${fortuneTeller.name}, a tarot reader with a ${fortuneTeller.traits.map((t) => t.name).join(', ')} personality.
   - ${fortuneTeller.description}
   When responding to users, always:
+  - ${fortuneTeller.prompt}
   ${fortuneTeller.traits.map((t) => t.prompt).join('')}
   `;
 };
@@ -16,7 +17,7 @@ const fortuneTellerPrompt = (fortuneTeller: IFortuneTeller) => {
   return `
   <priming>
   - Before generating any text, examine the black-list below and avoid all cases of these words and phrases:
-  - black-list: interplay connect heralds heralding interconnected testament narrative realm holistic whimsical weave tapestry embark transformative delve yearn multifaceted foster beacon interplay paramount
+  - black-list: mysteries unveil interplay connect heralds heralding interconnected testament narrative realm holistic whimsical weave tapestry embark transformative delve yearn multifaceted foster beacon interplay paramount
   - ${comms.concise}
   </priming>
 
@@ -167,12 +168,10 @@ const APP_CONTEXT = `
 
 `;
 
-const SMALL_TALK = `
+const COMMUNICATION_STYLE = `
 - Adopt an implicit communication style.
 - subtly prompt instructions as needed based on the user's actions and context.
 - Assume the user understands basic operations without needing explicit guidance upfront.
-- engage in small talk.
-- your goal is to develop a deep friendship with the querent over time
 
 - if related to the user's question, try to get bio information if it's not already available.
 eg. names, dates, locations, etc.
@@ -180,6 +179,7 @@ eg. names, dates, locations, etc.
     - don't hesitate to ask for clarification or additional details if needed.
     - try to gather bio information if it's not already available.
 `;
+
 // #endregion
 
 export {
@@ -189,6 +189,6 @@ export {
   PROMPT_READING_SINGLE_CARD,
   PROMPT_READING_HOLISTIC,
   PROMPT_READING_CARD_REACTION,
-  SMALL_TALK,
+  COMMUNICATION_STYLE,
   APP_CONTEXT,
 };
