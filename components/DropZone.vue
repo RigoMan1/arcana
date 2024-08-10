@@ -18,13 +18,17 @@ const emit = defineEmits(['drop']);
 watch(selectedCard, (newVal) => {
   emit('drop', newVal, props.label);
 });
+
+const hasCard = computed(() => {
+  return !!dndState.dropContainers[props.zoneId]?.length;
+});
 </script>
 
 <template>
   <div
     ref="dropTarget"
     class="drop-zone flex items-center justify-center bg-zinc-900 border-dashed"
-    :class="{ ' bg-indigo-700/40': isOver }"
+    :class="{ 'drop-zone--active': isOver && !hasCard }"
   >
     <span
       class="flex text-[10px] items-center justify-center absolute px-2 h-6 text-center
@@ -33,6 +37,8 @@ watch(selectedCard, (newVal) => {
     >
       {{ label }}
     </span>
+
+    <!-- <div class="w-20 h-20 absolute bd left-20 bg-indigo-700/50">test</div> -->
 
     <!-- <pre>
       isDragging:{{ dndState.isDragging }}
@@ -52,5 +58,10 @@ watch(selectedCard, (newVal) => {
 .drop-zone {
   @apply border border-primary-500 relative p-1.5 flex-1 rounded-lg;
   aspect-ratio: 11/19;
+  transition: transform 0.1s var(--v-ease-in-out);
+}
+
+.drop-zone--active {
+  @apply bg-indigo-700/50 scale-110;
 }
 </style>
