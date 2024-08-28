@@ -37,6 +37,7 @@ interface ITarotSpreadObject {
 }
 
 interface IFortuneTeller {
+  id: string | number;
   name: string;
   image: string;
   description: string;
