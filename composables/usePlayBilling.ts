@@ -71,38 +71,53 @@ export function usePlayBilling() {
     // },
 
     async purchase(itemId: string): Promise<boolean> {
-      const sku = skus.value.find((s) => s.itemId === itemId);
+      try {
+        const sku = skus.value.find((s) => s.itemId === itemId);
 
-      if (!sku) {
-        throw new Error('SKU not found');
-      }
+        if (!sku) {
+          throw new Error('SKU not found');
+        }
 
-      const paymentMethod: PaymentMethodData[] = [
-        {
-          supportedMethods: this.serviceURL,
-          data: {
-            sku: sku.itemId,
+        const paymentMethod: PaymentMethodData[] = [
+          {
+            supportedMethods: this.serviceURL,
+            data: {
+              sku: sku.itemId,
+            },
           },
-        },
-      ];
+        ];
 
-      const paymentDetails: PaymentDetailsInit = {
-        total: {
-          label: 'Total',
-          // ? Even though the payment details are required, the Play Billing will ignore those values and use the values set when creating the SKU in the Play Console, so they can be filled with bogus values:
-          amount: { currency: 'USD', value: '0.00' },
-        },
-      };
+        const paymentDetails: PaymentDetailsInit = {
+          total: {
+            label: 'Total',
+            // ? Even though the payment details are required, the Play Billing will ignore those values and use the values set when creating the SKU in the Play Console, so they can be filled with bogus values:
+            amount: { currency: 'USD', value: '0.00' },
+          },
+        };
 
-      const request = new PaymentRequest(paymentMethod, paymentDetails);
-      const paymentResponse = await request.show();
-      const { purchaseToken } = paymentResponse.details;
+        const request = new PaymentRequest(paymentMethod, paymentDetails);
 
-      const valid = await this.validatePurchase(sku, purchaseToken);
+        // Show the payment request and wait for user interaction
+        const paymentResponse = await request.show();
+        const { purchaseToken } = paymentResponse.details;
 
-      await paymentResponse.complete(valid ? 'success' : 'fail');
+        const valid = await this.validatePurchase(sku, purchaseToken);
 
-      return valid;
+        // Complete the payment response based on the validation result
+        await paymentResponse.complete(valid ? 'success' : 'fail');
+
+        return valid;
+      } catch (error: any) {
+        // Supress the error that occurs when the user cancels the payment
+        if (error.name === 'AbortError' || error.message.includes('canceled')) {
+          console.info('Purchase was canceled by the user.');
+          return false;
+        }
+
+        // If it's a different error, rethrow or handle accordingly
+        console.error('An error occurred during the purchase process', error);
+        throw error;
+      }
     },
 
     async consumePurchase(purchaseToken: string): Promise<void> {
