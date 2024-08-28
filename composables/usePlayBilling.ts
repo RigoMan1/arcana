@@ -101,6 +101,7 @@ export function usePlayBilling() {
         const paymentResponse = await request.show();
         const { purchaseToken } = paymentResponse.details;
 
+        // Validate the purchase token to ensure entitlement can be granted
         const valid = await this.validatePurchase(sku, purchaseToken);
 
         // Complete the payment response based on the validation result
@@ -108,15 +109,15 @@ export function usePlayBilling() {
 
         return valid;
       } catch (error: any) {
-        // Supress the error that occurs when the user cancels the payment
+        // Suppress the error that occurs when the user cancels the payment
         if (error.name === 'AbortError' || error.message.includes('canceled')) {
           console.info('Purchase was canceled by the user.');
           return false;
         }
 
-        // If it's a different error, rethrow or handle accordingly
+        // If it's a different error, log it and handle accordingly
         console.error('An error occurred during the purchase process', error);
-        throw error;
+        return false;
       }
     },
 
@@ -125,7 +126,9 @@ export function usePlayBilling() {
         throw new Error('Play Billing service is not available');
       }
       try {
-        await this.service.consumeAsync(purchaseToken); // Call the API to consume the purchase
+        // Ensure the correct method is called based on the service implementation
+        await this.service.consume(purchaseToken);
+        console.info('Purchase consumed successfully');
       } catch (error) {
         console.error('Error consuming purchase', error);
       }
@@ -144,12 +147,17 @@ export function usePlayBilling() {
               ? 3120
               : 0;
 
-      const addedEnergy = await addBasicEnergy(energyYield);
-      if (addedEnergy) {
-        // Consume the purchase to allow re-purchase
-        await this.consumePurchase(purchaseToken);
+      try {
+        const addedEnergy = await addBasicEnergy(energyYield);
+        if (addedEnergy) {
+          // Consume the purchase to allow repurchase
+          await this.consumePurchase(purchaseToken);
+        }
+        return addedEnergy;
+      } catch (error) {
+        console.error('Error validating purchase', error);
+        return false;
       }
-      return addedEnergy;
     },
   };
 
