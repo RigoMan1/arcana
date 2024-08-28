@@ -16,6 +16,7 @@ interface PlayBillingService {
     sku: PlayBillingServiceSku,
     purchaseToken: string
   ) => Promise<boolean>;
+  consumePurchase: (purchaseToken: string) => Promise<void>;
 }
 
 export function usePlayBilling() {
@@ -85,26 +86,40 @@ export function usePlayBilling() {
         },
       ];
 
-      // ? Even though the payment details are required, the Play Billing will ignore those values and use the values set when creating the SKU in the Play Console, so they can be filled with bogus values:
       const paymentDetails: PaymentDetailsInit = {
         total: {
           label: 'Total',
+          // ? Even though the payment details are required, the Play Billing will ignore those values and use the values set when creating the SKU in the Play Console, so they can be filled with bogus values:
           amount: { currency: 'USD', value: '0.00' },
         },
       };
 
       const request = new PaymentRequest(paymentMethod, paymentDetails);
-      const response = await request.show();
-      const { purchaseToken } = response.details;
+      const paymentResponse = await request.show();
+      const { purchaseToken } = paymentResponse.details;
 
       const valid = await this.validatePurchase(sku, purchaseToken);
 
-      await response.complete(valid ? 'success' : 'fail');
+      await paymentResponse.complete(valid ? 'success' : 'fail');
 
       return valid;
     },
 
-    async validatePurchase(sku: PlayBillingServiceSku): Promise<boolean> {
+    async consumePurchase(purchaseToken: string): Promise<void> {
+      if (!this.service) {
+        throw new Error('Play Billing service is not available');
+      }
+      try {
+        await this.service.consumeAsync(purchaseToken); // Call the API to consume the purchase
+      } catch (error) {
+        console.error('Error consuming purchase', error);
+      }
+    },
+
+    async validatePurchase(
+      sku: PlayBillingServiceSku,
+      purchaseToken: string
+    ): Promise<boolean> {
       const energyYield =
         sku.itemId === 'energy_basic'
           ? 600
@@ -114,7 +129,12 @@ export function usePlayBilling() {
               ? 3120
               : 0;
 
-      return await addBasicEnergy(energyYield);
+      const addedEnergy = await addBasicEnergy(energyYield);
+      if (addedEnergy) {
+        // Consume the purchase to allow re-purchase
+        await this.consumePurchase(purchaseToken);
+      }
+      return addedEnergy;
     },
   };
 
