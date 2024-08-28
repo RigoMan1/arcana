@@ -60,7 +60,7 @@ export type InsertUnlockedCharacter = InferInsertModel<
 
 // Simplified table to store only the ID and name of tarot spreads
 export const spreads = pgTable('spreads', {
-  id: serial('id').primaryKey(), // Auto-incrementing ID for each spread
+  id: text('id').primaryKey(), // Use the string ID as the primary key
   name: text('name').notNull(), // The name of the spread
 });
 
@@ -73,9 +73,9 @@ export const unlockedSpreads = pgTable('unlocked_spreads', {
   userId: uuid('user_id')
     .notNull()
     .references(() => profiles.userId, { onDelete: 'cascade' }), // Links to the profiles table
-  spreadId: integer('spread_id')
+  spreadId: text('spread_id')
     .notNull()
-    .references(() => spreads.id, { onDelete: 'cascade' }), // Links to the spreads table
+    .references(() => spreads.id, { onDelete: 'cascade' }), // Links to the spreads table with string ID
   unlockedAt: timestamp('unlocked_at').defaultNow().notNull(), // Timestamp when the spread was unlocked
 });
 

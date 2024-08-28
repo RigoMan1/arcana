@@ -43,7 +43,7 @@ defineProps({
             rounded-xl bg-secondary-400/10"
         >
           <div class="text-center">
-            <h6 class="text-xs">Cost</h6>
+            <h6 class="text-xs">Reading Cost</h6>
 
             <nuxt-img
               class="w-3.5 rounded-full inline mr-1"

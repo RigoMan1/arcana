@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
         .insert(currencyBalance)
         .values({
           userId,
-          basicEnergy: 100,
+          basicEnergy: 300,
         })
         .execute();
     });
