@@ -11,13 +11,13 @@ export default defineNuxtPlugin((nuxtApp) => {
     showModal.value = true;
   };
 
-  nuxtApp.vueApp.config.errorHandler = (error: any, instance, info) => {
+  nuxtApp.vueApp.config.errorHandler = (error: any) => {
     nuxtApp.vueApp.config.globalProperties.$showErrorModal(
       error.message || 'An unexpected error occurred'
     );
   };
 
-  nuxtApp.hook('vue:error', (error: any, instance, info) => {
+  nuxtApp.hook('vue:error', (error: any) => {
     nuxtApp.vueApp.config.globalProperties.$showErrorModal(
       error.message || 'An unexpected error occurred'
     );

@@ -159,14 +159,14 @@ const showConfirmDialog = ref(false);
 
       <arcana-button
         v-if="isUnlocked"
-        class="w-3/4 self-center"
+        class="w-3/4 self-center mt-3"
         text="Select"
         @click="handleClick"
       />
 
       <arcana-button
         v-else
-        class="w-3/4 self-center"
+        class="w-3/4 self-center mt-3"
         @click="showConfirmDialog = true"
       >
         <Icon

@@ -64,8 +64,8 @@ const emit = defineEmits(['click:secondary-action', 'click:primary-action']);
       <h3 class="mt-2 text-xl">{{ title }}</h3>
 
       <p
-        class="text-sm"
         v-if="color === 'danger-alt'"
+        class="text-sm"
       >
         Report this error to the Arcana team.
       </p>
