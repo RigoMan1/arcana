@@ -50,7 +50,7 @@ function getInDepthReading(label: string, card: TarotCard) {
     >
       <div
         v-for="p in activeSpread.positions"
-        :key="p.name"
+        :key="`${activeSpread.id}-${p.name}`"
         class="w-[70%] min-w-[3rem]"
         :class="p.name"
       >

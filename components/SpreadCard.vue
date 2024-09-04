@@ -20,7 +20,7 @@ defineProps({
     >
       <div
         v-for="label in activeSpread.positions"
-        :key="label.name"
+        :key="`${activeSpread.id}-${label.name}`"
         class="aspect-[11/19] rounded bg-card-gradient w-[32px] border border-secondary-300/15"
         :class="[label.name]"
       />
@@ -39,8 +39,8 @@ defineProps({
       <div class="rounded-lg p-4 overflow-auto h-full flex flex-col">
         <!-- bg-surface-800/50 -->
         <div
-          class="flex justify-around items-start space-x-4 max-w-sm mx-auto w-full py-4
-            rounded-xl bg-secondary-400/10"
+          class="flex justify-around items-start space-x-4 max-w-sm mx-auto w-full py-4 rounded-xl
+            bg-secondary-400/10"
         >
           <div class="text-center">
             <h6 class="text-xs">Reading Cost</h6>
