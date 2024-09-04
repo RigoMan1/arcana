@@ -3,17 +3,29 @@ const tarotSession = useTarotSession();
 
 const circle = ref() as Ref<HTMLDivElement | null>;
 
-const cumulativeRotation = ref(0); // Track cumulative rotation across spins
+const cumulativeRotation = ref(0); // Track rotation across spins
 
-const totalItems = tarotSession.tarotDeck.length;
-const removedIndexes = ref<number[]>([]); // Track removed indexes to avoid duplicates
+const totalCards = tarotSession.tarotDeck.length;
+const removedIndexes = ref<number[]>([]);
 const isSpinning = ref(false);
+
 const spinCarousel = () => {
   if (isSpinning.value) return;
   tarotSession.cardDrawn = true;
   isSpinning.value = true;
-  const targetIndex = Math.floor(Math.random() * totalItems); // Randomly select a target card index
-  const stepDegrees = 360 / totalItems; // Degrees each card takes up on the circle
+
+  let targetIndex = Math.floor(Math.random() * totalCards);
+
+  // Generate a new target index if the selected card has been removed
+  while (removedIndexes.value.includes(targetIndex)) {
+    if (removedIndexes.value.length === totalCards) {
+      throw new Error('All cards have been selected. No more spins allowed.');
+    }
+
+    targetIndex = Math.floor(Math.random() * totalCards);
+  }
+
+  const stepDegrees = 360 / totalCards; // Degrees each card takes up on the circle
   const targetDegrees = stepDegrees * targetIndex; // extra degrees needed to land on the target card
 
   // Calculate total rotation needed to reach the target index including full spins
@@ -21,39 +33,28 @@ const spinCarousel = () => {
   const fullSpin = 360;
   const fullRotationsDegrees = fullSpin * 2; // Make 3 full rotations for visual effect
   const totalRotation =
-    fullRotationsDegrees +
-    (360 - targetDegrees) -
-    (cumulativeRotation.value % 360);
+    fullRotationsDegrees + (360 - targetDegrees) - (cumulativeRotation.value % 360);
 
   // Update cumulative rotation
   cumulativeRotation.value += totalRotation;
 
-  // Generate a random duration between 500 and 1500 ms
   const randomDuration = Math.floor(Math.random() * 750) + 1000;
 
   // Apply the rotation visually
   circle.value.style.transitionDuration = `${randomDuration}ms`;
-  circle.value?.style.setProperty(
-    '--rotation',
-    `${cumulativeRotation.value}deg`
-  );
+  circle.value?.style.setProperty('--rotation', `${cumulativeRotation.value}deg`);
 
-  const targetIndexOffset = 20;
-  const computedTargetIndex = (targetIndex + targetIndexOffset) % totalItems;
+  const targetIndexOffset = totalCards / 2;
+  const visualTargetIndex = (targetIndex + targetIndexOffset) % totalCards;
 
   // Ensure the actual cumulative rotation is used for logic without visually exceeding 360 degrees
   circle.value.dataset.rotation = cumulativeRotation.value.toString();
 
-  // if indice is already removed return
-  if (removedIndexes.value.includes(computedTargetIndex)) {
-    isSpinning.value = false;
-    return;
-  }
-
   // Update the selected card index after the animation completes
   setTimeout(() => {
-    tarotSession.selectedCardIndex = computedTargetIndex;
-    removedIndexes.value.push(computedTargetIndex);
+    // I think visualTargetIndex is the order in the shuffled deck 🤷
+    tarotSession.selectedCardIndex = visualTargetIndex;
+    removedIndexes.value.push(targetIndex);
     isSpinning.value = false;
   }, randomDuration); // Adjust timeout to match your CSS transition
 };
@@ -74,7 +75,7 @@ defineExpose({
       <div
         ref="circle"
         class="circle"
-        :style="`--items: ${totalItems}`"
+        :style="`--items: ${totalCards}`"
       >
         <template
           v-for="(card, cardIndex) in tarotSession.tarotDeck"
@@ -222,9 +223,7 @@ defineExpose({
   --step: calc(360deg / var(--items));
   --angle: calc(var(--step) * var(--index));
   --difference: calc((var(--card-height) - var(--card-width)) / 2);
-  --x: calc(
-    var(--difference) + var(--radius) + var(--radius) * cos(var(--angle))
-  );
+  --x: calc(var(--difference) + var(--radius) + var(--radius) * cos(var(--angle)));
   --y: calc(var(--radius) + var(--radius) * sin(var(--angle)));
 
   width: var(--card-width);
