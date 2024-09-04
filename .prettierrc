@@ -5,6 +5,12 @@
   "singleQuote": true,
   "singleAttributePerLine": true,
   "bracketSameLine": false,
+  "arrowParens": "always",
+  "vueIndentScriptAndStyle": false,
+  "printWidth": 90,
+  "endOfLine": "lf",
+  "htmlWhitespaceSensitivity": "strict",
+  "pluginSearchDirs": false,
   "plugins": [
     "prettier-plugin-tailwindcss",
     "prettier-plugin-classnames"
