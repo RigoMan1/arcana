@@ -123,7 +123,7 @@ const showConfirmDialog = ref(false);
           class="h-[75vh]"
         >
           <spread-card
-            :class="{ grayscale: !isUnlocked }"
+            :class="{ 'grayscale opacity-60': !isUnlocked }"
             :spread-cost="spreadCost"
           />
         </v-slide>

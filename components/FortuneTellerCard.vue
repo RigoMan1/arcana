@@ -16,8 +16,8 @@ defineProps<{
     </div>
 
     <div
-      class="rounded-lg bg-secondary-400/10 border border-secondary-500/20 flex flex-col
-        overflow-auto mt-2 pb-4 h-[45vh]"
+      class="rounded-lg bg-secondary-400/10 border border-secondary-500/20 flex flex-col overflow-auto
+        mt-2 pb-4 h-[45vh]"
     >
       <div class="sticky top-0 w-full px-4 pt-4 bg-[#272939]">
         <h2 class="text-center mb-4 text-lg">{{ fortuneTeller.name }}</h2>
@@ -35,8 +35,8 @@ defineProps<{
         </div>
         <div class="flex space-x-4 w-full mt-1">
           <div
-            class="object-cover p-2 w-[4rem] h-[4rem] rounded flex items-center justify-center
-              flex-shrink-0 bg-seon"
+            class="object-cover p-2 w-[4rem] h-[4rem] rounded flex items-center justify-center flex-shrink-0
+              bg-seon"
           >
             <nuxt-img
               :src="trait.image"

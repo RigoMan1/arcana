@@ -98,7 +98,7 @@ const showConfirmDialog = ref(false);
       >
         <fortune-teller-card
           :fortune-teller="character"
-          :class="{ grayscale: !isUnlocked }"
+          :class="{ 'grayscale opacity-60 ': !isUnlocked }"
         />
       </v-slide>
 
